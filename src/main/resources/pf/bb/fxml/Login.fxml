@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXPasswordField?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="400.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pf.bb.controller.LoginController">
+   <padding>
+      <Insets bottom="50.0" left="50.0" right="50.0" top="50.0" />
+   </padding>
+   <children>
+      <JFXButton layoutX="250.0" layoutY="326.0" onAction="#authenticate" prefHeight="30.0" prefWidth="100.0" style="-fx-background-color: lightgrey;" text="Login" />
+      <JFXPasswordField layoutX="100.0" layoutY="180.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="200.0" />
+      <JFXTextField layoutX="100.0" layoutY="83.0" prefHeight="40.0" prefWidth="200.0" />
+      <JFXButton layoutX="50.0" layoutY="326.0" onAction="#close" prefHeight="30.0" prefWidth="100.0" style="-fx-background-color: lightgrey;" text="Beenden" />
+   </children>
+
+</AnchorPane>

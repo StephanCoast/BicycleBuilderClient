@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pf.bb.controller.BuilderController">
+   <children>
+      <JFXButton layoutX="14.0" layoutY="14.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#openOverview" prefHeight="30.0" prefWidth="150.0" style="-fx-background-color: lightgrey;" text="Detailansicht" />
+      <JFXButton layoutX="173.0" layoutY="14.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#openDashboard" prefHeight="30.0" prefWidth="150.0" style="-fx-background-color: lightgrey;" text="Dashboard" />
+      <JFXButton layoutX="14.0" layoutY="53.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#logout" prefHeight="30.0" prefWidth="150.0" style="-fx-background-color: lightgrey;" text="Logout" />
+      <JFXButton layoutX="173.0" layoutY="53.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#openCustomerData" prefHeight="30.0" prefWidth="150.0" style="-fx-background-color: lightgrey;" text="Kundendaten" />
+   </children>
+</AnchorPane>
