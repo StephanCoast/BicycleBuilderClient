@@ -3,7 +3,7 @@
 <?import com.jfoenix.controls.JFXButton?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pf.bb.controller.OverviewController">
+<AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" styleClass="apane" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pf.bb.controller.OverviewController">
    <children>
       <JFXButton layoutX="14.0" layoutY="52.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#logout" prefHeight="30.0" prefWidth="150.0" style="-fx-background-color: lightgrey;" text="Logout" />
       <JFXButton layoutX="175.0" layoutY="14.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#openBuilder" prefHeight="30.0" prefWidth="150.0" style="-fx-background-color: lightgrey;" text="Konfigurator" />

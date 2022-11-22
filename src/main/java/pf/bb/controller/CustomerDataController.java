@@ -9,14 +9,14 @@ public class CustomerDataController {
     ViewManager vm = new ViewManager();
 
     public void logout(ActionEvent event) throws IOException {
-        vm.forceLoginView(event, "Login.fxml", "Bicycle Builder - Login");
+        vm.forceLoginView(event, "Login.fxml", "Bicycle Builder - Login", "Login.css");
     }
 
     public void openOverview(ActionEvent event) throws IOException {
-        vm.forceView(event, "Overview.fxml", "Bicycle Builder - Auftragsübersicht");
+        vm.forceView(event, "Overview.fxml", "Bicycle Builder - Auftragsübersicht", "Overview.css");
     }
 
     public void openBuilder(ActionEvent event) throws IOException {
-        vm.forceView(event, "Builder.fxml", "Bicycle Builder - Konfigurator");
+        vm.forceView(event, "Builder.fxml", "Bicycle Builder - Konfigurator", "Builder.css");
     }
 }

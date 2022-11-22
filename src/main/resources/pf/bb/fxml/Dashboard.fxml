@@ -1,15 +1,92 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXButton?>
-<?import javafx.geometry.Insets?>
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pf.bb.controller.DashboardController">
-   <children>
-      <JFXButton layoutX="14.0" layoutY="14.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#openBuilder" prefHeight="30.0" prefWidth="150.0" style="-fx-background-color: lightgrey;" text="Konfigurator" />
-      <JFXButton layoutX="14.0" layoutY="50.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#logout" prefHeight="30.0" prefWidth="150.0" style="-fx-background-color: lightgrey;" text="Logout" />
-   </children>
-   <padding>
-      <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-   </padding>
+<AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pf.bb.controller.DashboardController">
+   <BorderPane layoutY="99.0" prefHeight="394.0" prefWidth="691.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <top>
+         <BorderPane prefHeight="48.0" prefWidth="625.0" styleClass="header-borderpane" BorderPane.alignment="CENTER">
+            <cursor>
+               <Cursor fx:constant="HAND" />
+            </cursor>
+            <left>
+               <StackPane prefHeight="150.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                  <FontAwesomeIconView glyphName="BICYCLE" size="38" styleClass="header-icon-bicycle" textOrigin="TOP" wrappingWidth="48.85714340209961" />
+               </StackPane>
+            </left>
+            <center>
+               <StackPane prefHeight="150.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                  <Label alignment="CENTER" styleClass="header-title" text="Bicycle Builder">
+                     <font>
+                        <Font size="32.0" />
+                     </font>
+                  </Label>
+               </StackPane>
+            </center>
+            <right>
+               <StackPane prefHeight="150.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                  <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="50.0">
+                     <JFXButton ellipsisString="" prefHeight="28.0" prefWidth="28.0" styleClass="header-icon-home">
+                        <graphic>
+                           <FontAwesomeIconView glyphName="HOME" size="28" />
+                        </graphic>
+                     </JFXButton>
+                     <JFXButton ellipsisString="" prefHeight="28.0" prefWidth="28.0" styleClass="header-icon-admin">
+                        <graphic>
+                           <FontAwesomeIconView glyphName="USER_PLUS" size="28" />
+                        </graphic>
+                     </JFXButton>
+                     <JFXButton ellipsisString="" prefHeight="28.0" prefWidth="28.0" styleClass="header-icon-profile">
+                        <graphic>
+                           <FontAwesomeIconView glyphName="USER_CIRCLE" size="28" />
+                        </graphic>
+                     </JFXButton>
+                     <JFXButton ellipsisString="" onAction="#logout" prefHeight="28.0" prefWidth="28.0" styleClass="header-icon-logout">
+                        <graphic>
+                           <FontAwesomeIconView glyphName="SIGN_OUT" size="28" />
+                        </graphic>
+                     </JFXButton>
+                  </HBox>
+               </StackPane>
+            </right>
+         </BorderPane>
+      </top>
+      <center>
+         <StackPane prefHeight="150.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+            <children>
+               <TableView fx:id="dboard_table" prefHeight="200.0" prefWidth="200.0">
+                  <columns>
+                     <TableColumn fx:id="dboard_col1" minWidth="100.0" prefWidth="100.0" styleClass="table-col" text="ID" />
+                     <TableColumn fx:id="dboard_col2" minWidth="100.0" prefWidth="100.0" styleClass="table-col" text="Datum" />
+                     <TableColumn fx:id="dboard_col3" minWidth="200.0" prefWidth="200.0" styleClass="table-col-customer" text="Kunde" />
+                     <TableColumn fx:id="dboard_col4" minWidth="100.0" prefWidth="100.0" styleClass="table-col" text="Kunden-ID" />
+                     <TableColumn fx:id="dboard_col5" minWidth="150.0" prefWidth="150.0" styleClass="table-col" text="Status" />
+                  </columns>
+               </TableView>
+            </children>
+         </StackPane>
+      </center>
+      <bottom>
+         <BorderPane prefHeight="50.0" styleClass="footer-borderpane" BorderPane.alignment="CENTER">
+            <left>
+               <StackPane prefHeight="150.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                  <JFXButton buttonType="RAISED" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#openBuilder" prefHeight="30.0" prefWidth="150.0" styleClass="btn-builder" text="Neue Konfiguration" />
+               </StackPane>
+            </left>
+            <cursor>
+               <Cursor fx:constant="HAND" />
+            </cursor>
+         </BorderPane>
+      </bottom>
+   </BorderPane>
 </AnchorPane>
