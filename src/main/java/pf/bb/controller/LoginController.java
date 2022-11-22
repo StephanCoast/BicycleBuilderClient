@@ -8,9 +8,10 @@ import javafx.scene.control.ButtonType;
 import java.io.IOException;
 
 public class LoginController {
+
     public void authenticate(ActionEvent event) throws IOException {
         ViewManager vm = new ViewManager();
-        vm.forceView(event, "Dashboard.fxml", "Bicycle Builder - Dashboard");
+        vm.forceView(event, "Dashboard.fxml", "Bicycle Builder - Dashboard", "Dashboard.css");
     }
 
     public void close() throws IOException {

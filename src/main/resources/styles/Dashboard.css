@@ -1,0 +1,52 @@
+.header-borderpane {
+    -fx-border-color : black;
+    -fx-border-width : 0 0 1 0;
+}
+
+.footer-borderpane {
+    -fx-border-color : black;
+    -fx-border-width : 1 0 0 0;
+}
+
+.header-icon-bicycle {
+    -fx-fill: black;
+}
+
+.header-title {
+    -fx-text-fill: black;
+}
+
+.header-icon-home .header-icon-admin .header-icon-profile .header-icon-logout {
+    -fx-fill: blue;
+}
+
+.header-icon-home:hover, .header-icon-admin:hover, .header-icon-profile:hover, .header-icon-logout:hover {
+    /* -fx-effect: dropshadow(blurType, color, radius, spread, offsetX, offsetY); */
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 5, 0.4, 0.0, 0.0);
+    -fx-scale-x: 1.2;
+    -fx-scale-y: 1.2;
+    -fx-scale-z: 1.2;
+}
+
+.table-col {
+    -fx-alignment: center;
+}
+
+.table-col-customer {
+    -fx-alignment: center-left;
+}
+
+.btn-builder {
+    -fx-text-fill: white;
+    -fx-background-color: #2196f3; /* material palette - blue 500 primary */
+}
+
+.btn-builder:hover {
+    -fx-effect: dropshadow(three-pass-box, rgba(33, 150, 243, 0.5), 5, 0.4, 0.0, 0.0);
+    -fx-scale-x: 1.05;
+    -fx-scale-y: 1.05;
+    -fx-scale-z: 1.05;
+}
+
+
+
