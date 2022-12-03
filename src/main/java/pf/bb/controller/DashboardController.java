@@ -1,5 +1,6 @@
 package pf.bb.controller;
 
+import com.jfoenix.controls.JFXDrawer;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -7,12 +8,15 @@ import javafx.fxml.FXML;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.BorderPane;
 import pf.bb.model.BicycleConfiguration;
 
 import java.io.IOException;
 
 public class DashboardController {
 
+    public JFXDrawer drawerAdmin, drawerProfile;
+    public BorderPane bpAdmin, bpProfile;
     @FXML
     private TableView<BicycleConfiguration> dboard_table;
     @FXML
@@ -26,14 +30,29 @@ public class DashboardController {
     @FXML
     private TableColumn<BicycleConfiguration, String> dboard_col5;
 
-    ViewManager vm = new ViewManager();
+    ViewManager vm;
 
     public DashboardController() {
     }
 
     @FXML
     public void initialize() {
+        vm = new ViewManager();
+        vm.setDashboardDrawers(drawerAdmin, drawerProfile);
         setupTableView();
+        closeBottomBar();
+    }
+
+    public void openDashboard(ActionEvent event) throws IOException {
+        vm.forceView(event, "Dashboard.fxml", "Bicycle Builder - Dashboard", "Dashboard.css");
+    }
+
+    public void openAdmin(ActionEvent event) throws IOException {
+        vm.forceBottomDashboardView(event, drawerAdmin, bpAdmin);
+    }
+
+    public void openProfile(ActionEvent event) throws IOException {
+        vm.forceBottomDashboardView(event, drawerProfile, bpProfile);
     }
 
     public void logout(ActionEvent event) throws IOException {
@@ -42,6 +61,18 @@ public class DashboardController {
 
     public void openBuilder(ActionEvent event) throws IOException {
         vm.forceView(event, "Builder.fxml", "Bicycle Builder - Konfigurator", "Builder.css");
+    }
+
+    public void onBottomBarClose(ActionEvent event) {
+        closeBottomBar();
+    }
+
+    public void onBottomBarSaveAdmin(ActionEvent event) {
+        closeBottomBar();
+    }
+
+    public void onBottomBarSaveProfile(ActionEvent event) {
+        closeBottomBar();
     }
 
     private void setupTableView() {
@@ -60,5 +91,11 @@ public class DashboardController {
         return list;
     }
 
+    private void closeBottomBar() {
+        drawerAdmin.close();
+        drawerProfile.close();
+        drawerAdmin.setVisible(false); /* AR: BugFix - JFXButton-Events not passing the JFXDrawer UI */
+        drawerProfile.setVisible(false); /* AR: BugFix - JFXButton-Events not passing the JFXDrawer UI */
+    }
 }
 
