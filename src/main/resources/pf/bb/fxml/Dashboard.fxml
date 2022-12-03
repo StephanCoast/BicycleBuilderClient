@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXDrawer?>
+<?import com.jfoenix.controls.JFXPasswordField?>
+<?import com.jfoenix.controls.JFXTextField?>
 <?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
@@ -10,9 +14,10 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pf.bb.controller.DashboardController">
+<AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pf.bb.controller.DashboardController">
    <BorderPane layoutY="99.0" prefHeight="394.0" prefWidth="691.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
       <top>
          <BorderPane prefHeight="48.0" prefWidth="625.0" styleClass="header-borderpane" BorderPane.alignment="CENTER">
@@ -36,24 +41,24 @@
             <right>
                <StackPane prefHeight="150.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                   <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="50.0">
-                     <JFXButton ellipsisString="" prefHeight="28.0" prefWidth="28.0" styleClass="header-icon-home">
+                     <JFXButton ellipsisString="" onAction="#openDashboard" prefHeight="28.0" prefWidth="28.0" styleClass="header-icon-home">
                         <graphic>
-                           <FontAwesomeIconView glyphName="HOME" size="28" />
+                           <FontAwesomeIconView glyphName="HOME" size="28" styleClass="header-icon-home" />
                         </graphic>
                      </JFXButton>
-                     <JFXButton ellipsisString="" prefHeight="28.0" prefWidth="28.0" styleClass="header-icon-admin">
+                     <JFXButton ellipsisString="" onAction="#openAdmin" prefHeight="28.0" prefWidth="28.0" styleClass="header-icon-admin">
                         <graphic>
-                           <FontAwesomeIconView glyphName="USER_PLUS" size="28" />
+                           <FontAwesomeIconView glyphName="USER_PLUS" size="28" styleClass="header-icon-admin" />
                         </graphic>
                      </JFXButton>
-                     <JFXButton ellipsisString="" prefHeight="28.0" prefWidth="28.0" styleClass="header-icon-profile">
+                     <JFXButton ellipsisString="" onAction="#openProfile" prefHeight="28.0" prefWidth="28.0" styleClass="header-icon-profile">
                         <graphic>
-                           <FontAwesomeIconView glyphName="USER_CIRCLE" size="28" />
+                           <FontAwesomeIconView glyphName="USER_CIRCLE" size="28" styleClass="header-icon-profile" />
                         </graphic>
                      </JFXButton>
                      <JFXButton ellipsisString="" onAction="#logout" prefHeight="28.0" prefWidth="28.0" styleClass="header-icon-logout">
                         <graphic>
-                           <FontAwesomeIconView glyphName="SIGN_OUT" size="28" />
+                           <FontAwesomeIconView glyphName="SIGN_OUT" size="28" styleClass="header-icon-logout" />
                         </graphic>
                      </JFXButton>
                   </HBox>
@@ -62,7 +67,7 @@
          </BorderPane>
       </top>
       <center>
-         <StackPane prefHeight="150.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+         <StackPane prefWidth="200.0" BorderPane.alignment="CENTER">
             <children>
                <TableView fx:id="dboard_table" prefHeight="200.0" prefWidth="200.0">
                   <columns>
@@ -77,15 +82,123 @@
          </StackPane>
       </center>
       <bottom>
-         <BorderPane prefHeight="50.0" styleClass="footer-borderpane" BorderPane.alignment="CENTER">
+         <BorderPane prefHeight="125.0" styleClass="footer-borderpane" BorderPane.alignment="CENTER">
             <left>
-               <StackPane prefHeight="150.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-                  <JFXButton buttonType="RAISED" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#openBuilder" prefHeight="30.0" prefWidth="150.0" styleClass="btn-builder" text="Neue Konfiguration" />
+               <StackPane prefHeight="150.0" prefWidth="300.0" BorderPane.alignment="CENTER">
+                  <JFXButton buttonType="RAISED" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#openBuilder" prefHeight="50.0" prefWidth="250.0" styleClass="btn-builder" text="Neue Konfiguration" />
                </StackPane>
             </left>
             <cursor>
                <Cursor fx:constant="HAND" />
             </cursor>
+            <center>
+               <StackPane prefHeight="150.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                  <children>
+                     <JFXDrawer fx:id="drawerAdmin" defaultDrawerSize="125.0" direction="BOTTOM" prefHeight="125.0" prefWidth="900.0" visible="false">
+                        <children>
+                           <BorderPane fx:id="bpAdmin" prefHeight="200.0" prefWidth="200.0" styleClass="bpAdmin">
+                              <center>
+                                 <StackPane prefHeight="150.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                                    <children>
+                                       <VBox prefHeight="200.0" prefWidth="100.0">
+                                          <children>
+                                             <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="20.0">
+                                                <children>
+                                                   <JFXTextField maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="150.0" promptText=" Benutzer-ID" />
+                                                   <JFXTextField maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="150.0" promptText=" Vorname" />
+                                                   <JFXTextField maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="150.0" promptText=" Nachname" />
+                                                </children>
+                                                <padding>
+                                                   <Insets left="10.0" />
+                                                </padding></HBox>
+                                             <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="20.0">
+                                                <children>
+                                                   <JFXTextField maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="150.0" promptText=" Benutzername" />
+                                                   <JFXTextField maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="150.0" promptText=" E-Mail" />
+                                                   <JFXPasswordField maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="150.0" promptText=" Passwort" />
+                                                </children>
+                                                <padding>
+                                                   <Insets left="10.0" />
+                                                </padding></HBox>
+                                             <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0">
+                                                <children>
+                                                   <JFXButton ellipsisString="" onAction="#onBottomBarClose" prefHeight="28.0" prefWidth="28.0" styleClass="bottombar-icon-close">
+                                                      <graphic>
+                                                         <FontAwesomeIconView glyphName="CLOSE" size="24" styleClass="bottombar-icon-close" />
+                                                      </graphic>
+                                                   </JFXButton>
+                                                   <JFXButton ellipsisString="" onAction="#onBottomBarSaveAdmin" prefHeight="28.0" prefWidth="28.0" styleClass="bottombar-icon-save">
+                                                      <graphic>
+                                                         <FontAwesomeIconView glyphName="SAVE" size="24" styleClass="bottombar-icon-save" />
+                                                      </graphic>
+                                                   </JFXButton>
+                                                </children>
+                                                <padding>
+                                                   <Insets left="10.0" />
+                                                </padding></HBox>
+                                          </children>
+                                       </VBox>
+                                    </children>
+                                 </StackPane>
+                              </center>
+                           </BorderPane>
+                        </children>
+                     </JFXDrawer>
+                     <JFXDrawer fx:id="drawerProfile" defaultDrawerSize="125.0" direction="BOTTOM" prefHeight="125.0" prefWidth="900.0">
+                        <children>
+                           <BorderPane fx:id="bpProfile" prefHeight="200.0" prefWidth="200.0" styleClass="bpProfile">
+                              <center>
+                                 <StackPane prefHeight="150.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                                    <children>
+                                       <VBox prefHeight="200.0" prefWidth="100.0">
+                                          <children>
+                                             <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="20.0">
+                                                <children>
+                                                   <JFXTextField maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="150.0" promptText=" Benutzer-ID" />
+                                                   <JFXTextField maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="150.0" promptText=" Vorname" />
+                                                   <JFXTextField maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="150.0" promptText=" Nachname" />
+                                                </children>
+                                                <padding>
+                                                   <Insets left="10.0" />
+                                                </padding>
+                                             </HBox>
+                                             <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="20.0">
+                                                <children>
+                                                   <JFXTextField maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="150.0" promptText=" Benutzername" />
+                                                   <JFXTextField maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="150.0" promptText=" E-Mail" />
+                                                </children>
+                                                <padding>
+                                                   <Insets left="10.0" />
+                                                </padding>
+                                             </HBox>
+                                             <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0">
+                                                <children>
+                                                   <JFXButton ellipsisString="" onAction="#onBottomBarClose" prefHeight="28.0" prefWidth="28.0" styleClass="bottombar-icon-close">
+                                                      <graphic>
+                                                         <FontAwesomeIconView glyphName="CLOSE" size="24" styleClass="bottombar-icon-close" />
+                                                      </graphic>
+                                                   </JFXButton>
+                                                   <JFXButton ellipsisString="" onAction="#onBottomBarSaveProfile" prefHeight="28.0" prefWidth="28.0" styleClass="bottombar-icon-save">
+                                                      <graphic>
+                                                         <FontAwesomeIconView glyphName="SAVE" size="24" styleClass="bottombar-icon-save" />
+                                                      </graphic>
+                                                   </JFXButton>
+                                                </children>
+                                                <padding>
+                                                   <Insets left="10.0" />
+                                                </padding>
+                                             </HBox>
+                                          </children>
+                                       </VBox>
+                                    </children>
+                                 </StackPane>
+                              </center>
+                           </BorderPane>
+                        </children>
+                     </JFXDrawer>
+                  </children>
+               </StackPane>
+            </center>
          </BorderPane>
       </bottom>
    </BorderPane>
