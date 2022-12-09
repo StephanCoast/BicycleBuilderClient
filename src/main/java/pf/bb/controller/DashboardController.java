@@ -44,8 +44,7 @@ public class DashboardController {
     }
 
     public void openDashboard(ActionEvent event) throws IOException {
-//        vm.forceView(event, "Dashboard.fxml", "Bicycle Builder - Dashboard", "Dashboard.css");
-        MainController.getInstance().changeView("Dashboard");
+        vm.forceView(event, "Dashboard.fxml", "Bicycle Builder - Dashboard", "Dashboard.css");
     }
 
     public void openAdmin(ActionEvent event) throws IOException {
@@ -57,13 +56,11 @@ public class DashboardController {
     }
 
     public void logout(ActionEvent event) throws IOException {
-//        vm.forceLoginView(event, "Login.fxml", "Bicycle Builder - Login", "Login.css");
-        MainController.getInstance().changeView("Login");
+        vm.forceLoginView(event, "Login.fxml", "Bicycle Builder - Login", "Login.css");
     }
 
     public void openBuilder(ActionEvent event) throws IOException {
-//        vm.forceView(event, "Builder.fxml", "Bicycle Builder - Konfigurator", "Builder.css");
-        MainController.getInstance().changeView("Builder");
+        vm.forceView(event, "Builder.fxml", "Bicycle Builder - Konfigurator", "Builder.css");
     }
 
     public void onBottomBarClose(ActionEvent event) {
