@@ -1,0 +1,102 @@
+/* ######################################### */
+/* Builder - Header */
+/* ######################################### */
+
+/* Trennlinie zwischen Header und Hauptbereich */
+.header-borderpane {
+    -fx-border-color : black;
+    -fx-border-width : 0 0 1 0;
+}
+/* Bicycle Icon im Header */
+.header-icon-bicycle {
+    -fx-fill: black;
+}
+/* Titel im Header */
+.header-title {
+    -fx-text-fill: black;
+}
+/* Funktions-Buttons rechts im Header */
+.header-icon-home, .header-icon-admin, .header-icon-profile, .header-icon-logout {
+    -fx-fill: black;
+}
+
+.header-icon-home:hover, .header-icon-admin:hover, .header-icon-profile:hover, .header-icon-logout:hover {
+    /* -fx-effect: dropshadow(blurType, color, radius, spread, offsetX, offsetY); */
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 5, 0.4, 0.0, 0.0);
+    -fx-scale-x: 1.2;
+    -fx-scale-y: 1.2;
+    -fx-scale-z: 1.2;
+}
+
+/* ######################################### */
+/* Builder - Main */
+/* ######################################### */
+
+/* Hintergrund im Hauptbereich */
+.container-main-center {
+    //-fx-background-color: white;
+}
+
+/* Hintergrund im Footer & Trennlinie */
+.container-main-bottom {
+    //-fx-background-color: white;
+    -fx-border-color : black;
+    -fx-border-width : 1 0 0 0;
+}
+
+/* Design der Kategorie-Buttons im Footer */
+.btn-toggle-cats {
+    -fx-text-fill: white;
+    -fx-background-radius: 5px;
+    -fx-background-insets: 1px;
+    -fx-border-color : #2286c3; /* material palette - blue 300 primary dark */
+    -fx-border-radius: 5px;
+    -fx-border-width : 1 1 1 1;
+    -jfx-toggle-color: #2286c3; /* material palette - blue 300 primary dark */
+    -jfx-untoggle-color: #42a5f5; /* material palette - blue 400 primary */
+}
+
+.jfx-toggle-node:selected {
+    -fx-border-color : #6ff9ff; /* material palette - cyan 400 primary light */
+}
+
+.jfx-toggle-node:hover {
+    -fx-border-color : #ffa726; /* material palette - orange 400 primary */
+}
+
+/* ######################################### */
+/* Builder - Sidebar */
+/* ######################################### */
+
+/* Trennlinie der Sidebar */
+.container-sidebar {
+    -fx-border-color : black;
+    -fx-border-width : 0 0 0 1;
+}
+/* Schliessen Button in allen Sidebar-Container */
+.sidebar-icon-close {
+    -fx-fill: #ef5350; /* material palette - red 400 primary */
+}
+
+.sidebar-icon-close:hover {
+    -fx-scale-x: 1.1;
+    -fx-scale-y: 1.1;
+    -fx-scale-z: 1.1;
+}
+/* Titel in allen Sidebar-Container */
+.label-cat-title {
+    -fx-text-fill: black;
+}
+/* Speichern Button in allen Sidebar-Container */
+.btn-sidebar-save {
+    -fx-text-fill: white;
+    -fx-background-color: #2196f3; /* material palette - blue 500 primary */
+}
+
+.btn-sidebar-save:hover {
+    -fx-effect: dropshadow(three-pass-box, rgba(33, 150, 243, 0.5), 5, 0.4, 0.0, 0.0);
+    -fx-scale-x: 1.05;
+    -fx-scale-y: 1.05;
+    -fx-scale-z: 1.05;
+}
+

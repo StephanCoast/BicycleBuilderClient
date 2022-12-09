@@ -8,16 +8,26 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
+<?import com.jfoenix.controls.JFXBadge?>
+<?import com.jfoenix.controls.JFXSnackbar?>
+
+<?import java.net.URL?>
+<?import javafx.scene.control.Label?>
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="250.0" prefWidth="300.0" styleClass="apane" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pf.bb.controller.LoginController">
+
+   <stylesheets>
+      <URL value="@styles/Login.css"/>
+   </stylesheets>
+
    <children>
       <VBox alignment="CENTER" layoutX="40.0" layoutY="40.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <JFXTextField maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="200.0" promptText=" Benutzername">
+            <JFXTextField fx:id="username" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="200.0" promptText=" Benutzername">
                <VBox.margin>
                   <Insets bottom="15.0" left="5.0" right="5.0" top="5.0" />
                </VBox.margin>
             </JFXTextField>
-            <JFXPasswordField maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="200.0" promptText=" Passwort">
+            <JFXPasswordField fx:id="password" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="200.0" promptText=" Passwort">
                <VBox.margin>
                   <Insets bottom="40.0" left="5.0" right="5.0" top="5.0" />
                </VBox.margin>
@@ -28,6 +38,7 @@
                   <JFXButton buttonType="RAISED" onAction="#authenticate" prefHeight="30.0" prefWidth="100.0" styleClass="btn-login" text="Login" />
                </children>
             </HBox>
+            <Label fx:id="loginFailure" text="Login fehlgeschlagen!" visible="false">Login fehlgeschlagen!</Label>
          </children>
       </VBox>
    </children>
