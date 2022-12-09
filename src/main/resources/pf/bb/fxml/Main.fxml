@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXDrawersStack?>
+<?import de.jensd.fx.glyphs.materialicons.MaterialIconView?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import java.net.URL?>
+
+<JFXDrawersStack xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1"
+                 fx:controller="pf.bb.controller.MainController" fx:id="drawersStack">
+<!--    <stylesheets>-->
+<!--        <URL value="@app.css"/>-->
+<!--    </stylesheets>-->
+    <VBox>
+        <HBox fx:id="header" alignment="CENTER_LEFT">
+            <MaterialIconView fx:id="menuBtn" glyphName="MENU" visible="false"></MaterialIconView>
+            <Label fx:id="title" HBox.hgrow="ALWAYS"></Label>
+        </HBox>
+        <StackPane fx:id="viewHolder">
+            <fx:include source="Login.fxml" />
+        </StackPane>
+    </VBox>
+</JFXDrawersStack>
+
