@@ -17,14 +17,8 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<?import java.net.URL?>
 <AnchorPane prefHeight="720.0" prefWidth="1280.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pf.bb.controller.BuilderController">
-
-   <stylesheets>
-      <URL value="@styles/Builder.css"/>
-   </stylesheets>
-
-   <BorderPane layoutY="99.0" prefHeight="394.0" prefWidth="691.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+<BorderPane layoutY="99.0" prefHeight="394.0" prefWidth="691.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
    <top>
       <BorderPane prefHeight="48.0" prefWidth="625.0" styleClass="header-borderpane" BorderPane.alignment="CENTER">
          <cursor>
