@@ -17,7 +17,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="720.0" prefWidth="1280.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pf.bb.controller.BuilderController">
+<AnchorPane prefHeight="720.0" prefWidth="1280.0" style="-fx-background-color: white;" stylesheets="@styles/Builder.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pf.bb.controller.BuilderController">
 <BorderPane layoutY="99.0" prefHeight="394.0" prefWidth="691.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
    <top>
       <BorderPane prefHeight="48.0" prefWidth="625.0" styleClass="header-borderpane" BorderPane.alignment="CENTER">
@@ -40,20 +40,10 @@
          </center>
          <right>
             <StackPane prefHeight="150.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-               <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="50.0">
+               <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="50.0" StackPane.alignment="CENTER_RIGHT">
                   <JFXButton ellipsisString="" onAction="#openDashboard" prefHeight="28.0" prefWidth="28.0" styleClass="header-icon-home">
                      <graphic>
                         <FontAwesomeIconView glyphName="HOME" size="28" styleClass="header-icon-home" />
-                     </graphic>
-                  </JFXButton>
-                  <JFXButton ellipsisString="" prefHeight="28.0" prefWidth="28.0" styleClass="header-icon-admin">
-                     <graphic>
-                        <FontAwesomeIconView glyphName="USER_PLUS" size="28" styleClass="header-icon-admin" />
-                     </graphic>
-                  </JFXButton>
-                  <JFXButton ellipsisString="" prefHeight="28.0" prefWidth="28.0" styleClass="header-icon-profile">
-                     <graphic>
-                        <FontAwesomeIconView glyphName="USER_CIRCLE" size="28" styleClass="header-icon-profile" />
                      </graphic>
                   </JFXButton>
                   <JFXButton ellipsisString="" onAction="#logout" prefHeight="28.0" prefWidth="28.0" styleClass="header-icon-logout">
@@ -61,6 +51,9 @@
                         <FontAwesomeIconView glyphName="SIGN_OUT" size="28" styleClass="header-icon-logout" />
                      </graphic>
                   </JFXButton>
+                     <padding>
+                        <Insets right="20.0" />
+                     </padding>
                </HBox>
             </StackPane>
          </right>
@@ -68,7 +61,7 @@
    </top>
       <right>
          <StackPane prefHeight="550.0" prefWidth="300.0" styleClass="container-sidebar" BorderPane.alignment="CENTER">
-            <JFXDrawer fx:id="drawerDefault" defaultDrawerSize="300.0" direction="RIGHT" prefHeight="550.0" prefWidth="300.0" visible="false">
+            <JFXDrawer fx:id="drawerDefault" defaultDrawerSize="300.0" direction="RIGHT" prefHeight="550.0" prefWidth="300.0">
                <children>
                   <BorderPane fx:id="catDefault" prefHeight="550.0" prefWidth="300.0">
                      <top>
@@ -105,7 +98,7 @@
                                     <Cursor fx:constant="HAND" />
                                  </cursor>
                                  <children>
-                                    <JFXButton buttonType="RAISED" ellipsisString="" prefHeight="80.0" prefWidth="250.0" styleClass="btn-sidebar-save" text="Entwurf Speichern" />
+                                    <JFXButton buttonType="RAISED" ellipsisString="" onAction="#onSaveDraft" prefHeight="80.0" prefWidth="250.0" styleClass="btn-sidebar-save" text="Entwurf Speichern" />
                                     <JFXButton buttonType="RAISED" ellipsisString="" onAction="#openCustomerDataView" prefHeight="80.0" prefWidth="250.0" styleClass="btn-sidebar-save" text="Kundendaten eingeben" />
                                  </children>
                               </VBox>
@@ -601,7 +594,7 @@
                      </center>
                   </BorderPane>
                </children></JFXDrawer>
-            <JFXDrawer fx:id="drawerFinish" defaultDrawerSize="300.0" direction="RIGHT" prefHeight="550.0" prefWidth="300.0">
+            <JFXDrawer fx:id="drawerFinish" defaultDrawerSize="300.0" direction="RIGHT" prefHeight="550.0" prefWidth="300.0" visible="false">
                <children>
                   <BorderPane fx:id="catFinish" prefHeight="550.0" prefWidth="300.0">
                      <top>
