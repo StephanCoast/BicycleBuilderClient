@@ -20,3 +20,10 @@
     -fx-scale-y: 1.05;
     -fx-scale-z: 1.05;
 }
+
+/* Error-Message des Validators */
+.error-label {
+    -fx-text-fill: #ba000d; /* material palette - red 500 primary dark */
+    -fx-font-size: 10px;
+    -fx-padding: 0 0 0 5px;
+}

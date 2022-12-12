@@ -45,8 +45,8 @@ public class ViewManager {
         stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
         scene = new Scene(rootLogin);
         stage.setTitle(title);
-        stage.setWidth(300.00);
-        stage.setHeight(250.00);
+        stage.setWidth(325.00);
+        stage.setHeight(300.00); /* AR: for some reason original SB size of 275 got compressed */
         stage.setResizable(false);
         stage.setScene(scene);
         stage.show();

@@ -3,32 +3,52 @@
 <?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXPasswordField?>
 <?import com.jfoenix.controls.JFXTextField?>
+<?import com.jfoenix.validation.RequiredFieldValidator?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="250.0" prefWidth="300.0" styleClass="apane" stylesheets="@styles/Login.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pf.bb.controller.LoginController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="275.0" prefWidth="325.0" styleClass="apane" stylesheets="@styles/Login.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pf.bb.controller.LoginController">
    <children>
       <VBox alignment="CENTER" layoutX="40.0" layoutY="40.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <JFXTextField fx:id="username" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="200.0" promptText=" Benutzername">
+            <RequiredFieldValidator fx:id="validatorName" message="Benutzername fehlt">
                <VBox.margin>
-                  <Insets bottom="15.0" left="5.0" right="5.0" top="5.0" />
+                  <Insets />
+               </VBox.margin>
+               <cursor>
+                  <Cursor fx:constant="NONE" />
+               </cursor></RequiredFieldValidator>
+            <RequiredFieldValidator fx:id="validatorPW" message="Passwort fehlt">
+               <cursor>
+                  <Cursor fx:constant="NONE" />
+               </cursor>
+            </RequiredFieldValidator>
+            <JFXTextField fx:id="username" labelFloat="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="200.0" promptText=" Benutzername">
+               <VBox.margin>
+                  <Insets bottom="35.0" left="5.0" right="5.0" />
                </VBox.margin>
             </JFXTextField>
-            <JFXPasswordField fx:id="password" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="200.0" promptText=" Passwort">
+            <JFXPasswordField fx:id="password" labelFloat="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="200.0" promptText=" Passwort">
                <VBox.margin>
-                  <Insets bottom="40.0" left="5.0" right="5.0" top="5.0" />
+                  <Insets bottom="15.0" left="5.0" right="5.0" top="20.0" />
                </VBox.margin>
             </JFXPasswordField>
             <HBox alignment="CENTER" nodeOrientation="LEFT_TO_RIGHT" prefHeight="40.0" prefWidth="300.0" spacing="50.0">
                <children>
-                  <JFXButton buttonType="RAISED" onAction="#close" prefHeight="30.0" prefWidth="100.0" styleClass="btn-close" text="Abbrechen" />
-                  <JFXButton buttonType="RAISED" onAction="#authenticate" prefHeight="30.0" prefWidth="100.0" styleClass="btn-login" text="Login" />
+                  <JFXButton buttonType="RAISED" onAction="#close" prefHeight="50.0" prefWidth="100.0" styleClass="btn-close" text="Abbrechen" />
+                  <JFXButton buttonType="RAISED" onAction="#authenticate" prefHeight="50.0" prefWidth="100.0" styleClass="btn-login" text="Login" />
                </children>
+               <VBox.margin>
+                  <Insets top="20.0" />
+               </VBox.margin>
             </HBox>
          </children>
+         <padding>
+            <Insets top="20.0" />
+         </padding>
       </VBox>
    </children>
 
