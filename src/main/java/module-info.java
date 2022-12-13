@@ -3,6 +3,9 @@ module pf.bb {
     requires javafx.controls;
     requires javafx.fxml;
     requires com.jfoenix;
+    requires unirest.java;
+    requires com.google.gson;
+    requires json.path;
 
     opens pf.bb to javafx.fxml;
     exports pf.bb;
