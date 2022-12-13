@@ -1,6 +1,6 @@
 package pf.bb.model;
 
-public class BicycleConfiguration {
+public class BicycleConfiguration extends EntityWithID {
 
     int configID;
     //private final ObjectProperty<Date> configDate;

@@ -26,7 +26,6 @@ public class PostConfigurationTask extends Task<Configuration> {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("articles", Main.API_HOST + "/configurations/" + configuration.articles);
         jsonObject.addProperty("user", Main.API_HOST + "/users/" + configuration.user.id);
-        jsonObject.addProperty("bookingPrice", configuration.bookingPrice);
 
         HttpResponse<JsonNode> res = Unirest.post(url).header("Content-Type", "application/json").header("Authorization", user.jsonWebToken).body(jsonObject.toString()).asJson();
 

@@ -10,25 +10,21 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-public class Configuration {
-    public Integer id;
+public class Configuration extends EntityWithID {
     public Date dateCreated = new Date();
-    public Integer bookingPrice;
     public List<Article> articles;
     public User user;
 
-//    public ConfigurationStatus status;
+    public ConfigurationStatus status = new ConfigurationStatus();
 
-    public Date dateLastChanged = new Date();
+    public Date dateLastChanged = null;
 
-    boolean writeAccess;
+    public boolean writeAccess = true;
 
-//    public OrderClass orderClass;
+    public OrderClass orderClass = new OrderClass();
 
 
-    public Configuration(Integer bookingPrice, List<Article> articles, User user) {
-        this.bookingPrice = bookingPrice;
-        this.articles = articles;
+    public Configuration(User user) {
         this.user = user;
     }
 
@@ -41,7 +37,4 @@ public class Configuration {
         return new SimpleStringProperty(df.format(dateCreated));
     }
 
-    public IntegerProperty bookingPriceProperty() {
-        return new SimpleIntegerProperty(bookingPrice);
-    }
 }

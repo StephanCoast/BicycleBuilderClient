@@ -1,9 +1,7 @@
 package pf.bb.model;
 
-public class Article {
+public class Article extends EntityWithID {
 
-
-	public int id;
 
 	public String name;
 
