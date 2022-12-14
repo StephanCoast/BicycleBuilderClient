@@ -1,7 +1,6 @@
 package pf.bb.controller;
 
 import com.jfoenix.controls.JFXDrawer;
-import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -10,7 +9,6 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
-import pf.bb.Main;
 import pf.bb.model.BicycleConfiguration;
 
 import java.io.IOException;
