@@ -6,7 +6,7 @@ public class Article extends EntityWithID {
 	public String name;
 
 
-	public ArticleType articleType;
+	public String type;
 
 
 	public String producer;

@@ -12,7 +12,7 @@ public class User extends EntityWithID {
 
 	public String lastname;
 
-	public UserRole userRole;
+	public String role;
 
     public List<Configuration> configurations = new ArrayList<>();
 
@@ -20,5 +20,6 @@ public class User extends EntityWithID {
 		this.name = name;
 		this.jsonWebToken = jsonWebToken;
 	}
+
 
 }

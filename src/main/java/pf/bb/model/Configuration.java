@@ -11,21 +11,23 @@ import java.util.Date;
 import java.util.List;
 
 public class Configuration extends EntityWithID {
-    public Date dateCreated = new Date();
-    public List<Article> articles;
+    //required
+    public boolean writeAccess;
+    public Date dateCreated;
+    public Date dateLastChanged;
     public User user;
+    public String status;
 
-    public ConfigurationStatus status = new ConfigurationStatus();
-
-    public Date dateLastChanged = null;
-
-    public boolean writeAccess = true;
-
+    //optional
+    public List<Article> articles;
     public OrderClass orderClass = new OrderClass();
 
-
     public Configuration(User user) {
+
+        String[] stats = {"ENTWURF", "ABGESCHLOSSEN", "EINKAUF", "STORNO"};
+
         this.user = user;
+        this.status = stats[0];
     }
 
     public IntegerProperty idProperty() {
@@ -34,7 +36,7 @@ public class Configuration extends EntityWithID {
 
     public StringProperty dateCreatedProperty() {
         DateFormat df = new SimpleDateFormat("dd.MM.yyyy");
-        return new SimpleStringProperty(df.format(dateCreated));
+        return new SimpleStringProperty(df.format(this.dateCreated));
     }
 
 }
