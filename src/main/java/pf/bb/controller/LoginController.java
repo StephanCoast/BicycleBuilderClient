@@ -9,8 +9,10 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
+import pf.bb.Main;
 import pf.bb.model.Configuration;
 import pf.bb.model.User;
+import pf.bb.task.DeleteConfigurationTask;
 import pf.bb.task.GetUserDetailsTask;
 import pf.bb.task.PostConfigurationTask;
 import pf.bb.task.PostLoginTask;
@@ -71,12 +73,23 @@ public class LoginController {
     public static void testPostConfiguration() {
         GetUserDetailsTask userDetailsTask = new GetUserDetailsTask(LoginController.activeUser);
         userDetailsTask.setOnSucceeded((WorkerStateEvent e2) -> {
+
+            // USER SUCCESSFULLY LOGGED IN -> ACCESS TO GET, POST, PUT, DELETE
+
+
             activeUser.id = userDetailsTask.getValue().id;
 
+            int off = 1;
+            // Example data
+            Configuration config1 = new Configuration(activeUser);
+            config1.articles.add(Main.ARTICLES.get(2-off));
+            config1.articles.add(Main.ARTICLES.get(5-off));
+            config1.articles.add(Main.ARTICLES.get(7-off));
+            config1.articles.add(Main.ARTICLES.get(9-off));
 
             // TODO Remove Test POST Configuration
             // query all configurations from REST API with Task Thread
-            PostConfigurationTask configurationsTask1 = new PostConfigurationTask(activeUser, new Configuration(activeUser));
+            PostConfigurationTask configurationsTask1 = new PostConfigurationTask(activeUser, config1);
             //Erst Task definieren incl. WorkerStateEvent als Flag, um zu wissen, wann fertig
             configurationsTask1.setOnRunning((successEvent) -> {
                 System.out.println("trying to save configuration...");
@@ -89,6 +102,23 @@ public class LoginController {
             });
             //Tasks in eigenem Thread ausführen
             new Thread(configurationsTask1).start();
+
+
+            // TODO Remove Test DELETE Configuration
+            // query all configurations from REST API with Task Thread
+            DeleteConfigurationTask configurationsTask2 = new DeleteConfigurationTask(activeUser, 21);
+            //Erst Task definieren incl. WorkerStateEvent als Flag, um zu wissen, wann fertig
+            configurationsTask2.setOnRunning((successEvent) -> {
+                System.out.println("trying to delete configuration...");
+            });
+            configurationsTask2.setOnSucceeded((WorkerStateEvent e) -> {
+                System.out.println("configurations deleted:" + configurationsTask1.getValue());
+            });
+            configurationsTask2.setOnFailed((WorkerStateEvent e) -> {
+                System.out.println("deleting failed" + configurationsTask1.getException());
+            });
+            //Tasks in eigenem Thread ausführen
+            new Thread(configurationsTask2).start();
 
 
         });

@@ -13,6 +13,7 @@ import javafx.util.Duration;
 import pf.bb.model.Article;
 import pf.bb.model.Configuration;
 import pf.bb.task.GetArticlesTask;
+import pf.bb.task.GetConfigurationsTask;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -20,7 +21,7 @@ import java.util.List;
 
 public class Main extends Application {
 
-    public static final List<Article> ARTICLES = new ArrayList<>();
+    public static final ArrayList<Article> ARTICLES = new ArrayList<>();
     public static final List<Configuration> CONFIGURATIONS = new ArrayList<>();
     public static final String API_HOST = "http://localhost:8080";
 
@@ -43,24 +44,29 @@ public class Main extends Application {
         articlesTask.setOnSucceeded((WorkerStateEvent e) -> {
             System.out.println("articles loaded.");
             ARTICLES.addAll(articlesTask.getValue());
+
+            ARTICLES.forEach( article -> {
+                System.out.println(article.id + ": "+ article.name);
+            });
+
         });
         //Tasks in eigenem Thread ausführen
         new Thread(articlesTask).start();
 
 
-//        // query all configurations from REST API with Task Thread
-//        GetConfigurationsTask configurationsTask = new GetConfigurationsTask();
-//
-//        //Erst Task definieren incl. WorkerStateEvent als Flag, um zu wissen, wann fertig
-//        configurationsTask.setOnRunning((successEvent) -> {
-//            System.out.println("loading  configurations...");
-//        });
-//        configurationsTask.setOnSucceeded((WorkerStateEvent e) -> {
-//            System.out.println("configurations loaded.");
-//            CONFIGURATIONS.addAll(configurationsTask.getValue());
-//        });
-//        //Tasks in eigenem Thread ausführen
-//        new Thread(configurationsTask).start();
+        // query all configurations from REST API with Task Thread
+        GetConfigurationsTask configurationsTask = new GetConfigurationsTask();
+
+        //Erst Task definieren incl. WorkerStateEvent als Flag, um zu wissen, wann fertig
+        configurationsTask.setOnRunning((successEvent) -> {
+            System.out.println("loading  configurations...");
+        });
+        configurationsTask.setOnSucceeded((WorkerStateEvent e) -> {
+            System.out.println("configurations loaded.");
+            CONFIGURATIONS.addAll(configurationsTask.getValue());
+        });
+        //Tasks in eigenem Thread ausführen
+        new Thread(configurationsTask).start();
 
 
     }
