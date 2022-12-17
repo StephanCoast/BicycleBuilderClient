@@ -3,7 +3,6 @@ package pf.bb.model;
 public class BicycleConfiguration {
 
     int configID;
-    //private final ObjectProperty<Date> configDate;
     String configDate;
     String configCustomer;
     int configCustomerID;

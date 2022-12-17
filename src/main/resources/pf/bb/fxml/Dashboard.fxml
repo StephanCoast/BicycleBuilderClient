@@ -17,7 +17,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" style="-fx-background-color: white;" stylesheets="@styles/Dashboard.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pf.bb.controller.DashboardController">
+<AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="720.0" minWidth="1280.0" prefHeight="720.0" prefWidth="1280.0" stylesheets="@styles/Dashboard.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pf.bb.controller.DashboardController">
    <BorderPane layoutY="99.0" prefHeight="394.0" prefWidth="691.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
       <top>
          <BorderPane prefHeight="48.0" prefWidth="625.0" styleClass="header-borderpane" BorderPane.alignment="CENTER">
@@ -71,11 +71,12 @@
             <children>
                <TableView fx:id="dboard_table" prefHeight="200.0" prefWidth="200.0">
                   <columns>
-                     <TableColumn fx:id="dboard_col1" minWidth="100.0" prefWidth="100.0" styleClass="table-col" text="ID" />
-                     <TableColumn fx:id="dboard_col2" minWidth="100.0" prefWidth="100.0" styleClass="table-col" text="Datum" />
-                     <TableColumn fx:id="dboard_col3" minWidth="200.0" prefWidth="200.0" styleClass="table-col-customer" text="Kunde" />
-                     <TableColumn fx:id="dboard_col4" minWidth="100.0" prefWidth="100.0" styleClass="table-col" text="Kunden-ID" />
-                     <TableColumn fx:id="dboard_col5" minWidth="150.0" prefWidth="150.0" styleClass="table-col" text="Status" />
+                     <TableColumn fx:id="dboard_col1" editable="false" maxWidth="200.0" minWidth="100.0" prefWidth="100.0" resizable="false" styleClass="table-col" text="ID" />
+                     <TableColumn fx:id="dboard_col2" editable="false" maxWidth="200.0" minWidth="100.0" prefWidth="100.0" resizable="false" styleClass="table-col" text="Datum" />
+                     <TableColumn fx:id="dboard_col3" editable="false" maxWidth="400.0" minWidth="200.0" prefWidth="200.0" styleClass="table-col-customer" text="Kunde" />
+                     <TableColumn fx:id="dboard_col4" editable="false" maxWidth="200.0" minWidth="100.0" prefWidth="100.0" resizable="false" styleClass="table-col" text="Kunden-ID" />
+                     <TableColumn fx:id="dboard_col5" editable="false" maxWidth="200.0" minWidth="100.0" prefWidth="100.0" resizable="false" styleClass="table-col" text="Status" />
+                     <TableColumn fx:id="dboard_col6" editable="false" maxWidth="150.0" minWidth="75.0" prefWidth="75.0" resizable="false" sortable="false" styleClass="table-col" text="Aktion" />
                   </columns>
                </TableView>
             </children>

@@ -3,6 +3,7 @@ module pf.bb {
     requires javafx.controls;
     requires javafx.fxml;
     requires com.jfoenix;
+    requires de.jensd.fx.glyphs.fontawesome;
 
     opens pf.bb to javafx.fxml;
     exports pf.bb;

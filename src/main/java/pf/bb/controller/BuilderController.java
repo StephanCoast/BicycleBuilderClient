@@ -1,9 +1,12 @@
 package pf.bb.controller;
 
 import com.jfoenix.controls.JFXDrawer;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
+import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.BorderPane;
 
@@ -29,6 +32,7 @@ public class BuilderController {
         closeAllBottomDrawers();
         vm.forceDrawerView(drawerDefault, catDefault);
         vm.forceDrawerView(drawerBottomCats, bpCats);
+        deactivateToggleDeselect();
     }
 
     public void logout(ActionEvent event) throws IOException {
@@ -56,6 +60,15 @@ public class BuilderController {
     // Stephan
     public void onSaveDraft(ActionEvent event) {
 
+    }
+
+    private void deactivateToggleDeselect() {
+        catsTogglegroup.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
+            @Override
+            public void changed(ObservableValue<? extends Toggle> observable, Toggle oldValue, Toggle newValue) {
+                if (newValue == null) { oldValue.setSelected(true); }
+            }
+        });
     }
 
     public void openSidebarCat1(ActionEvent event) throws IOException {
