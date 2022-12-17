@@ -45,7 +45,6 @@ public class Main extends Application {
     }
 
     // AR: aktuell nur zum Testen
-    
     private void fadeLoginScene(AnchorPane pane) {
         FadeTransition ft = new FadeTransition(Duration.millis(2000), pane);
         ft.setFromValue(0.0);

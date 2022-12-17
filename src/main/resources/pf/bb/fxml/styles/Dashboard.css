@@ -41,6 +41,20 @@
     -fx-alignment: center-left;
 }
 
+/* Icons in der Aktionsspalte */
+.table-icon-search {
+    -fx-fill: #2196f3; /* material palette - blue 500 primary */
+}
+
+.table-icon-remove {
+    -fx-fill: #ef5350; /* material palette - red 400 primary */
+}
+
+/* Zeilenhöhe abgestimmt mit Icon-Größe in der Aktionsspalte */
+.table-row-cell {
+    -fx-cell-size: 32px;
+}
+
 /* ######################################### */
 /* Dashboard - Footer */
 /* ######################################### */
