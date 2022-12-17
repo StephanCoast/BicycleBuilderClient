@@ -12,10 +12,7 @@ import javafx.scene.control.Label;
 import pf.bb.Main;
 import pf.bb.model.Configuration;
 import pf.bb.model.User;
-import pf.bb.task.DeleteConfigurationTask;
-import pf.bb.task.GetUserDetailsTask;
-import pf.bb.task.PostConfigurationTask;
-import pf.bb.task.PostLoginTask;
+import pf.bb.task.*;
 
 import java.io.IOException;
 
@@ -54,77 +51,27 @@ public class LoginController {
                 loginFailure.setVisible(true);
             } else {
 
+                GetUserDetailsTask userDetailsTask = new GetUserDetailsTask(LoginController.activeUser);
+                    userDetailsTask.setOnSucceeded((WorkerStateEvent e5) -> {
+                        activeUser.id = userDetailsTask.getValue().id;
 
-                testPostConfiguration();
+
+                        // Todo Remove before production - TEST Configuration Api
+                        testConfigurationApi();
 
 
+                        try {
+                            vm.forceView(event, "Dashboard.fxml", "Bicycle Builder - Dashboard");
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
 
-                try {
-                    vm.forceView(event, "Dashboard.fxml", "Bicycle Builder - Dashboard");
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
+                    });
+                new Thread(userDetailsTask).start();
             }
         });
         new Thread(loginTask).start();
     }
-
-
-    public static void testPostConfiguration() {
-        GetUserDetailsTask userDetailsTask = new GetUserDetailsTask(LoginController.activeUser);
-        userDetailsTask.setOnSucceeded((WorkerStateEvent e2) -> {
-
-            // USER SUCCESSFULLY LOGGED IN -> ACCESS TO GET, POST, PUT, DELETE
-
-
-            activeUser.id = userDetailsTask.getValue().id;
-
-            int off = 1;
-            // Example data
-            Configuration config1 = new Configuration(activeUser);
-            config1.articles.add(Main.ARTICLES.get(2-off));
-            config1.articles.add(Main.ARTICLES.get(5-off));
-            config1.articles.add(Main.ARTICLES.get(7-off));
-            config1.articles.add(Main.ARTICLES.get(9-off));
-
-            // TODO Remove Test POST Configuration
-            // query all configurations from REST API with Task Thread
-            PostConfigurationTask configurationsTask1 = new PostConfigurationTask(activeUser, config1);
-            //Erst Task definieren incl. WorkerStateEvent als Flag, um zu wissen, wann fertig
-            configurationsTask1.setOnRunning((successEvent) -> {
-                System.out.println("trying to save configuration...");
-            });
-            configurationsTask1.setOnSucceeded((WorkerStateEvent e) -> {
-                System.out.println("configurations saved. id=" + configurationsTask1.getValue());
-            });
-            configurationsTask1.setOnFailed((WorkerStateEvent e) -> {
-                System.out.println("saving failed" + configurationsTask1.getException());
-            });
-            //Tasks in eigenem Thread ausführen
-            new Thread(configurationsTask1).start();
-
-
-            // TODO Remove Test DELETE Configuration
-            // query all configurations from REST API with Task Thread
-            DeleteConfigurationTask configurationsTask2 = new DeleteConfigurationTask(activeUser, 21);
-            //Erst Task definieren incl. WorkerStateEvent als Flag, um zu wissen, wann fertig
-            configurationsTask2.setOnRunning((successEvent) -> {
-                System.out.println("trying to delete configuration...");
-            });
-            configurationsTask2.setOnSucceeded((WorkerStateEvent e) -> {
-                System.out.println("configurations deleted:" + configurationsTask1.getValue());
-            });
-            configurationsTask2.setOnFailed((WorkerStateEvent e) -> {
-                System.out.println("deleting failed" + configurationsTask1.getException());
-            });
-            //Tasks in eigenem Thread ausführen
-            new Thread(configurationsTask2).start();
-
-
-        });
-        new Thread(userDetailsTask).start();
-    }
-
 
 
     // todo: eventuell für fehlerhaften Login ebenfalls eine Alert-Box
@@ -138,5 +85,113 @@ public class LoginController {
         if (alert.getResult() == ButtonType.YES) {
             Platform.exit();
         }
+    }
+
+
+    public static void testConfigurationApi() {
+
+        // USER SUCCESSFULLY LOGGED IN -> ACCESS TO GET, POST, PUT, DELETE
+
+        // Test CREATE
+
+        int off = 1; // Local list index starts at 0, Db entity Ids with 1
+        // Example data
+        Configuration config1 = new Configuration(activeUser);
+        config1.articles.add(Main.ARTICLES.get(2 - off));
+        config1.articles.add(Main.ARTICLES.get(5 - off));
+        config1.articles.add(Main.ARTICLES.get(7 - off));
+        config1.articles.add(Main.ARTICLES.get(9 - off));
+
+        // Test POST
+        PostConfigurationTask configurationsTask1 = new PostConfigurationTask(activeUser, config1);
+        //Erst Task definieren incl. WorkerStateEvent als Flag, um zu wissen, wann fertig
+        configurationsTask1.setOnRunning((successEvent) -> {
+            System.out.println("trying to save configuration...");
+        });
+        configurationsTask1.setOnSucceeded((WorkerStateEvent e1) -> {
+            System.out.println("configurations saved. id=" + configurationsTask1.getValue());
+            Configuration createdConfiguration = configurationsTask1.getValue();
+            System.out.println("Created Configuration:" + createdConfiguration.toString());
+
+
+            // TEST GET
+            // query all configurations from REST API with Task Thread
+            GetConfigurationsTask configurationsTask2 = new GetConfigurationsTask();
+            //Erst Task definieren incl. WorkerStateEvent als Flag, um zu wissen, wann fertig
+            configurationsTask2.setOnRunning((successEvent) -> {
+                System.out.println("loading  configurations...");
+            });
+            configurationsTask2.setOnSucceeded((WorkerStateEvent e2) -> {
+                System.out.println("configurations loaded.");
+                Main.CONFIGURATIONS.addAll(configurationsTask2.getValue());
+
+                Main.CONFIGURATIONS.forEach(configuration -> {
+                    System.out.println(configuration.id + ": " + configuration.dateCreated + " - " + configuration.user.name);
+
+
+                    // CONFIGURATIONS Liste ist geladen.
+
+
+                    // Test PUT
+                    if (Main.CONFIGURATIONS.size() > 0) {
+
+                        int oldConfigId = Main.CONFIGURATIONS.get(0).id;
+                        Configuration updatedConfig = Main.CONFIGURATIONS.get(0);
+
+                        // UPDATES setzen
+                        updatedConfig.status = Configuration.stats[1]; // ABGESCHLOSSEN
+
+                        // Test PUT - Update Configuration
+                        PutConfigurationTask configurationsTask3 = new PutConfigurationTask(activeUser, updatedConfig, oldConfigId);
+                        //Erst Task definieren incl. WorkerStateEvent als Flag, um zu wissen, wann fertig
+                        configurationsTask3.setOnRunning((successEvent) -> {
+                            System.out.println("trying to update configuration...");
+                        });
+                        configurationsTask3.setOnSucceeded((WorkerStateEvent e3) -> {
+                            System.out.println("configuration updated: " + configurationsTask3.getValue());
+                            Configuration updatedConfiguration = configurationsTask3.getValue();
+                            System.out.println("Updated Configuration:" + updatedConfiguration.toString());
+                        });
+                        configurationsTask3.setOnFailed((WorkerStateEvent e31) -> {
+                            System.out.println("saving failed" + configurationsTask3.getException());
+                        });
+                        //Tasks in eigenem Thread ausführen
+                        new Thread(configurationsTask3).start();
+                    }
+
+
+                    // Test DELETE
+                    if (Main.CONFIGURATIONS.size() > 1) {
+                        int configId = 43;
+                        // query all configurations from REST API with Task Thread
+                        DeleteConfigurationTask configurationsTask4 = new DeleteConfigurationTask(activeUser, configId);
+                        //Erst Task definieren incl. WorkerStateEvent als Flag, um zu wissen, wann fertig
+                        configurationsTask4.setOnRunning((successEvent) -> {
+                            System.out.println("trying to delete configuration...");
+                        });
+                        configurationsTask4.setOnSucceeded((WorkerStateEvent e4) -> {
+                            System.out.println("configurations deleted:" + configurationsTask4.getValue());
+                        });
+                        configurationsTask4.setOnFailed((WorkerStateEvent e41) -> {
+                            System.out.println("deleting failed" + configurationsTask4.getException());
+                        });
+                        //Tasks in eigenem Thread ausführen
+                        new Thread(configurationsTask4).start();
+                    }
+
+
+                });
+            });
+            //Tasks in eigenem Thread ausführen
+            new Thread(configurationsTask2).start();
+
+
+        });
+        configurationsTask1.setOnFailed((WorkerStateEvent e11) -> {
+            System.out.println("saving failed" + configurationsTask1.getException());
+        });
+        new Thread(configurationsTask1).start();
+
+
     }
 }

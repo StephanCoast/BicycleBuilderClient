@@ -29,31 +29,8 @@ public class PostConfigurationTask extends Task<Configuration> {
 
     @Override
     protected Configuration call() throws Exception {
-        String url = Main.API_HOST + "/configurations";
 
-        //IDs or URLS necessary?
-//        String articleIds[] = new String[this.configuration.articles.size()];
-//
-//        for (int i=0; i<this.configuration.articles.size(); i++) {
-////            articleIds[i] = "{\"" + Main.API_HOST + "/articles/" + this.configuration.articles.get(i).id + "\"}";
-//            Main.API_HOST + "/articles/" + this.configuration.articles.get(i).id
-//        }
-//        System.out.println(Arrays.toString(articleIds));
-//        String articleIdJson = new Gson().toJson(articleIds);
-
-//        // FLATTEN - MAP JAVA Object to reduced JSON-TransferObject
-//        JsonObject jsonObject = new JsonObject();
-//        jsonObject.addProperty("user", Main.API_HOST + "/users/" + configuration.user.id);
-//        jsonObject.addProperty("status", this.configuration.status);
-//        jsonObject.addProperty("writeAccess", this.configuration.writeAccess);
-//        if (this.configuration.orderClass != null) {
-//            jsonObject.addProperty("orderClass", this.configuration.orderClass.id);
-//        }
-//
-////        jsonObject.addProperty("articles", articleIdJson);
-
-        HttpResponse<JsonNode> res = Unirest.post(url).header("Content-Type", "application/json").header("Authorization", user.jsonWebToken).body(this.configJSON).asJson();
-//        Configuration tempConfig = gson.fromJson(res.getBody().toString(),Configuration.class);
+        HttpResponse<JsonNode> res = Unirest.post(Configuration.getUrl()).header("Content-Type", "application/json").header("Authorization", user.jsonWebToken).body(this.configJSON).asJson();
 
         // Somehow necessary to get Location header for completing task succesfully, security?
         String location = res.getHeaders().getFirst("Location");

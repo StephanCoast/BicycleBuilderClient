@@ -22,7 +22,7 @@ import java.util.List;
 public class Main extends Application {
 
     public static final ArrayList<Article> ARTICLES = new ArrayList<>();
-    public static final List<Configuration> CONFIGURATIONS = new ArrayList<>();
+    public static List<Configuration> CONFIGURATIONS = new ArrayList<>();
     public static final String API_HOST = "http://localhost:8080";
 
 
@@ -34,7 +34,7 @@ public class Main extends Application {
     }
 
     private void stephan() {
-        // query all products from REST API with Task Thread
+        // query all articles from REST API with Task Thread before Login -> faster
         GetArticlesTask articlesTask = new GetArticlesTask();
 
         //Erst Task definieren incl. WorkerStateEvent als Flag, um zu wissen, wann fertig
@@ -44,30 +44,9 @@ public class Main extends Application {
         articlesTask.setOnSucceeded((WorkerStateEvent e) -> {
             System.out.println("articles loaded.");
             ARTICLES.addAll(articlesTask.getValue());
-
-            ARTICLES.forEach( article -> {
-                System.out.println(article.id + ": "+ article.name);
-            });
-
         });
         //Tasks in eigenem Thread ausführen
         new Thread(articlesTask).start();
-
-
-        // query all configurations from REST API with Task Thread
-        GetConfigurationsTask configurationsTask = new GetConfigurationsTask();
-
-        //Erst Task definieren incl. WorkerStateEvent als Flag, um zu wissen, wann fertig
-        configurationsTask.setOnRunning((successEvent) -> {
-            System.out.println("loading  configurations...");
-        });
-        configurationsTask.setOnSucceeded((WorkerStateEvent e) -> {
-            System.out.println("configurations loaded.");
-            CONFIGURATIONS.addAll(configurationsTask.getValue());
-        });
-        //Tasks in eigenem Thread ausführen
-        new Thread(configurationsTask).start();
-
 
     }
 
@@ -101,4 +80,5 @@ public class Main extends Application {
     public static void main(String[] args) {
         launch();
     }
+
 }

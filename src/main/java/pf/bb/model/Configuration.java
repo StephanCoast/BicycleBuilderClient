@@ -5,6 +5,7 @@ import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import pf.bb.Main;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -28,13 +29,16 @@ public class Configuration extends EntityWithID {
     //optional
     @Expose
     public ArrayList<Article> articles;
-
     @Expose
     public OrderClass orderClass;
 
-    public Configuration(User user) {
+    public static String[] stats = {"ENTWURF", "ABGESCHLOSSEN", "EINKAUF", "STORNO"};
+    private static String url = Main.API_HOST + "/configurations";
+    public static String getUrl() {
+        return url;
+    }
 
-        String[] stats = {"ENTWURF", "ABGESCHLOSSEN", "EINKAUF", "STORNO"};
+    public Configuration(User user) {
 
         this.writeAccess = true;
         this.user = user;
