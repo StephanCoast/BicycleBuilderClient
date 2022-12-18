@@ -6,25 +6,16 @@ import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
 import javafx.concurrent.Task;
-import pf.bb.Main;
 import pf.bb.model.Configuration;
 import pf.bb.model.User;
-
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 public class PutConfigurationTask extends Task<Configuration> {
 
     private final String configJSON;
     private final User user;
-
     private static final GsonBuilder gsonBuilder = new GsonBuilder();
-    private static final Gson gson = gsonBuilder.excludeFieldsWithoutExposeAnnotation().create();
-
+    private static final Gson gson = gsonBuilder.excludeFieldsWithoutExposeAnnotation().create();     // Wichtig damit @Expose Annotation greift
     private final int oldConfigId;
-
-    private final DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
     private final Configuration updatedConfig;
 
     public PutConfigurationTask(User user, Configuration updatedConfig, int oldConfigId) {
