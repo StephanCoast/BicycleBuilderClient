@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GetArticlesTask extends Task<List<Article>> {
-
+	
 	@Override
 	protected List<Article> call() throws Exception {
 		String url = Main.API_HOST + "/articles";

@@ -13,7 +13,6 @@ import javafx.util.Duration;
 import pf.bb.model.Article;
 import pf.bb.model.Configuration;
 import pf.bb.task.GetArticlesTask;
-import pf.bb.task.GetConfigurationsTask;
 
 import java.io.IOException;
 import java.util.ArrayList;

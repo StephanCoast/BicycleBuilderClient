@@ -116,7 +116,7 @@ public class LoginController {
 
             // TEST GET
             // query all configurations from REST API with Task Thread
-            GetConfigurationsTask configurationsTask2 = new GetConfigurationsTask();
+            GetConfigurationsTask configurationsTask2 = new GetConfigurationsTask(activeUser);
             //Erst Task definieren incl. WorkerStateEvent als Flag, um zu wissen, wann fertig
             configurationsTask2.setOnRunning((successEvent) -> {
                 System.out.println("loading  configurations...");

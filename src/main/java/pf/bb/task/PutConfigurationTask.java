@@ -30,19 +30,10 @@ public class PutConfigurationTask extends Task<Configuration> {
     @Override
     protected Configuration call() throws Exception {
 
-//        Configuration mappedUpdatedConfig = new Configuration(this.user);
-//        mappedUpdatedConfig.dateCreated = df.format(updatedConfig.dateCreated);
-//        mappedUpdatedConfig.dateLastChanged = df.format(new Date()); // set date of update
-//        mappedUpdatedConfig.status = updatedConfig.status;
-//        mappedUpdatedConfig.writeAccess = updatedConfig.writeAccess;
-//        mappedUpdatedConfig.orderClass = updatedConfig.orderClass;
-//        mappedUpdatedConfig.user = updatedConfig.user; // user who last changed it becomes new owner
-
         String url = Configuration.getUrl() + "/" + this.oldConfigId;
         System.out.println("Sending put request to: " + url);
 
         HttpResponse<JsonNode> res = Unirest.put(url).header("Content-Type", "application/json").header("Authorization", user.jsonWebToken).body(this.configJSON).asJson();
-
 //        System.out.println("Answer to PUT body:" + res.getHeaders() + "\n" + res.getBody());
 
         return updatedConfig;
