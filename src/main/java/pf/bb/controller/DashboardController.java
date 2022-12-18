@@ -1,5 +1,8 @@
 package pf.bb.controller;
 
+import com.jfoenix.controls.JFXPasswordField;
+import com.jfoenix.controls.JFXTextField;
+import com.jfoenix.validation.RequiredFieldValidator;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import com.jfoenix.controls.JFXButton;
@@ -22,6 +25,12 @@ import java.util.HashSet;
 
 public class DashboardController {
 
+    public RequiredFieldValidator validatorAdminUserID, validatorAdminFirstName, validatorAdminLastName, validatorAdminUserName, validatorAdminMail, validatorAdminPW;
+    public RequiredFieldValidator validatorProfileUserID, validatorProfileFirstName, validatorProfileLastName, validatorProfileUserName, validatorProfileMail;
+    public JFXTextField tfAdminUserID, tfAdminFirstName, tfAdminLastName, tfAdminUserName, tfAdminMail;
+    public JFXTextField tfProfileUserID, tfProfileFirstName, tfProfileLastName, tfProfileUserName, tfProfileMail;
+    public JFXPasswordField pfAdminPW;
+    public JFXButton btnNewConfig;
     public JFXDrawer drawerAdmin, drawerProfile;
     private HashSet<JFXDrawer> drawersDashboard;
     public BorderPane bpAdmin, bpProfile;
@@ -34,6 +43,7 @@ public class DashboardController {
     @FXML private TableColumn<BicycleConfiguration, Void> dboard_col6;
 
     ViewManager vm = ViewManager.getInstance();
+    ValidatorManager validatorManager = ValidatorManager.getInstance();
 
     public DashboardController() {
     }
@@ -44,6 +54,7 @@ public class DashboardController {
         setupTableView();
         closeAllDrawers();
         addActionButtonsToTable();
+        setupValidators();
     }
 
     public void openDashboard(ActionEvent event) throws IOException {
@@ -51,16 +62,19 @@ public class DashboardController {
     }
 
     public void openAdmin(ActionEvent event) throws IOException {
+        btnNewConfig.setDisable(true);
         closeAllDrawers();
         vm.forceDrawerView(drawerAdmin, bpAdmin);
     }
 
     public void openProfile(ActionEvent event) throws IOException {
+        btnNewConfig.setDisable(true);
         closeAllDrawers();
         vm.forceDrawerView(drawerProfile, bpProfile);
     }
 
     public void logout(ActionEvent event) throws IOException {
+        btnNewConfig.setDisable(false);
         vm.forceLoginView(event, "Login.fxml", "Bicycle Builder - Login");
     }
 
@@ -68,12 +82,16 @@ public class DashboardController {
         vm.forceView(event, "Builder.fxml", "Bicycle Builder - Konfigurator");
     }
 
-    public void onBottomBarClose(ActionEvent event) {closeAllDrawers();}
+    public void onBottomBarClose(ActionEvent event) {
+        btnNewConfig.setDisable(false);
+        closeAllDrawers();
+    }
 
     // AR: hier speichert der Admin einen neuen User
     // todo: speichern des neuen Users -> Server? bzw. DB?
     // Stephan
     public void onBottomBarSaveAdmin(ActionEvent event) {
+        btnNewConfig.setDisable(false);
         closeAllDrawers();
     }
 
@@ -81,6 +99,7 @@ public class DashboardController {
     // todo: speichern des neuen Profils -> Server? bzw. DB?
     // Stephan
     public void onBottomBarSaveProfile(ActionEvent event) {
+        btnNewConfig.setDisable(false);
         closeAllDrawers();
     }
 
@@ -152,6 +171,21 @@ public class DashboardController {
                 setGraphic(empty ? null : hBox);
             }
         });
+    }
+
+    private void setupValidators() {
+        validatorManager.initTextValidators(tfAdminUserID, validatorAdminUserID);
+        validatorManager.initTextValidators(tfAdminFirstName, validatorAdminFirstName);
+        validatorManager.initTextValidators(tfAdminLastName, validatorAdminLastName);
+        validatorManager.initTextValidators(tfAdminUserName, validatorAdminUserName);
+        validatorManager.initTextValidators(tfAdminMail, validatorAdminMail);
+        validatorManager.initPasswordValidators(pfAdminPW, validatorAdminPW);
+
+        validatorManager.initTextValidators(tfProfileUserID, validatorProfileUserID);
+        validatorManager.initTextValidators(tfProfileFirstName, validatorProfileFirstName);
+        validatorManager.initTextValidators(tfProfileLastName, validatorProfileLastName);
+        validatorManager.initTextValidators(tfProfileUserName, validatorProfileUserName);
+        validatorManager.initTextValidators(tfProfileMail, validatorProfileMail);
     }
 }
 

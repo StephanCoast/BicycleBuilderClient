@@ -64,6 +64,19 @@
     -fx-border-color : #ffa726; /* material palette - orange 400 primary */
 }
 
+/* Trennlinie links von den Kundendaten im Footer */
+.spCustomerData {
+    -fx-border-color : black;
+    -fx-border-width : 0 0 0 1;
+}
+
+/* Error-Message des Validators */
+.error-label {
+    -fx-text-fill: #ba000d; /* material palette - red 500 primary dark */
+    -fx-font-size: 10px;
+    -fx-padding: 0 0 0 5px;
+}
+
 /* ######################################### */
 /* Builder - Sidebar */
 /* ######################################### */
