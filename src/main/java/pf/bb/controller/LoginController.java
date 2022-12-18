@@ -125,62 +125,61 @@ public class LoginController {
                 System.out.println("configurations loaded.");
                 Main.CONFIGURATIONS.addAll(configurationsTask2.getValue());
 
-                Main.CONFIGURATIONS.forEach(configuration -> {
-                    System.out.println(configuration.id + ": " + configuration.dateCreated + " - " + configuration.user.name);
+//                Main.CONFIGURATIONS.forEach(configuration -> {
+//                    System.out.println(configuration.id + ": " + configuration.dateCreated + " - " + configuration.user.name);
+//                });
+
+                // Test PUT
+                if (Main.CONFIGURATIONS.size() > 1) {
+
+                    // Second to last set to "ABGESCHLOSSEN"
+                    int localConfigID = Main.CONFIGURATIONS.size()-2;
+                    int oldConfigId = Main.CONFIGURATIONS.get(localConfigID).id;
+                    Configuration updatedConfig = Main.CONFIGURATIONS.get(localConfigID);
+
+                    // UPDATES setzen
+                    updatedConfig.status = Configuration.stats[1]; // ABGESCHLOSSEN
+
+                    // Test PUT - Update Configuration
+                    PutConfigurationTask configurationsTask3 = new PutConfigurationTask(activeUser, updatedConfig, oldConfigId);
+                    //Erst Task definieren incl. WorkerStateEvent als Flag, um zu wissen, wann fertig
+                    configurationsTask3.setOnRunning((successEvent) -> {
+                        System.out.println("trying to update configuration...");
+                    });
+                    configurationsTask3.setOnSucceeded((WorkerStateEvent e3) -> {
+                        System.out.println("configuration updated: " + configurationsTask3.getValue());
 
 
-                    // CONFIGURATIONS Liste ist geladen.
+                        // Test DELETE
+                        if (Main.CONFIGURATIONS.size() > 10) {
+                            int configId = Main.CONFIGURATIONS.get(0).id; // DELETE OLDEST ELEMENT
+                            // query all configurations from REST API with Task Thread
+                            DeleteConfigurationTask configurationsTask4 = new DeleteConfigurationTask(activeUser, configId);
+                            //Erst Task definieren incl. WorkerStateEvent als Flag, um zu wissen, wann fertig
+                            configurationsTask4.setOnRunning((successEvent) -> {
+                                System.out.println("trying to delete configuration...");
+                            });
+                            configurationsTask4.setOnSucceeded((WorkerStateEvent e4) -> {
+                                System.out.println("configurations deleted:" + configurationsTask4.getValue());
+                            });
+                            configurationsTask4.setOnFailed((WorkerStateEvent e41) -> {
+                                System.out.println("deleting failed" + configurationsTask4.getException());
+                            });
+                            //Tasks in eigenem Thread ausführen
+                            new Thread(configurationsTask4).start();
+                        }
 
 
-                    // Test PUT
-                    if (Main.CONFIGURATIONS.size() > 0) {
-
-                        int oldConfigId = Main.CONFIGURATIONS.get(0).id;
-                        Configuration updatedConfig = Main.CONFIGURATIONS.get(0);
-
-                        // UPDATES setzen
-                        updatedConfig.status = Configuration.stats[1]; // ABGESCHLOSSEN
-
-                        // Test PUT - Update Configuration
-                        PutConfigurationTask configurationsTask3 = new PutConfigurationTask(activeUser, updatedConfig, oldConfigId);
-                        //Erst Task definieren incl. WorkerStateEvent als Flag, um zu wissen, wann fertig
-                        configurationsTask3.setOnRunning((successEvent) -> {
-                            System.out.println("trying to update configuration...");
-                        });
-                        configurationsTask3.setOnSucceeded((WorkerStateEvent e3) -> {
-                            System.out.println("configuration updated: " + configurationsTask3.getValue());
-                            Configuration updatedConfiguration = configurationsTask3.getValue();
-                            System.out.println("Updated Configuration:" + updatedConfiguration.toString());
-                        });
-                        configurationsTask3.setOnFailed((WorkerStateEvent e31) -> {
-                            System.out.println("saving failed" + configurationsTask3.getException());
-                        });
-                        //Tasks in eigenem Thread ausführen
-                        new Thread(configurationsTask3).start();
-                    }
+                    });
+                    configurationsTask3.setOnFailed((WorkerStateEvent e31) -> {
+                        System.out.println("saving failed" + configurationsTask3.getException());
+                    });
+                    //Tasks in eigenem Thread ausführen
+                    new Thread(configurationsTask3).start();
+                }
 
 
-                    // Test DELETE
-                    if (Main.CONFIGURATIONS.size() > 1) {
-                        int configId = 43;
-                        // query all configurations from REST API with Task Thread
-                        DeleteConfigurationTask configurationsTask4 = new DeleteConfigurationTask(activeUser, configId);
-                        //Erst Task definieren incl. WorkerStateEvent als Flag, um zu wissen, wann fertig
-                        configurationsTask4.setOnRunning((successEvent) -> {
-                            System.out.println("trying to delete configuration...");
-                        });
-                        configurationsTask4.setOnSucceeded((WorkerStateEvent e4) -> {
-                            System.out.println("configurations deleted:" + configurationsTask4.getValue());
-                        });
-                        configurationsTask4.setOnFailed((WorkerStateEvent e41) -> {
-                            System.out.println("deleting failed" + configurationsTask4.getException());
-                        });
-                        //Tasks in eigenem Thread ausführen
-                        new Thread(configurationsTask4).start();
-                    }
 
-
-                });
             });
             //Tasks in eigenem Thread ausführen
             new Thread(configurationsTask2).start();

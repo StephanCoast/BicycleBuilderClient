@@ -21,6 +21,6 @@ public class DeleteConfigurationTask extends Task<Boolean> {
 	protected Boolean call() throws Exception {
 		String url = Main.API_HOST + "/configurations/" + configId;
 		HttpResponse<JsonNode> res = Unirest.delete(url).header("Authorization", user.jsonWebToken).asJson();
-		return res.getStatus() == 200;
+		return res.getStatus() == 204;
 	}
 }

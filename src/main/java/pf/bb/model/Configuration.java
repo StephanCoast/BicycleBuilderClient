@@ -11,16 +11,16 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 public class Configuration extends EntityWithID {
     //required
     @Expose
     public boolean writeAccess;
 
-    public Date dateCreated; //Do not expose for serialization because creation Date is created serverside and cannot be changed
     @Expose
-    public Date dateLastChanged;
+    public String dateCreated;
+    @Expose
+    public String dateLastChanged;
     @Expose
     public User user;
     @Expose
@@ -51,7 +51,7 @@ public class Configuration extends EntityWithID {
     }
 
     public StringProperty dateCreatedProperty() {
-        DateFormat df = new SimpleDateFormat("dd.MM.yyyy");
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
         return new SimpleStringProperty(df.format(this.dateCreated));
     }
 
