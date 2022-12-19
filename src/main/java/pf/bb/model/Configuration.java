@@ -10,7 +10,6 @@ import pf.bb.Main;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 
 public class Configuration extends EntityWithID {
     //required
@@ -53,6 +52,10 @@ public class Configuration extends EntityWithID {
     public StringProperty dateCreatedProperty() {
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
         return new SimpleStringProperty(df.format(this.dateCreated));
+    }
+
+    public String toString() {
+        return String.format(this.getClass().getName() + "[id=%d, dateCreated='%s']", id, dateCreated);
     }
 
 }

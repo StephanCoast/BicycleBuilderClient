@@ -10,7 +10,7 @@ public class Bill extends EntityWithID {
 	public Date dateCreated = new Date();
 
 	public String toString() {
-		return String.format(this.getClass().getName() + "[id=%d, name='%s']", id);
+		return String.format(this.getClass().getName() + "[id=%d, dateCreated='%s']", id, dateCreated);
 	}
 
 }

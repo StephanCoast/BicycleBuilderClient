@@ -21,5 +21,9 @@ public class User extends EntityWithID {
 		this.jsonWebToken = jsonWebToken;
 	}
 
+	public String toString() {
+		return String.format(this.getClass().getName() + "[id=%d, dateCreated='%s']", id, name);
+	}
+
 
 }

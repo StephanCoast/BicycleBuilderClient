@@ -13,4 +13,6 @@ module pf.bb {
     exports pf.bb.controller;
     exports pf.bb.model;
     opens pf.bb.controller to javafx.fxml;
+    exports pf.bb.test;
+    opens pf.bb.test to javafx.fxml;
 }

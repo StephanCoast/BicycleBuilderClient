@@ -1,7 +1,5 @@
 package pf.bb.model;
 
-import com.google.gson.annotations.Expose;
-
 public class Article extends EntityWithID {
 
 	// GSON options: serialize only ID for less content in JSON, deserialize=true=default all fields from Server
@@ -24,5 +22,9 @@ public class Article extends EntityWithID {
 
 	public String hexColor;
 
+	@Override
+	public String toString() {
+		return String.format(this.getClass().getName() + "[id=%d, name='%s']", id, name);
+	}
 
 }
