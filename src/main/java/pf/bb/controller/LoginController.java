@@ -11,11 +11,10 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.concurrent.WorkerStateEvent;
-import javafx.scene.control.Label;
 import pf.bb.Main;
 import pf.bb.model.Configuration;
 import pf.bb.model.User;
-import pf.bb.model.ValidatorManager;
+import pf.bb.controller.ValidatorManager;
 import pf.bb.task.*;
 
 import java.io.IOException;
