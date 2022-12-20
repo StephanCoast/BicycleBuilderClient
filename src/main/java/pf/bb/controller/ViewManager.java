@@ -34,6 +34,8 @@ public class ViewManager {
         stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
         scene = new Scene(root);
         stage.setTitle(title);
+        stage.setMinWidth(1280.00); /* AR: must be set here to prevent resizing to zero, SC ignores */
+        stage.setMinHeight(800.00);
         stage.setResizable(true);
         stage.setScene(scene);
         stage.show();

@@ -41,6 +41,20 @@
     -fx-alignment: center-left;
 }
 
+/* Icons in der Aktionsspalte */
+.table-icon-search {
+    -fx-fill: #2196f3; /* material palette - blue 500 primary */
+}
+
+.table-icon-remove {
+    -fx-fill: #ef5350; /* material palette - red 400 primary */
+}
+
+/* Zeilenhöhe abgestimmt mit Icon-Größe in der Aktionsspalte */
+.table-row-cell {
+    -fx-cell-size: 32px;
+}
+
 /* ######################################### */
 /* Dashboard - Footer */
 /* ######################################### */
@@ -73,15 +87,18 @@
 .bottombar-icon-close {
     -fx-fill: #ef5350; /* material palette - red 400 primary */
 }
-/* Speichern Button im Admin- bzw Benutzerprofil */
-.bottombar-icon-save {
-    -fx-fill: #2196f3; /* material palette - blue 500 primary */
-}
 
-.bottombar-icon-close:hover, .bottombar-icon-save:hover {
+.bottombar-icon-close:hover {
     -fx-scale-x: 1.1;
     -fx-scale-y: 1.1;
     -fx-scale-z: 1.1;
+}
+
+/* Error-Message des Validators */
+.error-label {
+    -fx-text-fill: #ba000d; /* material palette - red 500 primary dark */
+    -fx-font-size: 10px;
+    -fx-padding: 0 0 0 5px;
 }
 
 

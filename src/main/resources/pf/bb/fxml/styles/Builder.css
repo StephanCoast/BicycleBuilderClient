@@ -56,12 +56,25 @@
     -jfx-untoggle-color: #42a5f5; /* material palette - blue 400 primary */
 }
 
-.jfx-toggle-node:selected {
+.btn-toggle-cats:selected {
     -fx-border-color : #6ff9ff; /* material palette - cyan 400 primary light */
 }
 
-.jfx-toggle-node:hover {
+.btn-toggle-cats:hover {
     -fx-border-color : #ffa726; /* material palette - orange 400 primary */
+}
+
+/* Trennlinie links von den Kundendaten im Footer */
+.spCustomerData {
+    -fx-border-color : black;
+    -fx-border-width : 0 0 0 1;
+}
+
+/* Error-Message des Validators */
+.error-label {
+    -fx-text-fill: #ba000d; /* material palette - red 500 primary dark */
+    -fx-font-size: 10px;
+    -fx-padding: 0 0 0 5px;
 }
 
 /* ######################################### */
@@ -99,4 +112,152 @@
     -fx-scale-y: 1.05;
     -fx-scale-z: 1.05;
 }
+
+/* ######################################### */
+/* Builder - Sidebar Kategorie 1 */
+/* ######################################### */
+
+.btn-toggle-cat1Color1, .btn-toggle-cat1Color2 {
+    -fx-background-radius: 50%;
+    -fx-background-insets: 1px;
+    -fx-border-color : black;
+    -fx-border-radius: 50%;
+    -fx-border-width : 1 1 1 1;
+}
+
+.btn-toggle-cat1Color1 {
+    -jfx-toggle-color: rgba(0, 0, 0, 1);
+    -jfx-untoggle-color: rgba(0, 0, 0, 0.9);
+    -fx-text-fill: transparent;
+}
+
+.btn-toggle-cat1Color2 {
+    -jfx-toggle-color: rgba(255, 255, 255, 1);
+    -jfx-untoggle-color: rgba(255, 255, 255, 0.9);
+    -fx-text-fill: transparent;
+}
+
+.btn-toggle-cat1Color1:selected, .btn-toggle-cat1Color2:selected {
+    -fx-border-color : #76ff03; /* material palette - light green 400 A primary */
+    -fx-effect: dropshadow(gaussian, rgba(118, 255, 3, .5), 5, 0.4, 0.0, 0.0); /* material palette - light green 400 A primary */
+}
+
+.btn-toggle-cat1Color1:hover {
+    -fx-border-color : #ffa726; /* material palette - orange 400 primary */
+    -fx-text-fill: white;
+}
+
+.btn-toggle-cat1Color2:hover {
+    -fx-border-color : #ffa726; /* material palette - orange 400 primary */
+    -fx-text-fill: black;
+}
+
+.btn-toggle-cats-radioText {
+    -fx-background-radius: 5px;
+    -fx-background-insets: 1px;
+    -fx-border-color : black;
+    -fx-border-radius: 5px;
+    -fx-border-width : 1 1 1 1;
+    -jfx-toggle-color: transparent;
+    -jfx-untoggle-color: transparent;
+}
+
+.btn-toggle-cats-radioText:selected {
+    -fx-border-color : #76ff03; /* material palette - light green 400 A primary */
+    -fx-effect: dropshadow(gaussian, rgba(118, 255, 3, .5), 5, 0.4, 0.0, 0.0); /* material palette - light green 400 A primary */
+}
+
+.btn-toggle-cats-radioText:hover {
+    -fx-border-color : #ffa726; /* material palette - orange 400 primary */
+}
+
+/* ######################################### */
+/* Builder - Sidebar Kategorie 2 */
+/* ######################################### */
+
+/* ######################################### */
+/* Builder - Sidebar Kategorie 3 */
+/* ######################################### */
+
+.btn-toggle-cat3Color1, .btn-toggle-cat3Color2 {
+    -fx-background-radius: 50%;
+    -fx-background-insets: 1px;
+    -fx-border-color : black;
+    -fx-border-radius: 50%;
+    -fx-border-width : 1 1 1 1;
+}
+
+.btn-toggle-cat3Color1 {
+    -jfx-toggle-color: rgba(0, 0, 0, 1);
+    -jfx-untoggle-color: rgba(0, 0, 0, 0.9);
+    -fx-text-fill: transparent;
+}
+
+.btn-toggle-cat3Color2 {
+    -jfx-toggle-color: rgba(255, 255, 255, 1);
+    -jfx-untoggle-color: rgba(255, 255, 255, 0.9);
+    -fx-text-fill: transparent;
+}
+
+.btn-toggle-cat3Color1:selected, .btn-toggle-cat3Color2:selected {
+    -fx-border-color : #76ff03; /* material palette - light green 400 A primary */
+    -fx-effect: dropshadow(gaussian, rgba(118, 255, 3, .5), 5, 0.4, 0.0, 0.0); /* material palette - light green 400 A primary */
+}
+
+.btn-toggle-cat3Color1:hover {
+    -fx-border-color : #ffa726; /* material palette - orange 400 primary */
+    -fx-text-fill: white;
+}
+
+.btn-toggle-cat3Color2:hover {
+    -fx-border-color : #ffa726; /* material palette - orange 400 primary */
+    -fx-text-fill: black;
+}
+
+/* ######################################### */
+/* Builder - Sidebar Kategorie 4 */
+/* ######################################### */
+
+/* ######################################### */
+/* Builder - Sidebar Kategorie 5 */
+/* ######################################### */
+
+.btn-toggle-cat5Color1, .btn-toggle-cat5Color2 {
+    -fx-background-radius: 50%;
+    -fx-background-insets: 1px;
+    -fx-border-color : black;
+    -fx-border-radius: 50%;
+    -fx-border-width : 1 1 1 1;
+}
+
+.btn-toggle-cat5Color1 {
+    -jfx-toggle-color: rgba(0, 0, 0, 1);
+    -jfx-untoggle-color: rgba(0, 0, 0, 0.9);
+    -fx-text-fill: transparent;
+}
+
+.btn-toggle-cat5Color2 {
+    -jfx-toggle-color: rgba(255, 255, 255, 1);
+    -jfx-untoggle-color: rgba(255, 255, 255, 0.9);
+    -fx-text-fill: transparent;
+}
+
+.btn-toggle-cat5Color1:selected, .btn-toggle-cat5Color2:selected {
+    -fx-border-color : #76ff03; /* material palette - light green 400 A primary */
+    -fx-effect: dropshadow(gaussian, rgba(118, 255, 3, .5), 5, 0.4, 0.0, 0.0); /* material palette - light green 400 A primary */
+}
+
+.btn-toggle-cat5Color1:hover {
+    -fx-border-color : #ffa726; /* material palette - orange 400 primary */
+    -fx-text-fill: white;
+}
+
+.btn-toggle-cat5Color2:hover {
+    -fx-border-color : #ffa726; /* material palette - orange 400 primary */
+    -fx-text-fill: black;
+}
+
+/* ######################################### */
+/* Builder - Sidebar Kategorie 6 */
+/* ######################################### */
 

@@ -4,6 +4,7 @@
 <?import com.jfoenix.controls.JFXDrawer?>
 <?import com.jfoenix.controls.JFXPasswordField?>
 <?import com.jfoenix.controls.JFXTextField?>
+<?import com.jfoenix.validation.RequiredFieldValidator?>
 <?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.Cursor?>
@@ -17,20 +18,20 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" style="-fx-background-color: white;" stylesheets="@styles/Dashboard.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pf.bb.controller.DashboardController">
-   <BorderPane layoutY="99.0" prefHeight="394.0" prefWidth="691.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+<AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" stylesheets="@styles/Dashboard.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pf.bb.controller.DashboardController">
+   <BorderPane layoutY="99.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
       <top>
          <BorderPane prefHeight="48.0" prefWidth="625.0" styleClass="header-borderpane" BorderPane.alignment="CENTER">
             <cursor>
                <Cursor fx:constant="HAND" />
             </cursor>
             <left>
-               <StackPane prefHeight="150.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+               <StackPane prefWidth="200.0" BorderPane.alignment="CENTER">
                   <FontAwesomeIconView glyphName="BICYCLE" size="38" styleClass="header-icon-bicycle" textOrigin="TOP" wrappingWidth="48.85714340209961" />
                </StackPane>
             </left>
             <center>
-               <StackPane prefHeight="150.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+               <StackPane prefWidth="200.0" BorderPane.alignment="CENTER">
                   <Label alignment="CENTER" styleClass="header-title" text="Bicycle Builder">
                      <font>
                         <Font size="32.0" />
@@ -39,7 +40,7 @@
                </StackPane>
             </center>
             <right>
-               <StackPane prefHeight="150.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+               <StackPane prefWidth="200.0" BorderPane.alignment="CENTER">
                   <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="50.0">
                      <JFXButton ellipsisString="" onAction="#openDashboard" prefHeight="28.0" prefWidth="28.0" styleClass="header-icon-home">
                         <graphic>
@@ -67,25 +68,26 @@
          </BorderPane>
       </top>
       <center>
-         <StackPane prefWidth="200.0" BorderPane.alignment="CENTER">
+         <StackPane BorderPane.alignment="CENTER">
             <children>
                <TableView fx:id="dboard_table" prefHeight="200.0" prefWidth="200.0">
                   <columns>
-                     <TableColumn fx:id="dboard_col1" minWidth="100.0" prefWidth="100.0" styleClass="table-col" text="ID" />
-                     <TableColumn fx:id="dboard_col2" minWidth="100.0" prefWidth="100.0" styleClass="table-col" text="Datum" />
-                     <TableColumn fx:id="dboard_col3" minWidth="200.0" prefWidth="200.0" styleClass="table-col-customer" text="Kunde" />
-                     <TableColumn fx:id="dboard_col4" minWidth="100.0" prefWidth="100.0" styleClass="table-col" text="Kunden-ID" />
-                     <TableColumn fx:id="dboard_col5" minWidth="150.0" prefWidth="150.0" styleClass="table-col" text="Status" />
+                     <TableColumn fx:id="dboard_col1" editable="false" maxWidth="200.0" minWidth="100.0" prefWidth="100.0" resizable="false" styleClass="table-col" text="ID" />
+                     <TableColumn fx:id="dboard_col2" editable="false" maxWidth="200.0" minWidth="100.0" prefWidth="100.0" resizable="false" styleClass="table-col" text="Datum" />
+                     <TableColumn fx:id="dboard_col3" editable="false" maxWidth="400.0" minWidth="200.0" prefWidth="200.0" styleClass="table-col-customer" text="Kunde" />
+                     <TableColumn fx:id="dboard_col4" editable="false" maxWidth="200.0" minWidth="100.0" prefWidth="100.0" resizable="false" styleClass="table-col" text="Kunden-ID" />
+                     <TableColumn fx:id="dboard_col5" editable="false" maxWidth="200.0" minWidth="100.0" prefWidth="100.0" resizable="false" styleClass="table-col" text="Status" />
+                     <TableColumn fx:id="dboard_col6" editable="false" maxWidth="150.0" minWidth="75.0" prefWidth="75.0" resizable="false" sortable="false" styleClass="table-col" text="Aktion" />
                   </columns>
                </TableView>
             </children>
          </StackPane>
       </center>
       <bottom>
-         <BorderPane prefHeight="125.0" styleClass="footer-borderpane" BorderPane.alignment="CENTER">
+         <BorderPane prefHeight="200.0" styleClass="footer-borderpane" BorderPane.alignment="CENTER">
             <left>
                <StackPane prefHeight="150.0" prefWidth="300.0" BorderPane.alignment="CENTER">
-                  <JFXButton buttonType="RAISED" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#openBuilder" prefHeight="50.0" prefWidth="250.0" styleClass="btn-builder" text="Neue Konfiguration" />
+                  <JFXButton fx:id="btnNewConfig" buttonType="RAISED" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#openBuilder" prefHeight="50.0" prefWidth="250.0" styleClass="btn-builder" text="Neue Konfiguration" />
                </StackPane>
             </left>
             <cursor>
@@ -94,48 +96,109 @@
             <center>
                <StackPane prefHeight="150.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                   <children>
-                     <JFXDrawer fx:id="drawerAdmin" defaultDrawerSize="125.0" direction="BOTTOM" prefHeight="125.0" prefWidth="900.0" visible="false">
+                     <JFXDrawer fx:id="drawerAdmin" defaultDrawerSize="200.0" direction="BOTTOM" prefHeight="125.0" prefWidth="900.0">
                         <children>
                            <BorderPane fx:id="bpAdmin" prefHeight="200.0" prefWidth="200.0" styleClass="bpAdmin">
                               <center>
-                                 <StackPane prefHeight="150.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                                 <StackPane BorderPane.alignment="CENTER">
                                     <children>
-                                       <VBox prefHeight="200.0" prefWidth="100.0">
+                                       <VBox>
                                           <children>
-                                             <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="20.0">
-                                                <children>
-                                                   <JFXTextField maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="150.0" promptText=" Benutzer-ID" />
-                                                   <JFXTextField maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="150.0" promptText=" Vorname" />
-                                                   <JFXTextField maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="150.0" promptText=" Nachname" />
-                                                </children>
-                                                <padding>
-                                                   <Insets left="10.0" />
-                                                </padding></HBox>
-                                             <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="20.0">
-                                                <children>
-                                                   <JFXTextField maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="150.0" promptText=" Benutzername" />
-                                                   <JFXTextField maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="150.0" promptText=" E-Mail" />
-                                                   <JFXPasswordField maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="150.0" promptText=" Passwort" />
-                                                </children>
-                                                <padding>
-                                                   <Insets left="10.0" />
-                                                </padding></HBox>
-                                             <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0">
-                                                <children>
-                                                   <JFXButton ellipsisString="" onAction="#onBottomBarClose" prefHeight="28.0" prefWidth="28.0" styleClass="bottombar-icon-close">
-                                                      <graphic>
-                                                         <FontAwesomeIconView glyphName="CLOSE" size="24" styleClass="bottombar-icon-close" />
-                                                      </graphic>
-                                                   </JFXButton>
-                                                   <JFXButton ellipsisString="" onAction="#onBottomBarSaveAdmin" prefHeight="28.0" prefWidth="28.0" styleClass="bottombar-icon-save">
-                                                      <graphic>
-                                                         <FontAwesomeIconView glyphName="SAVE" size="24" styleClass="bottombar-icon-save" />
-                                                      </graphic>
-                                                   </JFXButton>
-                                                </children>
-                                                <padding>
-                                                   <Insets left="10.0" />
-                                                </padding></HBox>
+                                             <BorderPane prefHeight="50.0">
+                                                <left>
+                                                   <StackPane prefWidth="40.0" BorderPane.alignment="CENTER">
+                                                      <children>
+                                                         <JFXButton ellipsisString="" onAction="#onBottomBarClose" prefHeight="28.0" prefWidth="28.0" styleClass="bottombar-icon-close">
+                                                            <graphic>
+                                                               <FontAwesomeIconView glyphName="CLOSE" size="24" styleClass="bottombar-icon-close" />
+                                                            </graphic>
+                                                         </JFXButton>
+                                                      </children>
+                                                   </StackPane>
+                                                </left>
+                                                <center>
+                                                   <StackPane BorderPane.alignment="CENTER">
+                                                      <children>
+                                                         <Label alignment="CENTER" styleClass="header-title" text="Nutzer anlegen">
+                                                            <font>
+                                                               <Font size="20.0" />
+                                                            </font>
+                                                         </Label>
+                                                      </children>
+                                                   </StackPane>
+                                                </center>
+                                             </BorderPane>
+                                             <BorderPane prefHeight="200.0" prefWidth="200.0">
+                                                <center>
+                                                   <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+                                                      <children>
+                                                         <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="20.0">
+                                                            <children>
+                                                               <JFXTextField fx:id="tfAdminUserID" labelFloat="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="150.0" promptText=" Benutzer-ID" />
+                                                               <JFXTextField fx:id="tfAdminFirstName" labelFloat="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="150.0" promptText=" Vorname" />
+                                                               <JFXTextField fx:id="tfAdminLastName" labelFloat="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="150.0" promptText=" Nachname" />
+                                                               <RequiredFieldValidator fx:id="validatorAdminUserID" message="Benutzer-ID fehlt">
+                                                                  <cursor>
+                                                                     <Cursor fx:constant="NONE" />
+                                                                  </cursor>
+                                                               </RequiredFieldValidator>
+                                                               <RequiredFieldValidator fx:id="validatorAdminFirstName" message="Vorname fehlt">
+                                                                  <cursor>
+                                                                     <Cursor fx:constant="NONE" />
+                                                                  </cursor>
+                                                               </RequiredFieldValidator>
+                                                               <RequiredFieldValidator fx:id="validatorAdminLastName" message="Nachname fehlt">
+                                                                  <cursor>
+                                                                     <Cursor fx:constant="NONE" />
+                                                                  </cursor>
+                                                               </RequiredFieldValidator>
+                                                            </children>
+                                                            <padding>
+                                                               <Insets left="10.0" />
+                                                            </padding>
+                                                         </HBox>
+                                                         <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="20.0">
+                                                            <children>
+                                                               <JFXTextField fx:id="tfAdminUserName" labelFloat="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="150.0" promptText=" Benutzername" />
+                                                               <JFXTextField fx:id="tfAdminMail" labelFloat="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="150.0" promptText=" E-Mail" />
+                                                               <JFXPasswordField fx:id="pfAdminPW" labelFloat="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="150.0" promptText=" Passwort" />
+                                                               <RequiredFieldValidator fx:id="validatorAdminUserName" message="Benutzername fehlt">
+                                                                  <cursor>
+                                                                     <Cursor fx:constant="NONE" />
+                                                                  </cursor>
+                                                               </RequiredFieldValidator>
+                                                               <RequiredFieldValidator fx:id="validatorAdminMail" message="E-Mail Adresse fehlt">
+                                                                  <cursor>
+                                                                     <Cursor fx:constant="NONE" />
+                                                                  </cursor>
+                                                               </RequiredFieldValidator>
+                                                               <RequiredFieldValidator fx:id="validatorAdminPW" message="Passwort fehlt">
+                                                                  <cursor>
+                                                                     <Cursor fx:constant="NONE" />
+                                                                  </cursor>
+                                                               </RequiredFieldValidator>
+                                                            </children>
+                                                            <padding>
+                                                               <Insets left="10.0" />
+                                                            </padding>
+                                                         </HBox>
+                                                      </children>
+                                                   </VBox>
+                                                </center>
+                                                <right>
+                                                   <StackPane alignment="BOTTOM_CENTER" prefWidth="225.0" BorderPane.alignment="CENTER">
+                                                      <children>
+                                                         <JFXButton buttonType="RAISED" ellipsisString="" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#onBottomBarSaveAdmin" prefHeight="40.0" prefWidth="150.0" styleClass="btn-builder" text="Speichern" />
+                                                      </children>
+                                                      <BorderPane.margin>
+                                                         <Insets />
+                                                      </BorderPane.margin>
+                                                      <padding>
+                                                         <Insets bottom="20.0" />
+                                                      </padding>
+                                                   </StackPane>
+                                                </right>
+                                             </BorderPane>
                                           </children>
                                        </VBox>
                                     </children>
@@ -144,7 +207,7 @@
                            </BorderPane>
                         </children>
                      </JFXDrawer>
-                     <JFXDrawer fx:id="drawerProfile" defaultDrawerSize="125.0" direction="BOTTOM" prefHeight="125.0" prefWidth="900.0">
+                     <JFXDrawer fx:id="drawerProfile" defaultDrawerSize="200.0" direction="BOTTOM" prefHeight="125.0" prefWidth="900.0" visible="false">
                         <children>
                            <BorderPane fx:id="bpProfile" prefHeight="200.0" prefWidth="200.0" styleClass="bpProfile">
                               <center>
@@ -152,42 +215,92 @@
                                     <children>
                                        <VBox prefHeight="200.0" prefWidth="100.0">
                                           <children>
-                                             <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="20.0">
-                                                <children>
-                                                   <JFXTextField maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="150.0" promptText=" Benutzer-ID" />
-                                                   <JFXTextField maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="150.0" promptText=" Vorname" />
-                                                   <JFXTextField maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="150.0" promptText=" Nachname" />
-                                                </children>
-                                                <padding>
-                                                   <Insets left="10.0" />
-                                                </padding>
-                                             </HBox>
-                                             <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="20.0">
-                                                <children>
-                                                   <JFXTextField maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="150.0" promptText=" Benutzername" />
-                                                   <JFXTextField maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="150.0" promptText=" E-Mail" />
-                                                </children>
-                                                <padding>
-                                                   <Insets left="10.0" />
-                                                </padding>
-                                             </HBox>
-                                             <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0">
-                                                <children>
-                                                   <JFXButton ellipsisString="" onAction="#onBottomBarClose" prefHeight="28.0" prefWidth="28.0" styleClass="bottombar-icon-close">
-                                                      <graphic>
-                                                         <FontAwesomeIconView glyphName="CLOSE" size="24" styleClass="bottombar-icon-close" />
-                                                      </graphic>
-                                                   </JFXButton>
-                                                   <JFXButton ellipsisString="" onAction="#onBottomBarSaveProfile" prefHeight="28.0" prefWidth="28.0" styleClass="bottombar-icon-save">
-                                                      <graphic>
-                                                         <FontAwesomeIconView glyphName="SAVE" size="24" styleClass="bottombar-icon-save" />
-                                                      </graphic>
-                                                   </JFXButton>
-                                                </children>
-                                                <padding>
-                                                   <Insets left="10.0" />
-                                                </padding>
-                                             </HBox>
+                                             <BorderPane prefHeight="50.0">
+                                                <left>
+                                                   <StackPane prefWidth="40.0" BorderPane.alignment="CENTER">
+                                                      <children>
+                                                         <JFXButton ellipsisString="" onAction="#onBottomBarClose" prefHeight="28.0" prefWidth="28.0" styleClass="bottombar-icon-close">
+                                                            <graphic>
+                                                               <FontAwesomeIconView glyphName="CLOSE" size="24" styleClass="bottombar-icon-close" />
+                                                            </graphic>
+                                                         </JFXButton>
+                                                      </children>
+                                                   </StackPane>
+                                                </left>
+                                                <center>
+                                                   <StackPane BorderPane.alignment="CENTER">
+                                                      <children>
+                                                         <Label alignment="CENTER" styleClass="header-title" text="Profildaten bearbeiten">
+                                                            <font>
+                                                               <Font size="20.0" />
+                                                            </font>
+                                                         </Label>
+                                                      </children>
+                                                   </StackPane>
+                                                </center>
+                                             </BorderPane>
+                                             <BorderPane prefHeight="200.0" prefWidth="200.0">
+                                                <center>
+                                                   <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+                                                      <children>
+                                                         <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="20.0">
+                                                            <children>
+                                                               <JFXTextField fx:id="tfProfileUserID" labelFloat="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="150.0" promptText=" Benutzer-ID" />
+                                                               <JFXTextField fx:id="tfProfileFirstName" labelFloat="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="150.0" promptText=" Vorname" />
+                                                               <JFXTextField fx:id="tfProfileLastName" labelFloat="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="150.0" promptText=" Nachname" />
+                                                               <RequiredFieldValidator fx:id="validatorProfileUserID" message="Benutzer-ID fehlt">
+                                                                  <cursor>
+                                                                     <Cursor fx:constant="NONE" />
+                                                                  </cursor>
+                                                               </RequiredFieldValidator>
+                                                               <RequiredFieldValidator fx:id="validatorProfileFirstName" message="Vorname fehlt">
+                                                                  <cursor>
+                                                                     <Cursor fx:constant="NONE" />
+                                                                  </cursor>
+                                                               </RequiredFieldValidator>
+                                                               <RequiredFieldValidator fx:id="validatorProfileLastName" message="Nachname fehlt">
+                                                                  <cursor>
+                                                                     <Cursor fx:constant="NONE" />
+                                                                  </cursor>
+                                                               </RequiredFieldValidator>
+                                                            </children>
+                                                            <padding>
+                                                               <Insets left="10.0" />
+                                                            </padding>
+                                                         </HBox>
+                                                         <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="20.0">
+                                                            <children>
+                                                               <JFXTextField fx:id="tfProfileUserName" labelFloat="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="150.0" promptText=" Benutzername" />
+                                                               <JFXTextField fx:id="tfProfileMail" labelFloat="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="150.0" promptText=" E-Mail" />
+                                                               <RequiredFieldValidator fx:id="validatorProfileUserName" message="Benutzername fehlt">
+                                                                  <cursor>
+                                                                     <Cursor fx:constant="NONE" />
+                                                                  </cursor>
+                                                               </RequiredFieldValidator>
+                                                               <RequiredFieldValidator fx:id="validatorProfileMail" message="E-Mail Adresse fehlt">
+                                                                  <cursor>
+                                                                     <Cursor fx:constant="NONE" />
+                                                                  </cursor>
+                                                               </RequiredFieldValidator>
+                                                            </children>
+                                                            <padding>
+                                                               <Insets left="10.0" />
+                                                            </padding>
+                                                         </HBox>
+                                                      </children>
+                                                   </VBox>
+                                                </center>
+                                                <right>
+                                                   <StackPane alignment="BOTTOM_CENTER" prefWidth="225.0" BorderPane.alignment="CENTER">
+                                                      <children>
+                                                         <JFXButton buttonType="RAISED" ellipsisString="" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#onBottomBarSaveProfile" prefHeight="40.0" prefWidth="150.0" styleClass="btn-builder" text="Speichern" />
+                                                      </children>
+                                                      <padding>
+                                                         <Insets bottom="20.0" />
+                                                      </padding>
+                                                   </StackPane>
+                                                </right>
+                                             </BorderPane>
                                           </children>
                                        </VBox>
                                     </children>

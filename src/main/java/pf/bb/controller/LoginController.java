@@ -3,15 +3,19 @@ package pf.bb.controller;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
 import javafx.application.Platform;
-import javafx.concurrent.WorkerStateEvent;
+import com.jfoenix.validation.RequiredFieldValidator;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
+import javafx.concurrent.WorkerStateEvent;
 import javafx.scene.control.Label;
 import pf.bb.Main;
 import pf.bb.model.Configuration;
 import pf.bb.model.User;
+import pf.bb.model.ValidatorManager;
 import pf.bb.task.*;
 
 import java.io.IOException;
@@ -20,14 +24,22 @@ public class LoginController {
 
     ViewManager vm = ViewManager.getInstance();
 
-
     public static User activeUser; // user who is currently logged in
     @FXML
     public JFXTextField username;
     @FXML
     public JFXPasswordField password;
+
+    ValidatorManager validatorManager = ValidatorManager.getInstance();
+    public RequiredFieldValidator validatorName;
+    public RequiredFieldValidator validatorPW;
+
+
     @FXML
-    public Label loginFailure;
+    public void initialize() {
+        validatorManager.initTextValidators(username, validatorName);
+        validatorManager.initPasswordValidators(password, validatorPW);
+    }
 
     public void authenticate(ActionEvent event) throws IOException {
         // todo: nach stephanLogin() verschieben beim erfolgreichen Login
@@ -47,8 +59,8 @@ public class LoginController {
         loginTask.setOnSucceeded((WorkerStateEvent e2) -> {
             activeUser = loginTask.getValue();
             if (activeUser == null) {
-                // login failed
-                loginFailure.setVisible(true);
+                // login failed -> Show somehow in FXML
+//                loginFailure.setVisible(true);
             } else {
 
                 GetUserDetailsTask userDetailsTask = new GetUserDetailsTask(LoginController.activeUser);
@@ -85,6 +97,23 @@ public class LoginController {
         if (alert.getResult() == ButtonType.YES) {
             Platform.exit();
         }
+    }
+
+    private void initValidators(JFXTextField textField, JFXPasswordField passwordField) {
+        textField.getValidators().add(validatorName);
+        passwordField.getValidators().add(validatorPW);
+        textField.focusedProperty().addListener(new ChangeListener<Boolean>() {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                if (!newValue) { textField.validate(); }
+            }
+        });
+        passwordField.focusedProperty().addListener(new ChangeListener<Boolean>() {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                if (!newValue) { passwordField.validate(); }
+            }
+        });
     }
 
 
@@ -193,4 +222,8 @@ public class LoginController {
 
 
     }
+
+
+
+
 }

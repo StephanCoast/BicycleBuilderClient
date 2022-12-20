@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXComboBox?>
 <?import com.jfoenix.controls.JFXDrawer?>
 <?import com.jfoenix.controls.JFXListCell?>
 <?import com.jfoenix.controls.JFXTextField?>
 <?import com.jfoenix.controls.JFXToggleNode?>
+<?import com.jfoenix.validation.RequiredFieldValidator?>
 <?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.Cursor?>
@@ -17,8 +19,8 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="720.0" prefWidth="1280.0" style="-fx-background-color: white;" stylesheets="@styles/Builder.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pf.bb.controller.BuilderController">
-<BorderPane layoutY="99.0" prefHeight="394.0" prefWidth="691.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+<AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" stylesheets="@styles/Builder.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pf.bb.controller.BuilderController">
+<BorderPane layoutY="99.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
    <top>
       <BorderPane prefHeight="48.0" prefWidth="625.0" styleClass="header-borderpane" BorderPane.alignment="CENTER">
          <cursor>
@@ -60,30 +62,43 @@
       </BorderPane>
    </top>
       <right>
-         <StackPane prefHeight="550.0" prefWidth="300.0" styleClass="container-sidebar" BorderPane.alignment="CENTER">
-            <JFXDrawer fx:id="drawerDefault" defaultDrawerSize="300.0" direction="RIGHT" prefHeight="550.0" prefWidth="300.0">
+         <StackPane prefHeight="669.0" prefWidth="350.0" styleClass="container-sidebar" BorderPane.alignment="CENTER">
+            <JFXDrawer fx:id="drawerDefault" defaultDrawerSize="350.0" direction="RIGHT" visible="false">
                <children>
-                  <BorderPane fx:id="catDefault" prefHeight="550.0" prefWidth="300.0">
+                  <BorderPane fx:id="catDefault">
                      <top>
                         <StackPane prefHeight="100.0" BorderPane.alignment="CENTER">
                            <padding>
-                              <Insets bottom="10.0" left="10.0" right="10.0" top="30.0" />
+                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                            </padding>
                            <children>
-                              <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
+                              <VBox prefHeight="200.0" prefWidth="100.0">
                                  <children>
-                                    <Label ellipsisString="" styleClass="label-price-text" text="Preis:">
-                                       <font>
-                                          <Font size="24.0" />
-                                       </font>
-                                    </Label>
-                                    <Label ellipsisString="" styleClass="label-price-value" text="1000€">
-                                       <font>
-                                          <Font size="24.0" />
-                                       </font>
-                                    </Label>
+                                    <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                                       <children>
+                                          <Label ellipsisString="" styleClass="label-price-text" text="Gesamtpreis">
+                                             <font>
+                                                <Font size="18.0" />
+                                             </font>
+                                          </Label>
+                                       </children>
+                                    </HBox>
+                                    <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
+                                       <children>
+                                          <Label fx:id="catDefaultPriceValue" ellipsisString="" styleClass="label-price-value" text="1000">
+                                             <font>
+                                                <Font size="24.0" />
+                                             </font>
+                                          </Label>
+                                          <Label ellipsisString="" styleClass="label-price-text" text="€">
+                                             <font>
+                                                <Font size="24.0" />
+                                             </font>
+                                          </Label>
+                                       </children>
+                                    </HBox>
                                  </children>
-                              </HBox>
+                              </VBox>
                            </children>
                         </StackPane>
                      </top>
@@ -114,9 +129,9 @@
                      </center>
                   </BorderPane>
                </children></JFXDrawer>
-            <JFXDrawer fx:id="drawerCat1" alignment="TOP_LEFT" defaultDrawerSize="300.0" direction="RIGHT" prefHeight="550.0" prefWidth="300.0" visible="false">
+            <JFXDrawer fx:id="drawerCat1" alignment="TOP_LEFT" defaultDrawerSize="350.0" direction="RIGHT" visible="false">
                <children>
-                  <BorderPane fx:id="cat1" prefHeight="550.0" prefWidth="300.0">
+                  <BorderPane fx:id="cat1">
                      <top>
                         <StackPane prefHeight="100.0" BorderPane.alignment="CENTER">
                            <padding>
@@ -136,7 +151,7 @@
                                     </HBox>
                                     <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
                                        <children>
-                                          <Label ellipsisString="" styleClass="label-cat-title" text="Katergorie 1">
+                                          <Label ellipsisString="" styleClass="label-cat-title" text="Rahmen">
                                              <font>
                                                 <Font size="24.0" />
                                              </font>
@@ -170,13 +185,66 @@
                            <padding>
                               <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                            </padding>
+                           <children>
+                              <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0">
+                                 <children>
+                                    <Label ellipsisString="" text="Farbe">
+                                       <font>
+                                          <Font size="18.0" />
+                                       </font>
+                                    </Label>
+                                    <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="30.0">
+                                       <children>
+                                          <JFXToggleNode ellipsisString="" prefHeight="60.0" prefWidth="60.0" styleClass="btn-toggle-cat3Color1" text="schwarz" textFill="WHITE">
+                                             <font>
+                                                <Font size="8.0" />
+                                             </font>
+                                             <toggleGroup>
+                                                <ToggleGroup fx:id="cat1TogglegroupColor" />
+                                             </toggleGroup>
+                                          </JFXToggleNode>
+                                          <JFXToggleNode ellipsisString="" prefHeight="60.0" prefWidth="60.0" styleClass="btn-toggle-cat3Color2" text="weiß" toggleGroup="$cat1TogglegroupColor">
+                                             <font>
+                                                <Font size="8.0" />
+                                             </font>
+                                          </JFXToggleNode>
+                                       </children>
+                                    </HBox>
+                                    <Label ellipsisString="" text="Größe">
+                                       <font>
+                                          <Font size="18.0" />
+                                       </font>
+                                    </Label>
+                                    <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="30.0">
+                                       <children>
+                                          <JFXToggleNode ellipsisString="" prefHeight="60.0" prefWidth="60.0" styleClass="btn-toggle-cats-radioText" text="M">
+                                             <font>
+                                                <Font size="22.0" />
+                                             </font>
+                                             <toggleGroup>
+                                                <ToggleGroup fx:id="cat1TogglegroupSize" />
+                                             </toggleGroup>
+                                          </JFXToggleNode>
+                                          <JFXToggleNode ellipsisString="" prefHeight="60.0" prefWidth="60.0" styleClass="btn-toggle-cats-radioText" text="L" toggleGroup="$cat1TogglegroupSize">
+                                             <font>
+                                                <Font size="22.0" />
+                                             </font>
+                                          </JFXToggleNode>
+                                       </children>
+                                    </HBox>
+                                 </children>
+                                 <padding>
+                                    <Insets top="20.0" />
+                                 </padding>
+                              </VBox>
+                           </children>
                         </StackPane>
                      </center>
                   </BorderPane>
                </children></JFXDrawer>
-            <JFXDrawer fx:id="drawerCat2" alignment="TOP_LEFT" defaultDrawerSize="300.0" direction="RIGHT" prefHeight="550.0" prefWidth="300.0" visible="false">
+            <JFXDrawer fx:id="drawerCat2" alignment="TOP_LEFT" defaultDrawerSize="350.0" direction="RIGHT" visible="false">
                <children>
-                  <BorderPane fx:id="cat2" prefHeight="550.0" prefWidth="300.0">
+                  <BorderPane fx:id="cat2">
                      <top>
                         <StackPane prefHeight="100.0" BorderPane.alignment="CENTER">
                            <padding>
@@ -196,7 +264,7 @@
                                     </HBox>
                                     <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
                                        <children>
-                                          <Label ellipsisString="" styleClass="label-cat-title" text="Katergorie 2">
+                                          <Label ellipsisString="" styleClass="label-cat-title" text="Lenker">
                                              <font>
                                                 <Font size="24.0" />
                                              </font>
@@ -230,13 +298,25 @@
                            <padding>
                               <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                            </padding>
+                           <children>
+                              <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" spacing="50.0">
+                                 <children>
+                                    <JFXComboBox fx:id="cat2SelectColor" labelFloat="true" prefHeight="40.0" prefWidth="200.0" promptText=" Farbe" />
+                                    <JFXComboBox fx:id="cat2SelectShape" labelFloat="true" prefHeight="40.0" prefWidth="200.0" promptText=" Form" />
+                                    <JFXComboBox fx:id="cat2SelectGrip" labelFloat="true" prefHeight="40.0" prefWidth="200.0" promptText=" Griffe" />
+                                 </children>
+                                 <padding>
+                                    <Insets top="20.0" />
+                                 </padding>
+                              </VBox>
+                           </children>
                         </StackPane>
                      </center>
                   </BorderPane>
                </children></JFXDrawer>
-            <JFXDrawer fx:id="drawerCat3" alignment="TOP_LEFT" defaultDrawerSize="300.0" direction="RIGHT" prefHeight="550.0" prefWidth="300.0" visible="false">
+            <JFXDrawer fx:id="drawerCat3" alignment="TOP_LEFT" defaultDrawerSize="350.0" direction="RIGHT" visible="false">
                <children>
-                  <BorderPane fx:id="cat3" prefHeight="550.0" prefWidth="300.0">
+                  <BorderPane fx:id="cat3">
                      <top>
                         <StackPane prefHeight="100.0" BorderPane.alignment="CENTER">
                            <padding>
@@ -256,7 +336,7 @@
                                     </HBox>
                                     <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
                                        <children>
-                                          <Label ellipsisString="" styleClass="label-cat-title" text="Katergorie 3">
+                                          <Label ellipsisString="" styleClass="label-cat-title" text="Räder">
                                              <font>
                                                 <Font size="24.0" />
                                              </font>
@@ -290,13 +370,66 @@
                            <padding>
                               <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                            </padding>
+                           <children>
+                              <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0">
+                                 <children>
+                                    <Label ellipsisString="" text="Farbe (Felgen)">
+                                       <font>
+                                          <Font size="18.0" />
+                                       </font>
+                                    </Label>
+                                    <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="30.0">
+                                       <children>
+                                          <JFXToggleNode ellipsisString="" prefHeight="60.0" prefWidth="60.0" styleClass="btn-toggle-cat1Color1" text="schwarz" textFill="WHITE">
+                                             <font>
+                                                <Font size="8.0" />
+                                             </font>
+                                             <toggleGroup>
+                                                <ToggleGroup fx:id="cat3TogglegroupColor" />
+                                             </toggleGroup>
+                                          </JFXToggleNode>
+                                          <JFXToggleNode ellipsisString="" prefHeight="60.0" prefWidth="60.0" styleClass="btn-toggle-cat1Color2" text="weiß" toggleGroup="$cat3TogglegroupColor">
+                                             <font>
+                                                <Font size="8.0" />
+                                             </font>
+                                          </JFXToggleNode>
+                                       </children>
+                                    </HBox>
+                                    <Label ellipsisString="" text="Größe (Felgen)">
+                                       <font>
+                                          <Font size="18.0" />
+                                       </font>
+                                    </Label>
+                                    <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="30.0">
+                                       <children>
+                                          <JFXToggleNode ellipsisString="" prefHeight="60.0" prefWidth="60.0" styleClass="btn-toggle-cats-radioText" text="M">
+                                             <font>
+                                                <Font size="22.0" />
+                                             </font>
+                                             <toggleGroup>
+                                                <ToggleGroup fx:id="cat3TogglegroupSize" />
+                                             </toggleGroup>
+                                          </JFXToggleNode>
+                                          <JFXToggleNode ellipsisString="" prefHeight="60.0" prefWidth="60.0" styleClass="btn-toggle-cats-radioText" text="L" toggleGroup="$cat3TogglegroupSize">
+                                             <font>
+                                                <Font size="22.0" />
+                                             </font>
+                                          </JFXToggleNode>
+                                       </children>
+                                    </HBox>
+                                 </children>
+                                 <padding>
+                                    <Insets top="20.0" />
+                                 </padding>
+                              </VBox>
+                           </children>
                         </StackPane>
                      </center>
                   </BorderPane>
                </children></JFXDrawer>
-            <JFXDrawer fx:id="drawerCat4" alignment="TOP_LEFT" defaultDrawerSize="300.0" direction="RIGHT" prefHeight="550.0" prefWidth="300.0" visible="false">
+            <JFXDrawer fx:id="drawerCat4" alignment="TOP_LEFT" defaultDrawerSize="350.0" direction="RIGHT" visible="false">
                <children>
-                  <BorderPane fx:id="cat4" prefHeight="550.0" prefWidth="300.0">
+                  <BorderPane fx:id="cat4">
                      <top>
                         <StackPane prefHeight="100.0" BorderPane.alignment="CENTER">
                            <padding>
@@ -316,7 +449,7 @@
                                     </HBox>
                                     <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
                                        <children>
-                                          <Label ellipsisString="" styleClass="label-cat-title" text="Katergorie 4">
+                                          <Label ellipsisString="" styleClass="label-cat-title" text="Sattel">
                                              <font>
                                                 <Font size="24.0" />
                                              </font>
@@ -350,13 +483,25 @@
                            <padding>
                               <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                            </padding>
+                           <children>
+                              <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" spacing="50.0">
+                                 <children>
+                                    <JFXComboBox fx:id="cat4SelectType" labelFloat="true" prefHeight="40.0" prefWidth="200.0" promptText=" Typ" />
+                                    <JFXComboBox fx:id="cat4SelectColor" labelFloat="true" prefHeight="40.0" prefWidth="200.0" promptText=" Farbe" />
+                                    <JFXComboBox fx:id="cat4SelectPrice" labelFloat="true" prefHeight="40.0" prefWidth="200.0" promptText=" Preis" />
+                                 </children>
+                                 <padding>
+                                    <Insets top="20.0" />
+                                 </padding>
+                              </VBox>
+                           </children>
                         </StackPane>
                      </center>
                   </BorderPane>
                </children></JFXDrawer>
-            <JFXDrawer fx:id="drawerCat5" alignment="TOP_LEFT" defaultDrawerSize="300.0" direction="RIGHT" prefHeight="550.0" prefWidth="300.0" visible="false">
+            <JFXDrawer fx:id="drawerCat5" alignment="TOP_LEFT" defaultDrawerSize="350.0" direction="RIGHT">
                <children>
-                  <BorderPane fx:id="cat5" prefHeight="550.0" prefWidth="300.0">
+                  <BorderPane fx:id="cat5">
                      <top>
                         <StackPane prefHeight="100.0" BorderPane.alignment="CENTER">
                            <padding>
@@ -376,7 +521,7 @@
                                     </HBox>
                                     <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
                                        <children>
-                                          <Label ellipsisString="" styleClass="label-cat-title" text="Katergorie 5">
+                                          <Label ellipsisString="" styleClass="label-cat-title" text="Bremsen">
                                              <font>
                                                 <Font size="24.0" />
                                              </font>
@@ -410,13 +555,66 @@
                            <padding>
                               <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                            </padding>
+                           <children>
+                              <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0">
+                                 <children>
+                                    <Label ellipsisString="" text="Farbe (Bremsen)">
+                                       <font>
+                                          <Font size="18.0" />
+                                       </font>
+                                    </Label>
+                                    <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="30.0">
+                                       <children>
+                                          <JFXToggleNode ellipsisString="" prefHeight="60.0" prefWidth="60.0" styleClass="btn-toggle-cat5Color1" text="schwarz" textFill="WHITE">
+                                             <font>
+                                                <Font size="8.0" />
+                                             </font>
+                                             <toggleGroup>
+                                                <ToggleGroup fx:id="cat5TogglegroupColor" />
+                                             </toggleGroup>
+                                          </JFXToggleNode>
+                                          <JFXToggleNode ellipsisString="" prefHeight="60.0" prefWidth="60.0" styleClass="btn-toggle-cat5Color2" text="weiß" toggleGroup="$cat5TogglegroupColor">
+                                             <font>
+                                                <Font size="8.0" />
+                                             </font>
+                                          </JFXToggleNode>
+                                       </children>
+                                    </HBox>
+                                    <Label ellipsisString="" text="Typ (Bremsen)">
+                                       <font>
+                                          <Font size="18.0" />
+                                       </font>
+                                    </Label>
+                                    <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="30.0">
+                                       <children>
+                                          <JFXToggleNode ellipsisString="" prefHeight="60.0" prefWidth="60.0" styleClass="btn-toggle-cats-radioText" text="A">
+                                             <font>
+                                                <Font size="22.0" />
+                                             </font>
+                                             <toggleGroup>
+                                                <ToggleGroup fx:id="cat5TogglegroupType" />
+                                             </toggleGroup>
+                                          </JFXToggleNode>
+                                          <JFXToggleNode ellipsisString="" prefHeight="60.0" prefWidth="60.0" styleClass="btn-toggle-cats-radioText" text="B" toggleGroup="$cat5TogglegroupType">
+                                             <font>
+                                                <Font size="22.0" />
+                                             </font>
+                                          </JFXToggleNode>
+                                       </children>
+                                    </HBox>
+                                 </children>
+                                 <padding>
+                                    <Insets top="20.0" />
+                                 </padding>
+                              </VBox>
+                           </children>
                         </StackPane>
                      </center>
                   </BorderPane>
                </children></JFXDrawer>
-            <JFXDrawer fx:id="drawerCat6" alignment="TOP_LEFT" defaultDrawerSize="300.0" direction="RIGHT" prefHeight="550.0" prefWidth="300.0" visible="false">
+            <JFXDrawer fx:id="drawerCat6" alignment="TOP_LEFT" defaultDrawerSize="350.0" direction="RIGHT" visible="false">
                <children>
-                  <BorderPane fx:id="cat6" prefHeight="550.0" prefWidth="300.0">
+                  <BorderPane fx:id="cat6">
                      <top>
                         <StackPane prefHeight="100.0" BorderPane.alignment="CENTER">
                            <padding>
@@ -436,7 +634,7 @@
                                     </HBox>
                                     <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
                                        <children>
-                                          <Label ellipsisString="" styleClass="label-cat-title" text="Katergorie 6">
+                                          <Label ellipsisString="" styleClass="label-cat-title" text="Zubehör">
                                              <font>
                                                 <Font size="24.0" />
                                              </font>
@@ -470,133 +668,25 @@
                            <padding>
                               <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                            </padding>
+                           <children>
+                              <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" spacing="50.0">
+                                 <children>
+                                    <JFXComboBox fx:id="cat6SelectBell" labelFloat="true" prefHeight="40.0" prefWidth="200.0" promptText=" Klingel" />
+                                    <JFXComboBox fx:id="cat6SelectStand" labelFloat="true" prefHeight="40.0" prefWidth="200.0" promptText=" Ständer" />
+                                    <JFXComboBox fx:id="cat6SelectLight" labelFloat="true" prefHeight="40.0" prefWidth="200.0" promptText=" Licht" />
+                                 </children>
+                                 <padding>
+                                    <Insets top="20.0" />
+                                 </padding>
+                              </VBox>
+                           </children>
                         </StackPane>
                      </center>
                   </BorderPane>
                </children></JFXDrawer>
-            <JFXDrawer fx:id="drawerCat7" alignment="TOP_LEFT" defaultDrawerSize="300.0" direction="RIGHT" prefHeight="550.0" prefWidth="300.0" visible="false">
+            <JFXDrawer fx:id="drawerFinish" defaultDrawerSize="350.0" direction="RIGHT" visible="false">
                <children>
-                  <BorderPane fx:id="cat7" prefHeight="550.0" prefWidth="300.0">
-                     <top>
-                        <StackPane prefHeight="100.0" BorderPane.alignment="CENTER">
-                           <padding>
-                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                           </padding>
-                           <children>
-                              <VBox prefHeight="200.0" prefWidth="100.0">
-                                 <children>
-                                    <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0">
-                                       <children>
-                                          <JFXButton ellipsisString="" onAction="#openSidebarDefault" prefHeight="28.0" prefWidth="28.0" styleClass="sidebar-icon-close">
-                                             <graphic>
-                                                <FontAwesomeIconView glyphName="CLOSE" size="24" styleClass="sidebar-icon-close" />
-                                             </graphic>
-                                          </JFXButton>
-                                       </children>
-                                    </HBox>
-                                    <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
-                                       <children>
-                                          <Label ellipsisString="" styleClass="label-cat-title" text="Katergorie 7">
-                                             <font>
-                                                <Font size="24.0" />
-                                             </font>
-                                          </Label>
-                                       </children>
-                                    </HBox>
-                                 </children>
-                              </VBox>
-                           </children>
-                        </StackPane>
-                     </top>
-                     <bottom>
-                        <StackPane prefHeight="100.0" BorderPane.alignment="CENTER">
-                           <padding>
-                              <Insets bottom="30.0" left="10.0" right="10.0" top="10.0" />
-                           </padding>
-                           <children>
-                              <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="10.0">
-                                 <cursor>
-                                    <Cursor fx:constant="HAND" />
-                                 </cursor>
-                                 <children>
-                                    <JFXButton fx:id="btnCat7Save" buttonType="RAISED" ellipsisString="" onAction="#onCat7Save" prefHeight="80.0" prefWidth="250.0" styleClass="btn-sidebar-save" text="Speichern" />
-                                 </children>
-                              </VBox>
-                           </children>
-                        </StackPane>
-                     </bottom>
-                     <center>
-                        <StackPane prefHeight="300.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-                           <padding>
-                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                           </padding>
-                        </StackPane>
-                     </center>
-                  </BorderPane>
-               </children></JFXDrawer>
-            <JFXDrawer fx:id="drawerCat8" alignment="TOP_LEFT" defaultDrawerSize="300.0" direction="RIGHT" prefHeight="550.0" prefWidth="300.0" visible="false">
-               <children>
-                  <BorderPane fx:id="cat8" prefHeight="550.0" prefWidth="300.0">
-                     <top>
-                        <StackPane prefHeight="100.0" BorderPane.alignment="CENTER">
-                           <padding>
-                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                           </padding>
-                           <children>
-                              <VBox prefHeight="200.0" prefWidth="100.0">
-                                 <children>
-                                    <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0">
-                                       <children>
-                                          <JFXButton ellipsisString="" onAction="#openSidebarDefault" prefHeight="28.0" prefWidth="28.0" styleClass="sidebar-icon-close">
-                                             <graphic>
-                                                <FontAwesomeIconView glyphName="CLOSE" size="24" styleClass="sidebar-icon-close" />
-                                             </graphic>
-                                          </JFXButton>
-                                       </children>
-                                    </HBox>
-                                    <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
-                                       <children>
-                                          <Label ellipsisString="" styleClass="label-cat-title" text="Katergorie 8">
-                                             <font>
-                                                <Font size="24.0" />
-                                             </font>
-                                          </Label>
-                                       </children>
-                                    </HBox>
-                                 </children>
-                              </VBox>
-                           </children>
-                        </StackPane>
-                     </top>
-                     <bottom>
-                        <StackPane prefHeight="100.0" BorderPane.alignment="CENTER">
-                           <padding>
-                              <Insets bottom="30.0" left="10.0" right="10.0" top="10.0" />
-                           </padding>
-                           <children>
-                              <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="10.0">
-                                 <cursor>
-                                    <Cursor fx:constant="HAND" />
-                                 </cursor>
-                                 <children>
-                                    <JFXButton fx:id="btnCat8Save" buttonType="RAISED" ellipsisString="" onAction="#onCat8Save" prefHeight="80.0" prefWidth="250.0" styleClass="btn-sidebar-save" text="Speichern" />
-                                 </children>
-                              </VBox>
-                           </children>
-                        </StackPane>
-                     </bottom>
-                     <center>
-                        <StackPane prefHeight="300.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-                           <padding>
-                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                           </padding>
-                        </StackPane>
-                     </center>
-                  </BorderPane>
-               </children></JFXDrawer>
-            <JFXDrawer fx:id="drawerFinish" defaultDrawerSize="300.0" direction="RIGHT" prefHeight="550.0" prefWidth="300.0" visible="false">
-               <children>
-                  <BorderPane fx:id="catFinish" prefHeight="550.0" prefWidth="300.0">
+                  <BorderPane fx:id="catFinish">
                      <top>
                         <StackPane prefHeight="100.0" BorderPane.alignment="CENTER">
                            <padding>
@@ -621,25 +711,26 @@
                         </StackPane>
                      </top>
                      <bottom>
-                        <StackPane prefHeight="150.0" BorderPane.alignment="CENTER">
+                        <StackPane prefHeight="200.0" BorderPane.alignment="CENTER">
                            <padding>
-                              <Insets bottom="30.0" left="10.0" right="10.0" top="10.0" />
+                              <Insets bottom="20.0" top="10.0" />
                            </padding>
                            <children>
-                              <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="10.0">
+                              <VBox alignment="CENTER" spacing="10.0">
                                  <cursor>
                                     <Cursor fx:constant="HAND" />
                                  </cursor>
                                  <children>
-                                    <JFXButton buttonType="RAISED" ellipsisString="" prefHeight="80.0" prefWidth="250.0" styleClass="btn-sidebar-save" text="Auftrag" />
-                                    <JFXButton buttonType="RAISED" ellipsisString="" prefHeight="80.0" prefWidth="250.0" styleClass="btn-sidebar-save" text="Rechnung" />
+                                    <JFXButton buttonType="RAISED" ellipsisString="" onAction="#onFinalOrder" prefHeight="80.0" prefWidth="250.0" styleClass="btn-sidebar-save" text="Auftrag" />
+                                    <JFXButton buttonType="RAISED" ellipsisString="" onAction="#onFinalInvoice" prefHeight="80.0" prefWidth="250.0" styleClass="btn-sidebar-save" text="Rechnung" />
+                                    <JFXButton buttonType="RAISED" ellipsisString="" onAction="#onFinalDashboard" prefHeight="80.0" prefWidth="250.0" styleClass="btn-sidebar-save" text="Dashboard" />
                                  </children>
                               </VBox>
                            </children>
                         </StackPane>
                      </bottom>
                      <center>
-                        <StackPane prefHeight="300.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                        <StackPane prefHeight="300.0" BorderPane.alignment="CENTER">
                            <children>
                               <VBox prefHeight="200.0" prefWidth="100.0">
                                  <children>
@@ -717,138 +808,154 @@
          </StackPane>
       </right>
       <center>
-         <BorderPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+         <BorderPane minWidth="-Infinity" prefHeight="669.0" prefWidth="930.0" BorderPane.alignment="CENTER">
             <bottom>
-               <StackPane prefHeight="200.0" prefWidth="200.0" styleClass="container-main-bottom" BorderPane.alignment="CENTER">
+               <StackPane prefHeight="200.0" styleClass="container-main-bottom" BorderPane.alignment="CENTER">
                   <children>
-                     <JFXDrawer fx:id="drawerBottomCats" defaultDrawerSize="200.0" direction="BOTTOM" prefHeight="200.0">
+                     <JFXDrawer fx:id="drawerBottomCats" defaultDrawerSize="200.0" direction="BOTTOM" prefHeight="200.0" prefWidth="880.0">
                         <children>
-                           <BorderPane fx:id="bpCats" prefHeight="200.0" prefWidth="200.0">
+                           <BorderPane fx:id="bpCats" prefHeight="200.0">
                               <center>
-                                 <VBox prefHeight="250.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+                                 <HBox alignment="CENTER" prefHeight="200.0" spacing="30.0" BorderPane.alignment="CENTER">
                                     <children>
-                                       <HBox alignment="CENTER" prefHeight="200.0" prefWidth="200.0" spacing="30.0">
-                                          <children>
-                                             <JFXToggleNode contentDisplay="CENTER" ellipsisString="" onAction="#openSidebarCat1" prefHeight="80.0" prefWidth="80.0" styleClass="btn-toggle-cats" text="Rahmen">
-                                                <cursor>
-                                                   <Cursor fx:constant="HAND" />
-                                                </cursor>
-                                                <toggleGroup>
-                                                   <ToggleGroup fx:id="catsTogglegroup" />
-                                                </toggleGroup>
-                                             </JFXToggleNode>
-                                             <JFXToggleNode contentDisplay="CENTER" ellipsisString="" onAction="#openSidebarCat2" prefHeight="80.0" prefWidth="80.0" styleClass="btn-toggle-cats" text="Antrieb" toggleGroup="$catsTogglegroup">
-                                                <cursor>
-                                                   <Cursor fx:constant="HAND" />
-                                                </cursor>
-                                             </JFXToggleNode>
-                                             <JFXToggleNode contentDisplay="CENTER" ellipsisString="" onAction="#openSidebarCat3" prefHeight="80.0" prefWidth="80.0" styleClass="btn-toggle-cats" text="Lenker" toggleGroup="$catsTogglegroup">
-                                                <cursor>
-                                                   <Cursor fx:constant="HAND" />
-                                                </cursor>
-                                             </JFXToggleNode>
-                                             <JFXToggleNode contentDisplay="CENTER" ellipsisString="" onAction="#openSidebarCat4" prefHeight="80.0" prefWidth="80.0" styleClass="btn-toggle-cats" text="Räder" toggleGroup="$catsTogglegroup">
-                                                <cursor>
-                                                   <Cursor fx:constant="HAND" />
-                                                </cursor>
-                                             </JFXToggleNode>
-                                          </children>
-                                          <padding>
-                                             <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                                          </padding>
-                                       </HBox>
-                                       <HBox alignment="CENTER" prefHeight="200.0" prefWidth="200.0" spacing="30.0">
-                                          <children>
-                                             <JFXToggleNode contentDisplay="CENTER" ellipsisString="" onAction="#openSidebarCat5" prefHeight="80.0" prefWidth="80.0" styleClass="btn-toggle-cats" text="Sattel" toggleGroup="$catsTogglegroup">
-                                                <cursor>
-                                                   <Cursor fx:constant="HAND" />
-                                                </cursor>
-                                             </JFXToggleNode>
-                                             <JFXToggleNode contentDisplay="CENTER" ellipsisString="" onAction="#openSidebarCat6" prefHeight="80.0" prefWidth="80.0" styleClass="btn-toggle-cats" text="Gepäck" toggleGroup="$catsTogglegroup">
-                                                <cursor>
-                                                   <Cursor fx:constant="HAND" />
-                                                </cursor>
-                                             </JFXToggleNode>
-                                             <JFXToggleNode contentDisplay="CENTER" ellipsisString="" onAction="#openSidebarCat7" prefHeight="80.0" prefWidth="80.0" styleClass="btn-toggle-cats" text="Licht" toggleGroup="$catsTogglegroup">
-                                                <cursor>
-                                                   <Cursor fx:constant="HAND" />
-                                                </cursor>
-                                             </JFXToggleNode>
-                                             <JFXToggleNode contentDisplay="CENTER" ellipsisString="" onAction="#openSidebarCat8" prefHeight="80.0" prefWidth="80.0" styleClass="btn-toggle-cats" text="Zubehör" toggleGroup="$catsTogglegroup">
-                                                <cursor>
-                                                   <Cursor fx:constant="HAND" />
-                                                </cursor>
-                                             </JFXToggleNode>
-                                          </children>
-                                          <padding>
-                                             <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                                          </padding>
-                                       </HBox>
+                                       <JFXToggleNode contentDisplay="CENTER" ellipsisString="" onAction="#openSidebarCat1" prefHeight="80.0" prefWidth="80.0" styleClass="btn-toggle-cats" text="Rahmen">
+                                          <cursor>
+                                             <Cursor fx:constant="HAND" />
+                                          </cursor>
+                                          <toggleGroup>
+                                             <ToggleGroup fx:id="catsTogglegroup" />
+                                          </toggleGroup>
+                                       </JFXToggleNode>
+                                       <JFXToggleNode contentDisplay="CENTER" ellipsisString="" onAction="#openSidebarCat2" prefHeight="80.0" prefWidth="80.0" styleClass="btn-toggle-cats" text="Lenker" toggleGroup="$catsTogglegroup">
+                                          <cursor>
+                                             <Cursor fx:constant="HAND" />
+                                          </cursor>
+                                       </JFXToggleNode>
+                                       <JFXToggleNode contentDisplay="CENTER" ellipsisString="" onAction="#openSidebarCat3" prefHeight="80.0" prefWidth="80.0" styleClass="btn-toggle-cats" text="Räder" toggleGroup="$catsTogglegroup">
+                                          <cursor>
+                                             <Cursor fx:constant="HAND" />
+                                          </cursor>
+                                       </JFXToggleNode>
+                                       <JFXToggleNode contentDisplay="CENTER" ellipsisString="" onAction="#openSidebarCat4" prefHeight="80.0" prefWidth="80.0" styleClass="btn-toggle-cats" text="Sattel" toggleGroup="$catsTogglegroup">
+                                          <cursor>
+                                             <Cursor fx:constant="HAND" />
+                                          </cursor>
+                                       </JFXToggleNode>
+                                       <JFXToggleNode contentDisplay="CENTER" ellipsisString="" onAction="#openSidebarCat5" prefHeight="80.0" prefWidth="80.0" styleClass="btn-toggle-cats" text="Bremsen" toggleGroup="$catsTogglegroup">
+                                          <cursor>
+                                             <Cursor fx:constant="HAND" />
+                                          </cursor>
+                                       </JFXToggleNode>
+                                       <JFXToggleNode contentDisplay="CENTER" ellipsisString="" onAction="#openSidebarCat6" prefHeight="80.0" prefWidth="80.0" styleClass="btn-toggle-cats" text="Zubehör" toggleGroup="$catsTogglegroup">
+                                          <cursor>
+                                             <Cursor fx:constant="HAND" />
+                                          </cursor>
+                                       </JFXToggleNode>
                                     </children>
                                     <padding>
-                                       <Insets bottom="5.0" top="5.0" />
+                                       <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                     </padding>
-                                 </VBox>
+                                 </HBox>
                               </center>
                            </BorderPane>
                         </children>
                      </JFXDrawer>
-                     <JFXDrawer fx:id="drawerBottomData" defaultDrawerSize="200.0" direction="BOTTOM" prefHeight="200.0">
+                     <JFXDrawer fx:id="drawerBottomData" defaultDrawerSize="200.0" direction="BOTTOM" prefHeight="200.0" prefWidth="880.0" visible="false">
                         <children>
-                           <BorderPane fx:id="bpCustomerData" prefHeight="200.0" prefWidth="200.0">
-                              <right>
-                                 <StackPane prefWidth="300.0" BorderPane.alignment="CENTER">
-                                    <children>
-                                       <BorderPane prefHeight="200.0" prefWidth="200.0" styleClass="container-sidebar">
-                                          <center>
-                                             <JFXButton buttonType="RAISED" ellipsisString="" onAction="#onBottomBarFinish" prefHeight="50.0" prefWidth="250.0" styleClass="btn-sidebar-save" text="Abschliessen" BorderPane.alignment="BOTTOM_CENTER" />
-                                          </center>
-                                          <top>
-                                             <JFXButton ellipsisString="" onAction="#onBottomBarClose" prefHeight="28.0" prefWidth="28.0" styleClass="sidebar-icon-close" BorderPane.alignment="CENTER_RIGHT">
-                                                <graphic>
-                                                   <FontAwesomeIconView glyphName="CLOSE" size="24" styleClass="sidebar-icon-close" />
-                                                </graphic>
-                                                <BorderPane.margin>
-                                                   <Insets right="5.0" top="5.0" />
-                                                </BorderPane.margin>
-                                             </JFXButton>
-                                          </top>
-                                          <padding>
-                                             <Insets bottom="20.0" />
-                                          </padding>
-                                       </BorderPane>
-                                    </children>
-                                 </StackPane>
-                              </right>
+                           <BorderPane fx:id="bpCustomerData" minWidth="-Infinity" prefHeight="200.0" prefWidth="880.0">
                               <center>
-                                 <StackPane alignment="TOP_LEFT" prefWidth="680.0" BorderPane.alignment="CENTER">
+                                 <StackPane alignment="TOP_LEFT" styleClass="spCustomerData" BorderPane.alignment="CENTER">
                                     <children>
-                                       <VBox prefWidth="680.0">
+                                       <VBox>
                                           <children>
-                                             <HBox alignment="CENTER" prefHeight="35.0">
+                                             <BorderPane prefHeight="30.0">
+                                                <left>
+                                                   <StackPane prefWidth="40.0" BorderPane.alignment="CENTER">
+                                                      <children>
+                                                         <JFXButton ellipsisString="" onAction="#onBottomBarClose" prefHeight="28.0" prefWidth="28.0" styleClass="sidebar-icon-close">
+                                                            <graphic>
+                                                               <FontAwesomeIconView glyphName="CLOSE" size="24" styleClass="sidebar-icon-close" />
+                                                            </graphic>
+                                                         </JFXButton>
+                                                      </children>
+                                                   </StackPane>
+                                                </left>
+                                                <center>
+                                                   <StackPane prefHeight="150.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                                                      <children>
+                                                         <Label alignment="CENTER" styleClass="header-title" text="Kundendaten">
+                                                            <font>
+                                                               <Font size="20.0" />
+                                                            </font>
+                                                         </Label>
+                                                      </children>
+                                                   </StackPane>
+                                                </center>
+                                             </BorderPane>
+                                             <HBox alignment="CENTER_LEFT" prefHeight="75.0" spacing="10.0">
                                                 <children>
-                                                   <Label alignment="CENTER" styleClass="header-title" text="Kundendaten">
-                                                      <font>
-                                                         <Font size="24.0" />
-                                                      </font>
-                                                   </Label>
+                                                   <JFXTextField fx:id="tfCustomerID" labelFloat="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="150.0" promptText=" Kunden-ID" />
+                                                   <JFXTextField fx:id="tfCustomerFirstName" labelFloat="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="150.0" promptText=" Vorname" />
+                                                   <JFXTextField fx:id="tfCustomerLastName" labelFloat="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="150.0" promptText=" Nachname" />
+                                                   <JFXTextField fx:id="tfCustomerMail" labelFloat="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="150.0" promptText=" E-Mail" />
+                                                   <RequiredFieldValidator fx:id="validatorCustomerID" message="Kunden-ID fehlt">
+                                                      <cursor>
+                                                         <Cursor fx:constant="NONE" />
+                                                      </cursor>
+                                                   </RequiredFieldValidator>
+                                                   <RequiredFieldValidator fx:id="validatorCustomerFirstName" message="Vorname fehlt">
+                                                      <cursor>
+                                                         <Cursor fx:constant="NONE" />
+                                                      </cursor>
+                                                   </RequiredFieldValidator>
+                                                   <RequiredFieldValidator fx:id="validatorCustomerLastName" message="Nachname fehlt">
+                                                      <cursor>
+                                                         <Cursor fx:constant="NONE" />
+                                                      </cursor>
+                                                   </RequiredFieldValidator>
+                                                   <RequiredFieldValidator fx:id="validatorCustomerMail" message="E-Mail Adresse fehlt">
+                                                      <cursor>
+                                                         <Cursor fx:constant="NONE" />
+                                                      </cursor>
+                                                   </RequiredFieldValidator>
                                                 </children>
+                                                <VBox.margin>
+                                                   <Insets />
+                                                </VBox.margin>
+                                                <padding>
+                                                   <Insets left="10.0" />
+                                                </padding>
                                              </HBox>
-                                             <HBox alignment="CENTER" prefHeight="75.0" prefWidth="680.0" spacing="10.0">
+                                             <HBox alignment="CENTER_LEFT" prefHeight="75.0" spacing="10.0">
                                                 <children>
-                                                   <JFXTextField maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="150.0" promptText=" Kunden-ID" />
-                                                   <JFXTextField maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="150.0" promptText=" Vorname" />
-                                                   <JFXTextField maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="150.0" promptText=" Nachname" />
-                                                   <JFXTextField maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="150.0" promptText=" E-Mail" />
+                                                   <JFXTextField fx:id="tfCustomerStreet" labelFloat="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="150.0" promptText=" Strasse" />
+                                                   <JFXTextField fx:id="tfCustomerNr" labelFloat="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="150.0" promptText=" Hausnummer" />
+                                                   <JFXTextField fx:id="tfCustomerZipcode" labelFloat="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="150.0" promptText=" Postleitzahl" />
+                                                   <JFXTextField fx:id="tfCustomerCity" labelFloat="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="150.0" promptText=" Stadt" />
+                                                   <RequiredFieldValidator fx:id="validatorCustomerStreet" message="Strasse fehlt">
+                                                      <cursor>
+                                                         <Cursor fx:constant="NONE" />
+                                                      </cursor>
+                                                   </RequiredFieldValidator>
+                                                   <RequiredFieldValidator fx:id="validatorCustomerNr" message="Hausnummer fehlt">
+                                                      <cursor>
+                                                         <Cursor fx:constant="NONE" />
+                                                      </cursor>
+                                                   </RequiredFieldValidator>
+                                                   <RequiredFieldValidator fx:id="validatorCustomerZipcode" message="Postleitzahl fehlt">
+                                                      <cursor>
+                                                         <Cursor fx:constant="NONE" />
+                                                      </cursor>
+                                                   </RequiredFieldValidator>
+                                                   <RequiredFieldValidator fx:id="validatorCustomerCity" message="Stadt fehlt">
+                                                      <cursor>
+                                                         <Cursor fx:constant="NONE" />
+                                                      </cursor>
+                                                   </RequiredFieldValidator>
                                                 </children>
-                                             </HBox>
-                                             <HBox alignment="CENTER" prefHeight="75.0" prefWidth="680.0" spacing="10.0">
-                                                <children>
-                                                   <JFXTextField maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="150.0" promptText=" Strasse" />
-                                                   <JFXTextField maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="150.0" promptText=" Hausnummer" />
-                                                   <JFXTextField maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="150.0" promptText=" Postleitzahl" />
-                                                   <JFXTextField maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="150.0" promptText=" Stadt" />
-                                                </children>
+                                                <padding>
+                                                   <Insets left="10.0" top="5.0" />
+                                                </padding>
                                              </HBox>
                                           </children>
                                           <opaqueInsets>
@@ -858,6 +965,13 @@
                                     </children>
                                  </StackPane>
                               </center>
+                              <left>
+                                 <StackPane minWidth="-Infinity" prefWidth="250.0" BorderPane.alignment="CENTER">
+                                    <children>
+                                       <JFXButton buttonType="RAISED" ellipsisString="" onAction="#onBottomBarFinish" prefHeight="50.0" prefWidth="225.0" styleClass="btn-sidebar-save" text="Abschliessen" />
+                                    </children>
+                                 </StackPane>
+                              </left>
                            </BorderPane>
                         </children>
                      </JFXDrawer>
@@ -865,7 +979,7 @@
                </StackPane>
             </bottom>
             <center>
-               <StackPane prefHeight="300.0" prefWidth="600.0" styleClass="container-main-center" BorderPane.alignment="CENTER" />
+               <StackPane styleClass="container-main-center" BorderPane.alignment="CENTER" />
             </center>
          </BorderPane>
       </center>
