@@ -6,12 +6,15 @@ module pf.bb {
     requires com.jfoenix;
     requires de.jensd.fx.glyphs.fontawesome;
 
-    //Backend
+    //HTTP-Requests
     requires unirest.java;
     requires com.google.gson;
     requires json.path;
     requires com.fasterxml.jackson.annotation;
 
+    //Logging
+    requires org.slf4j;
+    requires org.slf4j.simple;
 
     opens pf.bb to javafx.fxml;
     exports pf.bb;
