@@ -14,7 +14,7 @@ public class OrderClass extends EntityWithID {
 	@Expose
 	public Bill bill;
 	@Expose
-	public String dateCreated;
+	public String timestampCreated;
 
 	public static String getUrl() {
 		return Main.API_HOST + "/orders";
@@ -28,6 +28,6 @@ public class OrderClass extends EntityWithID {
 
 	@Override
 	public String toString() {
-		return String.format(this.getClass().getName() + "[id=%d, name='%s']", id);
+		return String.format(this.getClass().getName() + "[id=%d, created='%s']", id, timestampCreated);
 	}
 }

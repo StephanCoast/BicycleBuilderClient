@@ -36,8 +36,11 @@ public class PutConfigurationTask extends Task<Configuration> {
             System.out.println("Sending put request to: " + url);
 
             HttpResponse<JsonNode> res = Unirest.put(url).header("Content-Type", "application/json").header("Authorization", user.jsonWebToken).body(this.configJSON).asJson();
-            //System.out.println("Answer to PUT body:" + res.getHeaders() + "\n" + res.getBody());
 
+            if(res.getStatus() == 403) { //FORBIDDEN
+              System.out.println("WRITE ACCESS TO CONFIGURATION DENIED, you must get write access via PutConfigurationWriteAccessTask before you can run a PutConfigurationTask!");
+            }
+            //System.out.println("Answer to PUT body:" + res.getHeaders() + "\n" + res.getBody());
             return updatedConfig;
 
             } catch (UnirestException e) {

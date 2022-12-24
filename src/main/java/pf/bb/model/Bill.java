@@ -5,7 +5,8 @@ import pf.bb.Main;
 public class Bill extends EntityWithID {
 
     public OrderClass order;
-	public String dateCreated;
+
+	public String timestampCreated;
 
 	public static String getUrl() {
 		return Main.API_HOST + "/bills";
@@ -17,7 +18,7 @@ public class Bill extends EntityWithID {
 	}
 
 	public String toString() {
-		return String.format(this.getClass().getName() + "[id=%d, dateCreated='%s']", id, dateCreated);
+		return String.format(this.getClass().getName() + "[id=%d, dateCreated='%s']", id, timestampCreated);
 	}
 
 }

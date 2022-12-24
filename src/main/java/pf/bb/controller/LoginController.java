@@ -130,7 +130,7 @@ public class LoginController {
 
 
         // Test CREATE USER - ONLY USER WITH ADMIN ROLL IS ALLOWED
-        User newUser = new User("Zweiradler" + (int)(Math.random()*10000), "osmi", "zweiradler" + (int)(Math.random()*10000) + "@bikeshop.de", "Armin", "Admin", "CONSULTANT");
+        User newUser = new User("Zweiradler" + randInt, "osmi", "zweiradler" + randInt + "@bikeshop.de", "Armin", "Admin", "CONSULTANT");
         PostUserTask userTask1 = new PostUserTask(activeUser, newUser);
         //Erst Task definieren incl. WorkerStateEvent als Flag, um zu wissen, wann fertig
         userTask1.setOnSucceeded((WorkerStateEvent userCreated) -> {
@@ -215,90 +215,122 @@ public class LoginController {
                     configurationsTask3.setOnSucceeded((WorkerStateEvent e3) -> {
                         System.out.println("configuration updated id: " + configurationsTask3.getValue().id);
 
-                        // Order mit Kundendaten und Gesamtpreis zur Konfiguration hinzufügen
-                        Customer newCustomer = new Customer("customer" + randInt + "@shopping.de", "Caro", "Customer", "Mallway", 17, "D-32423", "Mallland");
 
-                        // Customer in DB erzeugen, um unique ID zu bekommen
-                        PostCustomerTask customerTask1 = new PostCustomerTask(activeUser, newCustomer);
-                        customerTask1.setOnRunning((runningEvent) -> System.out.println("trying to create customer..."));
-                        customerTask1.setOnFailed((WorkerStateEvent createUserFailed) -> System.out.println("creating customer failed..."));
+
+
+
+                        // Test PUT - Update Configuration again
+                        PutConfigurationWriteAccessTask writeAccessTask1 = new PutConfigurationWriteAccessTask(activeUser, oldConfigId);
                         //Erst Task definieren incl. WorkerStateEvent als Flag, um zu wissen, wann fertig
-                        customerTask1.setOnSucceeded((WorkerStateEvent customerCreated) -> {
-                            System.out.println("customer created id:" + customerTask1.getValue().id);
+                        writeAccessTask1.setOnRunning((runningEvent) -> System.out.println("trying to get writeAccess for configuration..."));
+                        writeAccessTask1.setOnSucceeded((WorkerStateEvent writeAccess) -> {
+                            System.out.println("writeAccess for configuration: " + writeAccessTask1.getValue());
 
 
-                            // Order in DB erzeugen
-                            // Calculate total price
-                            float priceTotal = 0;
-                            for (Article article : updatedConfig.articles) {
-                                priceTotal += article.price;
-                            }
-                            OrderClass newOrder = new OrderClass(configurationsTask3.getValue(), customerTask1.getValue(), priceTotal);
 
-                            PostOrderTask orderTask1 = new PostOrderTask(activeUser, newOrder);
+                            // Test PUT - Update Configuration
+                            PutConfigurationTask configurationsTask4 = new PutConfigurationTask(activeUser, updatedConfig, oldConfigId);
                             //Erst Task definieren incl. WorkerStateEvent als Flag, um zu wissen, wann fertig
-                            orderTask1.setOnSucceeded((WorkerStateEvent orderCreated) -> {
-                                System.out.println("order created id:" + orderTask1.getValue().id);
+                            configurationsTask4.setOnRunning((successEvent) -> System.out.println("trying to update configuration..."));
+                            configurationsTask4.setOnSucceeded((WorkerStateEvent configTask4) -> {
+                                System.out.println("configuration updated id: " + configurationsTask4.getValue().id);
 
 
-                                // CREATE BILL
-                                Bill newBill = new Bill(orderTask1.getValue());
-                                PostBillTask billTask1 = new PostBillTask(activeUser, newBill);
+
+
+                                // Order mit Kundendaten und Gesamtpreis zur Konfiguration hinzufügen
+                                Customer newCustomer = new Customer("customer" + randInt + "@shopping.de", "Caro", "Customer", "Mallway", 17, "D-32423", "Mallland");
+                                // Customer in DB erzeugen, um unique ID zu bekommen
+                                PostCustomerTask customerTask1 = new PostCustomerTask(activeUser, newCustomer);
+                                customerTask1.setOnRunning((runningEvent) -> System.out.println("trying to create customer..."));
+                                customerTask1.setOnFailed((WorkerStateEvent createUserFailed) -> System.out.println("creating customer failed..."));
                                 //Erst Task definieren incl. WorkerStateEvent als Flag, um zu wissen, wann fertig
-                                billTask1.setOnSucceeded((WorkerStateEvent billCreated) -> {
-                                    System.out.println("bill created id:" + billTask1.getValue().id);
+                                customerTask1.setOnSucceeded((WorkerStateEvent customerCreated) -> {
+                                    System.out.println("customer created id:" + customerTask1.getValue().id);
 
 
+                                    // Order in DB erzeugen
+                                    // Calculate total price
+                                    float priceTotal = 0;
+                                    for (Article article : updatedConfig.articles) {
+                                        priceTotal += article.price;
+                                    }
+                                    OrderClass newOrder = new OrderClass(configurationsTask3.getValue(), customerTask1.getValue(), priceTotal);
 
-                                    // DELETE A CONFIGURATION REQUIRES: DELETE BILL -> DELETE ORDER -> DELETE CONFIGURATION
+                                    PostOrderTask orderTask1 = new PostOrderTask(activeUser, newOrder);
+                                    //Erst Task definieren incl. WorkerStateEvent als Flag, um zu wissen, wann fertig
+                                    orderTask1.setOnSucceeded((WorkerStateEvent orderCreated) -> {
+                                        System.out.println("order created id:" + orderTask1.getValue().id);
 
-                                    // Test DELETE BILL
-                                    if (Main.CONFIGURATIONS.size() > 2) {
-                                        int billId = Main.CONFIGURATIONS.get(0).order.bill.id; // DELETE OLDEST ELEMENT
-                                        DeleteBillTask billTask2 = new DeleteBillTask(activeUser, billId);
+
+                                        // CREATE BILL
+                                        Bill newBill = new Bill(orderTask1.getValue());
+                                        PostBillTask billTask1 = new PostBillTask(activeUser, newBill);
                                         //Erst Task definieren incl. WorkerStateEvent als Flag, um zu wissen, wann fertig
-                                        billTask2.setOnSucceeded((WorkerStateEvent billDeleted) -> {
-                                            System.out.println("bill id=" + billId + " deleted=" +  billTask2.getValue());
+                                        billTask1.setOnSucceeded((WorkerStateEvent billCreated) -> {
+                                            System.out.println("bill created id:" + billTask1.getValue().id);
 
-                                            // Test DELETE ORDER
-                                            int orderId = Main.CONFIGURATIONS.get(0).order.id; // DELETE OLDEST ELEMENT
-                                            DeleteOrderTask orderTask2 = new DeleteOrderTask(activeUser, orderId);
-                                            //Erst Task definieren incl. WorkerStateEvent als Flag, um zu wissen, wann fertig
-                                            orderTask2.setOnSucceeded((WorkerStateEvent orderDeleted) -> {
-                                                System.out.println("order id=" + orderId + " deleted="  +  orderTask2.getValue());
 
-                                                // Test DELETE CONFIGURATION
-                                                int configId = Main.CONFIGURATIONS.get(0).id; // DELETE OLDEST ELEMENT
-                                                DeleteConfigurationTask configTask1 = new DeleteConfigurationTask(activeUser, configId);
+
+                                            // DELETE A CONFIGURATION REQUIRES: DELETE BILL -> DELETE ORDER -> DELETE CONFIGURATION
+
+                                            // Test DELETE BILL
+                                            if (Main.CONFIGURATIONS.size() > 2) {
+                                                int billId = Main.CONFIGURATIONS.get(0).order.bill.id; // DELETE OLDEST ELEMENT
+                                                DeleteBillTask billTask2 = new DeleteBillTask(activeUser, billId);
                                                 //Erst Task definieren incl. WorkerStateEvent als Flag, um zu wissen, wann fertig
-                                                configTask1.setOnSucceeded((WorkerStateEvent configDeleted) -> {
-                                                    System.out.println("configuration id=" + configId + " deleted="  + configTask1.getValue());
+                                                billTask2.setOnSucceeded((WorkerStateEvent billDeleted) -> {
+                                                    System.out.println("bill id=" + billId + " deleted=" +  billTask2.getValue());
 
-                                                    // FINISH TEST
+                                                    // Test DELETE ORDER
+                                                    int orderId = Main.CONFIGURATIONS.get(0).order.id; // DELETE OLDEST ELEMENT
+                                                    DeleteOrderTask orderTask2 = new DeleteOrderTask(activeUser, orderId);
+                                                    //Erst Task definieren incl. WorkerStateEvent als Flag, um zu wissen, wann fertig
+                                                    orderTask2.setOnSucceeded((WorkerStateEvent orderDeleted) -> {
+                                                        System.out.println("order id=" + orderId + " deleted="  +  orderTask2.getValue());
+
+                                                        // Test DELETE CONFIGURATION
+                                                        int configId = Main.CONFIGURATIONS.get(0).id; // DELETE OLDEST ELEMENT
+                                                        DeleteConfigurationTask configTask1 = new DeleteConfigurationTask(activeUser, configId);
+                                                        //Erst Task definieren incl. WorkerStateEvent als Flag, um zu wissen, wann fertig
+                                                        configTask1.setOnSucceeded((WorkerStateEvent configDeleted) -> {
+                                                            System.out.println("configuration id=" + configId + " deleted="  + configTask1.getValue());
+
+                                                            // FINISH TEST
+
+                                                        });
+                                                        //Tasks in eigenem Thread ausführen
+                                                        new Thread(configTask1).start();
+
+                                                    });
+                                                    //Tasks in eigenem Thread ausführen
+                                                    new Thread(orderTask2).start();
 
                                                 });
                                                 //Tasks in eigenem Thread ausführen
-                                                new Thread(configTask1).start();
-
-                                            });
-                                            //Tasks in eigenem Thread ausführen
-                                            new Thread(orderTask2).start();
+                                                new Thread(billTask2).start();
+                                            }
 
                                         });
                                         //Tasks in eigenem Thread ausführen
-                                        new Thread(billTask2).start();
-                                    }
+                                        new Thread(billTask1).start();
 
+                                    });
+                                    //Tasks in eigenem Thread ausführen
+                                    new Thread(orderTask1).start();
                                 });
                                 //Tasks in eigenem Thread ausführen
-                                new Thread(billTask1).start();
+                                new Thread(customerTask1).start();
 
                             });
                             //Tasks in eigenem Thread ausführen
-                            new Thread(orderTask1).start();
+                            new Thread(configurationsTask4).start();
+
+
                         });
                         //Tasks in eigenem Thread ausführen
-                        new Thread(customerTask1).start();
+                        new Thread(writeAccessTask1).start();
+
 
                     });
                     configurationsTask3.setOnFailed((WorkerStateEvent e31) -> System.out.println("updating configuration failed" + configurationsTask3.getException()));

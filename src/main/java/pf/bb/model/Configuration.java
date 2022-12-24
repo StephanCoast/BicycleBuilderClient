@@ -7,12 +7,13 @@ import java.util.ArrayList;
 public class Configuration extends EntityWithID {
     //required
     @Expose
-    public boolean writeAccess;
+    public String writeAccess;
 
     @Expose
-    public String dateCreated;
+    public String timestampCreated;
     @Expose
-    public String dateLastChanged;
+    public String timestampLastTouched;
+
     @Expose
     public User user;
     @Expose
@@ -32,14 +33,14 @@ public class Configuration extends EntityWithID {
 
     public Configuration(User user) {
 
-        this.writeAccess = true;
+        this.writeAccess = null;
         this.user = user;
         this.status = stats[0];
         this.articles = new ArrayList<>();
     }
 
     public String toString() {
-        return String.format(this.getClass().getName() + "[id=%d, dateCreated='%s']", id, dateCreated);
+        return String.format(this.getClass().getName() + "[id=%d, dateCreated='%s', lastTouched='%s']", id, timestampCreated, timestampLastTouched);
     }
 
 }
