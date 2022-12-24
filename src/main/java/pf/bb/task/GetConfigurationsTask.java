@@ -5,6 +5,7 @@ import com.google.gson.reflect.TypeToken;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
+import com.mashape.unirest.http.exceptions.UnirestException;
 import javafx.concurrent.Task;
 import pf.bb.Main;
 import pf.bb.model.Configuration;
@@ -23,11 +24,15 @@ public class GetConfigurationsTask extends Task<List<Configuration>> {
 	
 	@Override
 	protected List<Configuration> call() throws Exception {
+		try{
 		String url = Main.API_HOST + "/configurations";
 		HttpResponse<JsonNode> resJson = Unirest.get(url).header("Accept", "application/json").header("Authorization", user.jsonWebToken).asJson();
 		String json = resJson.getBody().toString();
-		List<Configuration> configurations = new Gson().fromJson(json, new TypeToken<ArrayList<Configuration>>() {}.getType());
+		return new Gson().fromJson(json, new TypeToken<ArrayList<Configuration>>() {}.getType());
 
-		return configurations;
+		} catch (UnirestException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 }

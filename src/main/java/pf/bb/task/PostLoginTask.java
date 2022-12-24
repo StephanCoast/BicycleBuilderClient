@@ -11,7 +11,6 @@ import pf.bb.model.User;
 public class PostLoginTask extends Task<User> {
 
 	private final String username;
-
 	private final String password;
 
 	public PostLoginTask(String username, String password) {
@@ -19,20 +18,18 @@ public class PostLoginTask extends Task<User> {
 		this.password = password;
 	}
 
+	/*Exception is handled in Calling Class*/
 	@Override
-	protected User call() {
+	protected User call() throws UnirestException {
 		String url = Main.API_HOST + "/login";
 		String json = "{\"name\": \"" + username + "\", \"passwordHash\": \"" + password + "\"}";
 
-		try {
-			HttpResponse<String> res = Unirest.post(url).header("Content-Type", "application/json").body(json).asString();
-			if (res.getStatus() != 403) {
-				String jsonWebToken = res.getHeaders().getFirst("Authorization");
-				return new User(username, jsonWebToken);
-			}
-		} catch (UnirestException e) {
-			e.printStackTrace();
+		HttpResponse<String> res = Unirest.post(url).header("Content-Type", "application/json").body(json).asString();
+		if (res.getStatus() != 403) {
+			String jsonWebToken = res.getHeaders().getFirst("Authorization");
+			return new User(username, jsonWebToken);
 		}
+
 		return null;
 	}
 }

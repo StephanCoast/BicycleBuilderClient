@@ -1,14 +1,27 @@
 package pf.bb.model;
 
-public class Customer extends EntityWithID {
+import com.google.gson.annotations.Expose;
+import pf.bb.Main;
 
+public class Customer extends EntityWithID {
+    @Expose
     public String email;
+    @Expose
     public String forename;
+    @Expose
     public String lastname;
+    @Expose
     public String street;
+    @Expose
     public int houseNumber;
+    @Expose
     public String zipCode;
+    @Expose
     public String city;
+
+    public static String getUrl() {
+        return Main.API_HOST + "/customers";
+    }
 
     public Customer(String email, String forename, String lastname, String street, int houseNumber, String zipCode, String city) {
 
