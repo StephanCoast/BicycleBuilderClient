@@ -1,16 +1,24 @@
 package pf.bb.model;
+import pf.bb.Main;
 
-import java.util.Date;
 
 public class Bill extends EntityWithID {
 
+    public OrderClass order;
 
-    public OrderClass orderClass;
+	public String timestampCreated;
 
-	public Date dateCreated = new Date();
+	public static String getUrl() {
+		return Main.API_HOST + "/bills";
+	}
+
+
+	public Bill (OrderClass order) {
+		this.order = order;
+	}
 
 	public String toString() {
-		return String.format(this.getClass().getName() + "[id=%d, dateCreated='%s']", id, dateCreated);
+		return String.format(this.getClass().getName() + "[id=%d, dateCreated='%s']", id, timestampCreated);
 	}
 
 }

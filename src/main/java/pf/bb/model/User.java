@@ -1,24 +1,47 @@
 package pf.bb.model;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.google.gson.annotations.Expose;
+import pf.bb.Main;
 
 public class User extends EntityWithID {
 
+	@Expose
 	public String name;
+	@Expose
+	public String passwordHash;
+
+	@Expose
+	public String email;
+
 	public String jsonWebToken;
 
+	@Expose
 	public String forename;
 
+	@Expose
 	public String lastname;
 
+	@Expose
 	public String role;
 
-    public List<Configuration> configurations = new ArrayList<>();
+	public static String getUrl() {
+		return Main.API_HOST + "/users";
+	}
+
 
 	public User(String name, String jsonWebToken) {
 		this.name = name;
 		this.jsonWebToken = jsonWebToken;
+	}
+
+
+	public User(String name, String passwordHash, String email, String forename, String lastname, String role) {
+		this.name = name;
+		this.passwordHash = passwordHash;
+		this.email = email;
+		this.forename = forename;
+		this.lastname = lastname;
+		this.role = role;
 	}
 
 	public String toString() {

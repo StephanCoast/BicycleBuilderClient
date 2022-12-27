@@ -1,25 +1,19 @@
 package pf.bb.model;
 
 import com.google.gson.annotations.Expose;
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
 import pf.bb.Main;
-
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 public class Configuration extends EntityWithID {
     //required
     @Expose
-    public boolean writeAccess;
+    public String writeAccess;
 
     @Expose
-    public String dateCreated;
+    public String timestampCreated;
     @Expose
-    public String dateLastChanged;
+    public String timestampLastTouched;
+
     @Expose
     public User user;
     @Expose
@@ -29,33 +23,24 @@ public class Configuration extends EntityWithID {
     @Expose
     public ArrayList<Article> articles;
     @Expose
-    public OrderClass orderClass;
+    public OrderClass order;
 
     public static String[] stats = {"ENTWURF", "ABGESCHLOSSEN", "EINKAUF", "STORNO"};
-    private static String url = Main.API_HOST + "/configurations";
+
     public static String getUrl() {
-        return url;
+        return Main.API_HOST + "/configurations";
     }
 
     public Configuration(User user) {
 
-        this.writeAccess = true;
+        this.writeAccess = null;
         this.user = user;
         this.status = stats[0];
         this.articles = new ArrayList<>();
     }
 
-    public IntegerProperty idProperty() {
-        return new SimpleIntegerProperty(id);
-    }
-
-    public StringProperty dateCreatedProperty() {
-        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-        return new SimpleStringProperty(df.format(this.dateCreated));
-    }
-
     public String toString() {
-        return String.format(this.getClass().getName() + "[id=%d, dateCreated='%s']", id, dateCreated);
+        return String.format(this.getClass().getName() + "[id=%d, dateCreated='%s', lastTouched='%s']", id, timestampCreated, timestampLastTouched);
     }
 
 }

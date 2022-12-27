@@ -7,39 +7,41 @@ import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import javafx.concurrent.Task;
-import pf.bb.model.Configuration;
+import pf.bb.model.Customer;
 import pf.bb.model.User;
 
-public class PostConfigurationTask extends Task<Configuration> {
+public class PostCustomerTask extends Task<Customer> {
 
     private final String configJSON;
     private final User user;
-    private final Configuration configuration;
+
+    private final Customer customer;
 
     private static final GsonBuilder gsonBuilder = new GsonBuilder();
     private static final Gson gson = gsonBuilder.excludeFieldsWithoutExposeAnnotation().create();
 
-    public PostConfigurationTask(User user, Configuration configuration) {
+    public PostCustomerTask(User user, Customer customer) {
         this.user = user;
-        this.configuration = configuration;
+        this.customer = customer;
 
         //Only Serialize article IDs in GSON for less content in JSON
-        this.configJSON = gson.toJson(configuration);
+        this.configJSON = gson.toJson(customer);
     }
 
     @Override
-    protected Configuration call() throws Exception {
+    protected Customer call() throws Exception {
 
         try {
-            HttpResponse<JsonNode> res = Unirest.post(Configuration.getUrl()).header("Content-Type", "application/json").header("Authorization", user.jsonWebToken).body(this.configJSON).asJson();
+            HttpResponse<JsonNode> res = Unirest.post(Customer.getUrl()).header("Content-Type", "application/json").header("Authorization", user.jsonWebToken).body(this.configJSON).asJson();
 
             String location = res.getHeaders().getFirst("Location");
-            configuration.id = Integer.parseInt(location.substring(location.lastIndexOf("/") + 1));
+            customer.id = Integer.parseInt(location.substring(location.lastIndexOf("/") + 1));
 
-            return configuration;
-        } catch (UnirestException e) {
+            return customer;
+        } catch (UnirestException e){
             e.printStackTrace();
         }
         return null;
+
     }
 }

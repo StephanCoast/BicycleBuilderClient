@@ -5,24 +5,23 @@ import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import javafx.concurrent.Task;
-import pf.bb.model.Configuration;
+import pf.bb.model.OrderClass;
 import pf.bb.model.User;
 
-public class DeleteConfigurationTask extends Task<Boolean> {
+public class DeleteOrderTask extends Task<Boolean> {
 
 	private final User user;
-	private final Integer configId;
+	private final Integer orderId;
 
-	public DeleteConfigurationTask(User user, Integer configId) {
+	public DeleteOrderTask(User user, Integer orderId) {
 		this.user = user;
-		this.configId = configId;
+		this.orderId = orderId;
 	}
 
 	@Override
 	protected Boolean call() throws Exception {
-
 		try{
-			String url = Configuration.getUrl() + "/" + configId;
+			String url = OrderClass.getUrl() + "/" + orderId;
 			System.out.println("Sending DELETE request to: " + url);
 			HttpResponse<JsonNode> res = Unirest.delete(url).header("Authorization", user.jsonWebToken).asJson();
 			return res.getStatus() == 204;
