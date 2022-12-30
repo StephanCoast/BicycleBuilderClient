@@ -4,8 +4,6 @@ import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
 import javafx.application.Platform;
 import com.jfoenix.validation.RequiredFieldValidator;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -19,7 +17,6 @@ import java.io.IOException;
 
 public class LoginController {
 
-    ViewManager vm = ViewManager.getInstance();
     public static User activeUser; // user who is currently logged in
     @FXML
     public JFXTextField username;
@@ -28,30 +25,33 @@ public class LoginController {
     @FXML
     public Label loginFailure;
 
+    ViewManager vm = ViewManager.getInstance();
     ValidatorManager validatorManager = ValidatorManager.getInstance();
     public RequiredFieldValidator validatorName;
     public RequiredFieldValidator validatorPW;
-
 
     @FXML
     public void initialize() {
         validatorManager.initTextValidators(username, validatorName);
         validatorManager.initPasswordValidators(password, validatorPW);
 
+        // for developing only
+        // todo: must be removed for shipping, causes label float bug
+        username.setText("Consultant");
+        password.setText("osmi");
     }
 
     public void authenticate(ActionEvent event) throws IOException {
-        // todo: nach stephanLogin() verschieben beim erfolgreichen Login
+        // uncomment to bypass Server-Login, for developing only
         //vm.forceView(event, "Dashboard.fxml", "Bicycle Builder - Dashboard");
-        // Stephan loginTask - zur Trennung
+
+        // Stephan loginTask
         stephanLogin(event);
     }
 
 
     //
     private void stephanLogin(ActionEvent event) {
-        // alles was du in Login machen möchtest bitte hier rein
-        // benenne die methode wie du willst
 
         PostLoginTask loginTask = new PostLoginTask(username.getText(), password.getText());
 
@@ -103,24 +103,6 @@ public class LoginController {
             Platform.exit();
         }
     }
-
-    private void initValidators(JFXTextField textField, JFXPasswordField passwordField) {
-        textField.getValidators().add(validatorName);
-        passwordField.getValidators().add(validatorPW);
-        textField.focusedProperty().addListener(new ChangeListener<Boolean>() {
-            @Override
-            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-                if (!newValue) { textField.validate(); }
-            }
-        });
-        passwordField.focusedProperty().addListener(new ChangeListener<Boolean>() {
-            @Override
-            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-                if (!newValue) { passwordField.validate(); }
-            }
-        });
-    }
-
 
     public static void testConfigurationApi() {
 

@@ -21,6 +21,9 @@ public class ViewManager {
     private static final ViewManager instance = new ViewManager();
     private Stage stage;
     private Scene scene;
+    private Double defaultWidth = 1440.00;
+    private Double defaultHeight = 900.00;
+    private Boolean sizeHasChanged = false;
 
     public ViewManager() {
     }
@@ -32,14 +35,18 @@ public class ViewManager {
     public void forceView(ActionEvent e, String fileName, String title) throws IOException {
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/pf/bb/fxml/" + fileName)));
         stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
+        Double oldWidth = stage.getWidth();
+        Double oldHeight = stage.getHeight();
         scene = new Scene(root);
         stage.setTitle(title);
         stage.setMinWidth(1280.00); /* AR: must be set here to prevent resizing to zero, SC ignores */
         stage.setMinHeight(800.00);
+        stage.setWidth(defaultWidth);
+        stage.setHeight(defaultHeight);
         stage.setResizable(true);
         stage.setScene(scene);
         stage.show();
-        setFullScreenScene(stage);
+        calcWindowSize(stage, oldWidth, oldHeight);
     }
 
     public void forceLoginView(ActionEvent e, String fileNameLogin, String title) throws IOException {
@@ -48,7 +55,7 @@ public class ViewManager {
         scene = new Scene(rootLogin);
         stage.setTitle(title);
         stage.setWidth(325.00);
-        stage.setHeight(300.00); /* AR: for some reason original SB size of 275 got compressed */
+        stage.setHeight(325.00); /* AR: for some reason original SB size of 275 got compressed */
         stage.setResizable(false);
         stage.setScene(scene);
         stage.show();
@@ -68,12 +75,14 @@ public class ViewManager {
         stage.setY((sb.getHeight() - stage.getHeight()) / 2);
     }
 
-    private void setFullScreenScene(Stage stage) {
-        Screen screen = Screen.getPrimary();
-        Rectangle2D bounds = screen.getVisualBounds();
-        stage.setX(bounds.getMinX());
-        stage.setY(bounds.getMinY());
-        stage.setWidth(bounds.getWidth());
-        stage.setHeight(bounds.getHeight());
+    private void calcWindowSize(Stage stage, Double oldWidth, Double oldHeight) {
+        if (oldWidth < defaultWidth || oldWidth > defaultWidth || oldHeight < defaultHeight || oldHeight > defaultHeight) { sizeHasChanged = true; }
+        if (sizeHasChanged) {
+            stage.setWidth(oldWidth);
+            stage.setHeight(oldHeight);
+        } else {
+            stage.setWidth(defaultWidth);
+            stage.setHeight(defaultHeight);
+        }
     }
 }

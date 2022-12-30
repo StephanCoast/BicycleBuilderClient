@@ -49,7 +49,6 @@ public class Main extends Application {
 
     }
 
-
     private void loadFirstClientView(Stage stageMain) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("fxml/Login.fxml"));
         AnchorPane apane = fxmlLoader.load();

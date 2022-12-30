@@ -19,7 +19,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" stylesheets="@styles/Builder.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pf.bb.controller.BuilderController">
+<AnchorPane fx:id="anchorContainer" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" stylesheets="@styles/Builder.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pf.bb.controller.BuilderController">
 <BorderPane layoutY="99.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
    <top>
       <BorderPane prefHeight="48.0" prefWidth="625.0" styleClass="header-borderpane" BorderPane.alignment="CENTER">
@@ -43,7 +43,7 @@
          <right>
             <StackPane prefHeight="150.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="50.0" StackPane.alignment="CENTER_RIGHT">
-                  <JFXButton ellipsisString="" onAction="#openDashboard" prefHeight="28.0" prefWidth="28.0" styleClass="header-icon-home">
+                  <JFXButton fx:id="btnHeaderHome" ellipsisString="" onAction="#openDashboard" prefHeight="28.0" prefWidth="28.0" styleClass="header-icon-home">
                      <graphic>
                         <FontAwesomeIconView glyphName="HOME" size="28" styleClass="header-icon-home" />
                      </graphic>
@@ -63,7 +63,7 @@
    </top>
       <right>
          <StackPane prefHeight="669.0" prefWidth="350.0" styleClass="container-sidebar" BorderPane.alignment="CENTER">
-            <JFXDrawer fx:id="drawerDefault" defaultDrawerSize="350.0" direction="RIGHT" visible="false">
+            <JFXDrawer fx:id="drawerDefault" defaultDrawerSize="350.0" direction="RIGHT">
                <children>
                   <BorderPane fx:id="catDefault">
                      <top>
@@ -103,18 +103,19 @@
                         </StackPane>
                      </top>
                      <bottom>
-                        <StackPane prefHeight="150.0" BorderPane.alignment="CENTER">
+                        <StackPane prefHeight="200.0" BorderPane.alignment="CENTER">
                            <padding>
                               <Insets bottom="30.0" left="10.0" right="10.0" top="10.0" />
                            </padding>
                            <children>
-                              <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="10.0">
+                              <VBox alignment="CENTER" spacing="10.0">
                                  <cursor>
                                     <Cursor fx:constant="HAND" />
                                  </cursor>
                                  <children>
-                                    <JFXButton buttonType="RAISED" ellipsisString="" onAction="#onSaveDraft" prefHeight="80.0" prefWidth="250.0" styleClass="btn-sidebar-save" text="Entwurf Speichern" />
-                                    <JFXButton buttonType="RAISED" ellipsisString="" onAction="#openCustomerDataView" prefHeight="80.0" prefWidth="250.0" styleClass="btn-sidebar-save" text="Kundendaten eingeben" />
+                                    <JFXButton fx:id="btnSaveDraft" buttonType="RAISED" ellipsisString="" onAction="#onSaveDraft" prefHeight="80.0" prefWidth="250.0" styleClass="btn-sidebar-save" text="Entwurf Speichern" />
+                                    <JFXButton fx:id="btnAddCustomerData" buttonType="RAISED" ellipsisString="" onAction="#openCustomerDataView" prefHeight="80.0" prefWidth="250.0" styleClass="btn-sidebar-save" text="Kundendaten eingeben" />
+                                    <JFXButton fx:id="btnSidebarHome" buttonType="RAISED" ellipsisString="" onAction="#openDashboard" prefHeight="80.0" prefWidth="250.0" styleClass="btn-sidebar-save" text="Dashboard" />
                                  </children>
                               </VBox>
                            </children>
@@ -499,7 +500,7 @@
                      </center>
                   </BorderPane>
                </children></JFXDrawer>
-            <JFXDrawer fx:id="drawerCat5" alignment="TOP_LEFT" defaultDrawerSize="350.0" direction="RIGHT">
+            <JFXDrawer fx:id="drawerCat5" alignment="TOP_LEFT" defaultDrawerSize="350.0" direction="RIGHT" visible="false">
                <children>
                   <BorderPane fx:id="cat5">
                      <top>
@@ -723,7 +724,7 @@
                                  <children>
                                     <JFXButton buttonType="RAISED" ellipsisString="" onAction="#onFinalOrder" prefHeight="80.0" prefWidth="250.0" styleClass="btn-sidebar-save" text="Auftrag" />
                                     <JFXButton buttonType="RAISED" ellipsisString="" onAction="#onFinalInvoice" prefHeight="80.0" prefWidth="250.0" styleClass="btn-sidebar-save" text="Rechnung" />
-                                    <JFXButton buttonType="RAISED" ellipsisString="" onAction="#onFinalDashboard" prefHeight="80.0" prefWidth="250.0" styleClass="btn-sidebar-save" text="Dashboard" />
+                                    <JFXButton buttonType="RAISED" ellipsisString="" onAction="#openDashboard" prefHeight="80.0" prefWidth="250.0" styleClass="btn-sidebar-save" text="Dashboard" />
                                  </children>
                               </VBox>
                            </children>
@@ -810,9 +811,9 @@
       <center>
          <BorderPane minWidth="-Infinity" prefHeight="669.0" prefWidth="930.0" BorderPane.alignment="CENTER">
             <bottom>
-               <StackPane prefHeight="200.0" styleClass="container-main-bottom" BorderPane.alignment="CENTER">
+               <StackPane prefHeight="225.0" styleClass="container-main-bottom" BorderPane.alignment="CENTER">
                   <children>
-                     <JFXDrawer fx:id="drawerBottomCats" defaultDrawerSize="200.0" direction="BOTTOM" prefHeight="200.0" prefWidth="880.0">
+                     <JFXDrawer fx:id="drawerBottomCats" defaultDrawerSize="225.0" direction="BOTTOM" prefHeight="225.0" visible="false">
                         <children>
                            <BorderPane fx:id="bpCats" prefHeight="200.0">
                               <center>
@@ -860,9 +861,9 @@
                            </BorderPane>
                         </children>
                      </JFXDrawer>
-                     <JFXDrawer fx:id="drawerBottomData" defaultDrawerSize="200.0" direction="BOTTOM" prefHeight="200.0" prefWidth="880.0" visible="false">
+                     <JFXDrawer fx:id="drawerBottomData" defaultDrawerSize="225.0" direction="BOTTOM" prefHeight="225.0">
                         <children>
-                           <BorderPane fx:id="bpCustomerData" minWidth="-Infinity" prefHeight="200.0" prefWidth="880.0">
+                           <BorderPane fx:id="bpCustomerData" minWidth="-Infinity">
                               <center>
                                  <StackPane alignment="TOP_LEFT" styleClass="spCustomerData" BorderPane.alignment="CENTER">
                                     <children>
@@ -892,71 +893,90 @@
                                                    </StackPane>
                                                 </center>
                                              </BorderPane>
-                                             <HBox alignment="CENTER_LEFT" prefHeight="75.0" spacing="10.0">
-                                                <children>
-                                                   <JFXTextField fx:id="tfCustomerID" labelFloat="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="150.0" promptText=" Kunden-ID" />
-                                                   <JFXTextField fx:id="tfCustomerFirstName" labelFloat="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="150.0" promptText=" Vorname" />
-                                                   <JFXTextField fx:id="tfCustomerLastName" labelFloat="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="150.0" promptText=" Nachname" />
-                                                   <JFXTextField fx:id="tfCustomerMail" labelFloat="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="150.0" promptText=" E-Mail" />
-                                                   <RequiredFieldValidator fx:id="validatorCustomerID" message="Kunden-ID fehlt">
-                                                      <cursor>
-                                                         <Cursor fx:constant="NONE" />
-                                                      </cursor>
-                                                   </RequiredFieldValidator>
-                                                   <RequiredFieldValidator fx:id="validatorCustomerFirstName" message="Vorname fehlt">
-                                                      <cursor>
-                                                         <Cursor fx:constant="NONE" />
-                                                      </cursor>
-                                                   </RequiredFieldValidator>
-                                                   <RequiredFieldValidator fx:id="validatorCustomerLastName" message="Nachname fehlt">
-                                                      <cursor>
-                                                         <Cursor fx:constant="NONE" />
-                                                      </cursor>
-                                                   </RequiredFieldValidator>
-                                                   <RequiredFieldValidator fx:id="validatorCustomerMail" message="E-Mail Adresse fehlt">
-                                                      <cursor>
-                                                         <Cursor fx:constant="NONE" />
-                                                      </cursor>
-                                                   </RequiredFieldValidator>
-                                                </children>
-                                                <VBox.margin>
-                                                   <Insets />
-                                                </VBox.margin>
-                                                <padding>
-                                                   <Insets left="10.0" />
-                                                </padding>
-                                             </HBox>
-                                             <HBox alignment="CENTER_LEFT" prefHeight="75.0" spacing="10.0">
-                                                <children>
-                                                   <JFXTextField fx:id="tfCustomerStreet" labelFloat="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="150.0" promptText=" Strasse" />
-                                                   <JFXTextField fx:id="tfCustomerNr" labelFloat="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="150.0" promptText=" Hausnummer" />
-                                                   <JFXTextField fx:id="tfCustomerZipcode" labelFloat="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="150.0" promptText=" Postleitzahl" />
-                                                   <JFXTextField fx:id="tfCustomerCity" labelFloat="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="150.0" promptText=" Stadt" />
-                                                   <RequiredFieldValidator fx:id="validatorCustomerStreet" message="Strasse fehlt">
-                                                      <cursor>
-                                                         <Cursor fx:constant="NONE" />
-                                                      </cursor>
-                                                   </RequiredFieldValidator>
-                                                   <RequiredFieldValidator fx:id="validatorCustomerNr" message="Hausnummer fehlt">
-                                                      <cursor>
-                                                         <Cursor fx:constant="NONE" />
-                                                      </cursor>
-                                                   </RequiredFieldValidator>
-                                                   <RequiredFieldValidator fx:id="validatorCustomerZipcode" message="Postleitzahl fehlt">
-                                                      <cursor>
-                                                         <Cursor fx:constant="NONE" />
-                                                      </cursor>
-                                                   </RequiredFieldValidator>
-                                                   <RequiredFieldValidator fx:id="validatorCustomerCity" message="Stadt fehlt">
-                                                      <cursor>
-                                                         <Cursor fx:constant="NONE" />
-                                                      </cursor>
-                                                   </RequiredFieldValidator>
-                                                </children>
-                                                <padding>
-                                                   <Insets left="10.0" top="5.0" />
-                                                </padding>
-                                             </HBox>
+                                             <BorderPane prefHeight="200.0" prefWidth="930.0">
+                                                <right>
+                                                   <StackPane alignment="BOTTOM_CENTER" minWidth="-Infinity" prefWidth="225.0" BorderPane.alignment="CENTER">
+                                                      <children>
+                                                         <JFXButton buttonType="RAISED" ellipsisString="" onAction="#onBottomBarFinish" prefHeight="40.0" prefWidth="150.0" styleClass="btn-sidebar-save" text="Abschliessen" />
+                                                      </children>
+                                                      <padding>
+                                                         <Insets bottom="20.0" />
+                                                      </padding>
+                                                   </StackPane>
+                                                </right>
+                                                <center>
+                                                   <StackPane prefHeight="191.0" prefWidth="700.0" BorderPane.alignment="CENTER">
+                                                      <children>
+                                                         <VBox prefHeight="200.0" spacing="10.0">
+                                                            <children>
+                                                               <HBox alignment="CENTER_LEFT" prefHeight="75.0" spacing="10.0">
+                                                                  <children>
+                                                                     <JFXTextField fx:id="tfCustomerID" labelFloat="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="150.0" promptText=" Kunden-ID" />
+                                                                     <JFXTextField fx:id="tfCustomerFirstName" labelFloat="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="150.0" promptText=" Vorname" />
+                                                                     <JFXTextField fx:id="tfCustomerLastName" labelFloat="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="150.0" promptText=" Nachname" />
+                                                                     <JFXTextField fx:id="tfCustomerMail" labelFloat="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="150.0" promptText=" E-Mail" />
+                                                                     <RequiredFieldValidator fx:id="validatorCustomerID" message="Kunden-ID fehlt">
+                                                                        <cursor>
+                                                                           <Cursor fx:constant="NONE" />
+                                                                        </cursor>
+                                                                     </RequiredFieldValidator>
+                                                                     <RequiredFieldValidator fx:id="validatorCustomerFirstName" message="Vorname fehlt">
+                                                                        <cursor>
+                                                                           <Cursor fx:constant="NONE" />
+                                                                        </cursor>
+                                                                     </RequiredFieldValidator>
+                                                                     <RequiredFieldValidator fx:id="validatorCustomerLastName" message="Nachname fehlt">
+                                                                        <cursor>
+                                                                           <Cursor fx:constant="NONE" />
+                                                                        </cursor>
+                                                                     </RequiredFieldValidator>
+                                                                     <RequiredFieldValidator fx:id="validatorCustomerMail" message="E-Mail Adresse fehlt">
+                                                                        <cursor>
+                                                                           <Cursor fx:constant="NONE" />
+                                                                        </cursor>
+                                                                     </RequiredFieldValidator>
+                                                                  </children>
+                                                                  <padding>
+                                                                     <Insets left="20.0" />
+                                                                  </padding>
+                                                               </HBox>
+                                                               <HBox alignment="CENTER_LEFT" prefHeight="75.0" spacing="10.0">
+                                                                  <children>
+                                                                     <JFXTextField fx:id="tfCustomerStreet" labelFloat="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="150.0" promptText=" Strasse" />
+                                                                     <JFXTextField fx:id="tfCustomerNr" labelFloat="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="150.0" promptText=" Hausnummer" />
+                                                                     <JFXTextField fx:id="tfCustomerZipcode" labelFloat="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="150.0" promptText=" Postleitzahl" />
+                                                                     <JFXTextField fx:id="tfCustomerCity" labelFloat="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="150.0" promptText=" Stadt" />
+                                                                     <RequiredFieldValidator fx:id="validatorCustomerStreet" message="Strasse fehlt">
+                                                                        <cursor>
+                                                                           <Cursor fx:constant="NONE" />
+                                                                        </cursor>
+                                                                     </RequiredFieldValidator>
+                                                                     <RequiredFieldValidator fx:id="validatorCustomerNr" message="Hausnummer fehlt">
+                                                                        <cursor>
+                                                                           <Cursor fx:constant="NONE" />
+                                                                        </cursor>
+                                                                     </RequiredFieldValidator>
+                                                                     <RequiredFieldValidator fx:id="validatorCustomerZipcode" message="Postleitzahl fehlt">
+                                                                        <cursor>
+                                                                           <Cursor fx:constant="NONE" />
+                                                                        </cursor>
+                                                                     </RequiredFieldValidator>
+                                                                     <RequiredFieldValidator fx:id="validatorCustomerCity" message="Stadt fehlt">
+                                                                        <cursor>
+                                                                           <Cursor fx:constant="NONE" />
+                                                                        </cursor>
+                                                                     </RequiredFieldValidator>
+                                                                  </children>
+                                                                  <padding>
+                                                                     <Insets left="20.0" />
+                                                                  </padding>
+                                                               </HBox>
+                                                            </children>
+                                                         </VBox>
+                                                      </children>
+                                                   </StackPane>
+                                                </center>
+                                             </BorderPane>
                                           </children>
                                           <opaqueInsets>
                                              <Insets />
@@ -965,13 +985,6 @@
                                     </children>
                                  </StackPane>
                               </center>
-                              <left>
-                                 <StackPane minWidth="-Infinity" prefWidth="250.0" BorderPane.alignment="CENTER">
-                                    <children>
-                                       <JFXButton buttonType="RAISED" ellipsisString="" onAction="#onBottomBarFinish" prefHeight="50.0" prefWidth="225.0" styleClass="btn-sidebar-save" text="Abschliessen" />
-                                    </children>
-                                 </StackPane>
-                              </left>
                            </BorderPane>
                         </children>
                      </JFXDrawer>
