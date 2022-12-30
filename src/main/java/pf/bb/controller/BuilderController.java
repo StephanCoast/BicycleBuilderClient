@@ -1,16 +1,21 @@
 package pf.bb.controller;
 
+import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXDrawer;
 import com.jfoenix.controls.JFXTextField;
 import com.jfoenix.validation.RequiredFieldValidator;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
+import pf.bb.Main;
+import pf.bb.model.Article;
 
 import java.io.IOException;
 import java.util.HashSet;
@@ -20,6 +25,8 @@ public class BuilderController {
     public RequiredFieldValidator validatorCustomerID, validatorCustomerFirstName, validatorCustomerLastName, validatorCustomerMail;
     public RequiredFieldValidator validatorCustomerStreet, validatorCustomerNr, validatorCustomerZipcode, validatorCustomerCity;
     public JFXTextField tfCustomerID, tfCustomerFirstName, tfCustomerLastName, tfCustomerMail, tfCustomerStreet, tfCustomerNr, tfCustomerZipcode, tfCustomerCity;
+    public AnchorPane anchorContainer;
+    public JFXButton btnHeaderHome, btnSaveDraft, btnAddCustomerData, btnSidebarHome;
     private Boolean catIsOpen;
     public ToggleGroup catsTogglegroup, cat1TogglegroupColor, cat1TogglegroupSize, cat3TogglegroupColor, cat3TogglegroupSize, cat5TogglegroupColor, cat5TogglegroupType;
     public JFXComboBox<String> cat2SelectColor, cat2SelectShape, cat2SelectGrip, cat4SelectType, cat4SelectColor, cat4SelectPrice, cat6SelectBell, cat6SelectStand, cat6SelectLight;
@@ -67,6 +74,7 @@ public class BuilderController {
 
     public void openCustomerDataView(ActionEvent event) throws IOException {
         vm.forceDrawerView(drawerBottomData, bpCustomerData);
+        deactivateButtonsOnCustomerEdit();
     }
 
     public void openSidebarDefault(ActionEvent event) throws IOException {
@@ -87,6 +95,14 @@ public class BuilderController {
         catIsOpen = true;
         closeAllSideDrawers();
         vm.forceDrawerView(drawerCat1, cat1);
+
+        /* AR: for testing only
+        for (Article i : Main.ARTICLES) {
+            if (i.type.equals("Rahmen")) {
+                System.out.println("AR-Test: " + i.name);
+            }
+        }
+         */
     }
 
     public void openSidebarCat2(ActionEvent event) throws IOException {
@@ -142,6 +158,8 @@ public class BuilderController {
     public void onBottomBarClose(ActionEvent event) throws IOException {
         closeAllBottomDrawers();
         vm.forceDrawerView(drawerBottomCats, bpCats);
+        setDefaultFocus();
+        activateButtonsOnCustomerEdit();
     }
 
     // AR: "Abschliessen" - hier wird bestimmt was nach Eingabe der Kundendaten passiert
@@ -155,6 +173,8 @@ public class BuilderController {
             Node node = (Node) toggle ;
             node.setDisable(true);
         });
+        setDefaultFocus();
+        activateButtonsOnCustomerEdit();
     }
 
     // AR: Auftrag Button
@@ -167,10 +187,6 @@ public class BuilderController {
     // todo: PDF erstellen und anzeigen/herunterladen
     public void onFinalInvoice(ActionEvent event) {
 
-    }
-
-    public void onFinalDashboard(ActionEvent event) throws IOException {
-        vm.forceView(event, "Dashboard.fxml", "Bicycle Builder - Dashboard");
     }
 
     private void setupSideDrawersSet(JFXDrawer drawerDefault, JFXDrawer drawerFinish, JFXDrawer drawerCat1, JFXDrawer drawerCat2, JFXDrawer drawerCat3, JFXDrawer drawerCat4, JFXDrawer drawerCat5, JFXDrawer drawerCat6) {
@@ -230,5 +246,30 @@ public class BuilderController {
         validatorManager.initTextValidators(tfCustomerNr, validatorCustomerNr);
         validatorManager.initTextValidators(tfCustomerZipcode, validatorCustomerZipcode);
         validatorManager.initTextValidators(tfCustomerCity, validatorCustomerCity);
+    }
+
+    private void setDefaultFocus() {
+        Platform.runLater(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                anchorContainer.requestFocus();
+            }
+        });
+    }
+
+    private void deactivateButtonsOnCustomerEdit() {
+        btnHeaderHome.setDisable(true);
+        btnAddCustomerData.setDisable(true);
+        btnSaveDraft.setDisable(true);
+        btnSidebarHome.setDisable(true);
+    }
+
+    private void activateButtonsOnCustomerEdit() {
+        btnHeaderHome.setDisable(false);
+        btnAddCustomerData.setDisable(false);
+        btnSaveDraft.setDisable(false);
+        btnSidebarHome.setDisable(false);
     }
 }

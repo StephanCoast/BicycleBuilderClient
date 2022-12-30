@@ -7,6 +7,7 @@ import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXDrawer;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -55,6 +56,7 @@ public class DashboardController {
         closeAllDrawers();
         addActionButtonsToTable();
         setupValidators();
+        setDefaultFocus();
     }
 
     public void openDashboard(ActionEvent event) throws IOException {
@@ -85,6 +87,7 @@ public class DashboardController {
     public void onBottomBarClose(ActionEvent event) {
         btnNewConfig.setDisable(false);
         closeAllDrawers();
+        setDefaultFocus();
     }
 
     // AR: hier speichert der Admin einen neuen User
@@ -93,6 +96,7 @@ public class DashboardController {
     public void onBottomBarSaveAdmin(ActionEvent event) {
         btnNewConfig.setDisable(false);
         closeAllDrawers();
+        setDefaultFocus();
     }
 
     // AR: hier speichert der User neue Daten für sein Profil
@@ -101,6 +105,7 @@ public class DashboardController {
     public void onBottomBarSaveProfile(ActionEvent event) {
         btnNewConfig.setDisable(false);
         closeAllDrawers();
+        setDefaultFocus();
     }
 
     private void setupTableView() {
@@ -136,6 +141,19 @@ public class DashboardController {
             i.close();
             i.setVisible(false);
         }
+    }
+
+    private void setDefaultFocus() {
+        Platform.runLater(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                dboard_table.requestFocus();
+                dboard_table.getSelectionModel().select(0);
+                dboard_table.getFocusModel().focus(0);
+            }
+        });
     }
 
     private void addActionButtonsToTable() {

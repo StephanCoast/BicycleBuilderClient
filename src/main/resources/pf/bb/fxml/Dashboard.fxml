@@ -84,10 +84,13 @@
          </StackPane>
       </center>
       <bottom>
-         <BorderPane prefHeight="200.0" styleClass="footer-borderpane" BorderPane.alignment="CENTER">
+         <BorderPane prefHeight="225.0" styleClass="footer-borderpane" BorderPane.alignment="CENTER">
             <left>
                <StackPane prefHeight="150.0" prefWidth="300.0" BorderPane.alignment="CENTER">
-                  <JFXButton fx:id="btnNewConfig" buttonType="RAISED" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#openBuilder" prefHeight="50.0" prefWidth="250.0" styleClass="btn-builder" text="Neue Konfiguration" />
+                  <JFXButton fx:id="btnNewConfig" buttonType="RAISED" contentDisplay="TOP" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#openBuilder" prefHeight="150.0" prefWidth="200.0" styleClass="btn-builder" text="Neue Konfiguration">
+                     <graphic>
+                        <FontAwesomeIconView fill="WHITE" glyphName="BICYCLE" size="38" textOrigin="TOP" wrappingWidth="48.85714340209961" />
+                     </graphic></JFXButton>
                </StackPane>
             </left>
             <cursor>
@@ -96,11 +99,11 @@
             <center>
                <StackPane prefHeight="150.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                   <children>
-                     <JFXDrawer fx:id="drawerAdmin" defaultDrawerSize="200.0" direction="BOTTOM" prefHeight="125.0" prefWidth="900.0">
+                     <JFXDrawer fx:id="drawerAdmin" defaultDrawerSize="225.0" direction="BOTTOM" prefHeight="125.0" prefWidth="900.0">
                         <children>
                            <BorderPane fx:id="bpAdmin" prefHeight="200.0" prefWidth="200.0" styleClass="bpAdmin">
                               <center>
-                                 <StackPane BorderPane.alignment="CENTER">
+                                 <StackPane prefHeight="225.0" BorderPane.alignment="CENTER">
                                     <children>
                                        <VBox>
                                           <children>
@@ -207,7 +210,7 @@
                            </BorderPane>
                         </children>
                      </JFXDrawer>
-                     <JFXDrawer fx:id="drawerProfile" defaultDrawerSize="200.0" direction="BOTTOM" prefHeight="125.0" prefWidth="900.0" visible="false">
+                     <JFXDrawer fx:id="drawerProfile" defaultDrawerSize="225.0" direction="BOTTOM" prefHeight="125.0" prefWidth="900.0" visible="false">
                         <children>
                            <BorderPane fx:id="bpProfile" prefHeight="200.0" prefWidth="200.0" styleClass="bpProfile">
                               <center>
