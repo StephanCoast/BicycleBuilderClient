@@ -114,10 +114,21 @@
 }
 
 /* ######################################### */
-/* Builder - Sidebar Kategorie 1 */
+/* Builder - Sidebar Kategorien Allgemein */
 /* ######################################### */
 
-.btn-toggle-cat1Color1, .btn-toggle-cat1Color2 {
+.btn-toggle-cat1Color1,
+.btn-toggle-cat1Color2,
+.btn-toggle-cat1Color3,
+.btn-toggle-cat2Color1,
+.btn-toggle-cat2Color2,
+.btn-toggle-cat2Color3,
+.btn-toggle-cat3Color1,
+.btn-toggle-cat3Color2,
+.btn-toggle-cat3Color3,
+.btn-toggle-cat4Color1,
+.btn-toggle-cat4Color2,
+.btn-toggle-cat4Color3 {
     -fx-background-radius: 50%;
     -fx-background-insets: 1px;
     -fx-border-color : black;
@@ -125,31 +136,35 @@
     -fx-border-width : 1 1 1 1;
 }
 
-.btn-toggle-cat1Color1 {
-    -jfx-toggle-color: rgba(0, 0, 0, 1);
-    -jfx-untoggle-color: rgba(0, 0, 0, 0.9);
-    -fx-text-fill: transparent;
-}
-
-.btn-toggle-cat1Color2 {
-    -jfx-toggle-color: rgba(255, 255, 255, 1);
-    -jfx-untoggle-color: rgba(255, 255, 255, 0.9);
-    -fx-text-fill: transparent;
-}
-
-.btn-toggle-cat1Color1:selected, .btn-toggle-cat1Color2:selected {
+.btn-toggle-cat1Color1:selected,
+.btn-toggle-cat1Color2:selected,
+.btn-toggle-cat1Color3:selected,
+.btn-toggle-cat2Color1:selected,
+.btn-toggle-cat2Color2:selected,
+.btn-toggle-cat2Color3:selected,
+.btn-toggle-cat3Color1:selected,
+.btn-toggle-cat3Color2:selected,
+.btn-toggle-cat3Color3:selected,
+.btn-toggle-cat4Color1:selected,
+.btn-toggle-cat4Color2:selected,
+.btn-toggle-cat4Color3:selected {
     -fx-border-color : #76ff03; /* material palette - light green 400 A primary */
     -fx-effect: dropshadow(gaussian, rgba(118, 255, 3, .5), 5, 0.4, 0.0, 0.0); /* material palette - light green 400 A primary */
 }
 
-.btn-toggle-cat1Color1:hover {
+.btn-toggle-cat1Color1:hover,
+.btn-toggle-cat1Color2:hover,
+.btn-toggle-cat1Color3:hover,
+.btn-toggle-cat2Color1:hover,
+.btn-toggle-cat2Color2:hover,
+.btn-toggle-cat2Color3:hover,
+.btn-toggle-cat3Color1:hover,
+.btn-toggle-cat3Color2:hover,
+.btn-toggle-cat3Color3:hover,
+.btn-toggle-cat4Color1:hover,
+.btn-toggle-cat4Color2:hover,
+.btn-toggle-cat4Color3:hover {
     -fx-border-color : #ffa726; /* material palette - orange 400 primary */
-    -fx-text-fill: white;
-}
-
-.btn-toggle-cat1Color2:hover {
-    -fx-border-color : #ffa726; /* material palette - orange 400 primary */
-    -fx-text-fill: black;
 }
 
 .btn-toggle-cats-radioText {
@@ -172,92 +187,80 @@
 }
 
 /* ######################################### */
-/* Builder - Sidebar Kategorie 2 */
+/* Builder - Sidebar Kategorie 1 - Rahmen */
 /* ######################################### */
 
-/* ######################################### */
-/* Builder - Sidebar Kategorie 3 */
-/* ######################################### */
-
-.btn-toggle-cat3Color1, .btn-toggle-cat3Color2 {
-    -fx-background-radius: 50%;
-    -fx-background-insets: 1px;
-    -fx-border-color : black;
-    -fx-border-radius: 50%;
-    -fx-border-width : 1 1 1 1;
+.btn-toggle-cat1Color1 {
+    -jfx-toggle-color: rgba(0, 0, 0, 1);
+    -jfx-untoggle-color: rgba(0, 0, 0, 0.9);
 }
+
+.btn-toggle-cat1Color2 {
+    -jfx-toggle-color: rgba(255, 255, 255, 1);
+    -jfx-untoggle-color: rgba(255, 255, 255, 0.9);
+}
+
+.btn-toggle-cat1Color3 {
+    -jfx-toggle-color: rgba(192, 192, 192, 1);
+    -jfx-untoggle-color: rgba(192, 192, 192, 0.9);
+}
+
+/* ######################################### */
+/* Builder - Sidebar Kategorie 2 - Lenker */
+/* ######################################### */
+
+.btn-toggle-cat2Color1 {
+    -jfx-toggle-color: rgba(0, 0, 0, 1);
+    -jfx-untoggle-color: rgba(0, 0, 0, 0.9);
+}
+
+.btn-toggle-cat2Color2 {
+    -jfx-toggle-color: rgba(255, 255, 255, 1);
+    -jfx-untoggle-color: rgba(255, 255, 255, 0.9);
+}
+
+.btn-toggle-cat2Color3 {
+    -jfx-toggle-color: rgba(192, 192, 192, 1);
+    -jfx-untoggle-color: rgba(192, 192, 192, 0.9);
+}
+
+/* ######################################### */
+/* Builder - Sidebar Kategorie 3 - Räder */
+/* ######################################### */
 
 .btn-toggle-cat3Color1 {
     -jfx-toggle-color: rgba(0, 0, 0, 1);
     -jfx-untoggle-color: rgba(0, 0, 0, 0.9);
-    -fx-text-fill: transparent;
 }
 
 .btn-toggle-cat3Color2 {
     -jfx-toggle-color: rgba(255, 255, 255, 1);
     -jfx-untoggle-color: rgba(255, 255, 255, 0.9);
-    -fx-text-fill: transparent;
 }
 
-.btn-toggle-cat3Color1:selected, .btn-toggle-cat3Color2:selected {
-    -fx-border-color : #76ff03; /* material palette - light green 400 A primary */
-    -fx-effect: dropshadow(gaussian, rgba(118, 255, 3, .5), 5, 0.4, 0.0, 0.0); /* material palette - light green 400 A primary */
-}
-
-.btn-toggle-cat3Color1:hover {
-    -fx-border-color : #ffa726; /* material palette - orange 400 primary */
-    -fx-text-fill: white;
-}
-
-.btn-toggle-cat3Color2:hover {
-    -fx-border-color : #ffa726; /* material palette - orange 400 primary */
-    -fx-text-fill: black;
+.btn-toggle-cat3Color3 {
+    -jfx-toggle-color: rgba(192, 192, 192, 1);
+    -jfx-untoggle-color: rgba(192, 192, 192, 0.9);
 }
 
 /* ######################################### */
-/* Builder - Sidebar Kategorie 4 */
+/* Builder - Sidebar Kategorie 4 - Sattel */
 /* ######################################### */
 
-/* ######################################### */
-/* Builder - Sidebar Kategorie 5 */
-/* ######################################### */
-
-.btn-toggle-cat5Color1, .btn-toggle-cat5Color2 {
-    -fx-background-radius: 50%;
-    -fx-background-insets: 1px;
-    -fx-border-color : black;
-    -fx-border-radius: 50%;
-    -fx-border-width : 1 1 1 1;
-}
-
-.btn-toggle-cat5Color1 {
+.btn-toggle-cat4Color1 {
     -jfx-toggle-color: rgba(0, 0, 0, 1);
     -jfx-untoggle-color: rgba(0, 0, 0, 0.9);
-    -fx-text-fill: transparent;
 }
 
-.btn-toggle-cat5Color2 {
+.btn-toggle-cat4Color2 {
+    -jfx-toggle-color: rgba(75, 44, 32, 1); /* material palette - brown 500 primary dark */
+    -jfx-untoggle-color: rgba(75, 44, 32, 0.9);
+}
+
+.btn-toggle-cat4Color3 {
     -jfx-toggle-color: rgba(255, 255, 255, 1);
     -jfx-untoggle-color: rgba(255, 255, 255, 0.9);
-    -fx-text-fill: transparent;
 }
 
-.btn-toggle-cat5Color1:selected, .btn-toggle-cat5Color2:selected {
-    -fx-border-color : #76ff03; /* material palette - light green 400 A primary */
-    -fx-effect: dropshadow(gaussian, rgba(118, 255, 3, .5), 5, 0.4, 0.0, 0.0); /* material palette - light green 400 A primary */
-}
 
-.btn-toggle-cat5Color1:hover {
-    -fx-border-color : #ffa726; /* material palette - orange 400 primary */
-    -fx-text-fill: white;
-}
-
-.btn-toggle-cat5Color2:hover {
-    -fx-border-color : #ffa726; /* material palette - orange 400 primary */
-    -fx-text-fill: black;
-}
-
-/* ######################################### */
-/* Builder - Sidebar Kategorie 6 */
-/* ######################################### */
 

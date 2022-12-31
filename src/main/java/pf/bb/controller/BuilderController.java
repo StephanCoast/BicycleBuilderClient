@@ -28,8 +28,8 @@ public class BuilderController {
     public AnchorPane anchorContainer;
     public JFXButton btnHeaderHome, btnSaveDraft, btnAddCustomerData, btnSidebarHome;
     private Boolean catIsOpen;
-    public ToggleGroup catsTogglegroup, cat1TogglegroupColor, cat1TogglegroupSize, cat3TogglegroupColor, cat3TogglegroupSize, cat5TogglegroupColor, cat5TogglegroupType;
-    public JFXComboBox<String> cat2SelectColor, cat2SelectShape, cat2SelectGrip, cat4SelectType, cat4SelectColor, cat4SelectPrice, cat6SelectBell, cat6SelectStand, cat6SelectLight;
+    public ToggleGroup catsTogglegroup, cat1TogglegroupColor, cat1TogglegroupSize, cat2TogglegroupColor, cat3TogglegroupColor, cat3TogglegroupSize, cat4TogglegroupColor;
+    public JFXComboBox<String> cat1SelectName, cat2SelectModel, cat2SelectGrip, cat3SelectModel, cat3SelectTyre, cat4SelectModel, cat5SelectModel, cat6SelectBell, cat6SelectStand, cat6SelectLight;
     public BorderPane cat1, cat2, cat3, cat4, cat5, cat6, catDefault, catFinish, bpCats, bpCustomerData;
     public JFXDrawer drawerDefault, drawerCat1, drawerCat2, drawerCat3, drawerCat4, drawerCat5, drawerCat6, drawerBottomCats, drawerBottomData, drawerFinish;
     private HashSet<JFXDrawer> drawersBuilderSide, drawersBuilderBottom;
@@ -49,16 +49,23 @@ public class BuilderController {
         vm.forceDrawerView(drawerDefault, catDefault);
         vm.forceDrawerView(drawerBottomCats, bpCats);
         onToggleDeselect();
+        onToggleDeselectSubCat(cat1TogglegroupColor);
+        onToggleDeselectSubCat(cat1TogglegroupSize);
+        onToggleDeselectSubCat(cat2TogglegroupColor);
+        onToggleDeselectSubCat(cat3TogglegroupColor);
+        onToggleDeselectSubCat(cat3TogglegroupSize);
+        onToggleDeselectSubCat(cat4TogglegroupColor);
         setupValidators();
 
         /* AR: set dummy data for all sidebar cat-selects */
         ObservableList<String> data = FXCollections.observableArrayList("test1", "test2", "test3");
-        cat2SelectColor.setItems(data);
-        cat2SelectShape.setItems(data);
+        cat1SelectName.setItems(data);
+        cat2SelectModel.setItems(data);
         cat2SelectGrip.setItems(data);
-        cat4SelectType.setItems(data);
-        cat4SelectColor.setItems(data);
-        cat4SelectPrice.setItems(data);
+        cat3SelectModel.setItems(data);
+        cat3SelectTyre.setItems(data);
+        cat4SelectModel.setItems(data);
+        cat5SelectModel.setItems(data);
         cat6SelectBell.setItems(data);
         cat6SelectStand.setItems(data);
         cat6SelectLight.setItems(data);
@@ -227,6 +234,14 @@ public class BuilderController {
                 if (newValue == null) {
                     oldValue.setSelected(true);
                 }
+            }
+        });
+    }
+
+    private void onToggleDeselectSubCat(ToggleGroup tg) {
+        tg.selectedToggleProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue == null) {
+                oldValue.setSelected(true);
             }
         });
     }
