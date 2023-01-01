@@ -78,6 +78,25 @@
 }
 
 /* ######################################### */
+/* Builder - Main - SVG Container */
+/* ######################################### */
+
+.bpaneSVGright {
+    -fx-border-color : rgba(0, 0, 0, 0.25);
+    -fx-border-width : 0 0 0 1;
+}
+
+.svg-container-techinfo-header {
+    -fx-border-color : rgba(0, 0, 0, 0.25);
+    -fx-border-width : 0 0 1 0;
+}
+
+.svg-container-techinfo-textarea {
+    -jfx-focus-color: transparent;
+    -jfx-unfocus-color: transparent;
+}
+
+/* ######################################### */
 /* Builder - Sidebar */
 /* ######################################### */
 
@@ -261,6 +280,20 @@
     -jfx-toggle-color: rgba(255, 255, 255, 1);
     -jfx-untoggle-color: rgba(255, 255, 255, 0.9);
 }
+
+/* ######################################### */
+/* Builder - Sidebar Kategorie Final */
+/* ######################################### */
+
+.catSidebarFinalCellLeft {
+    -fx-background-color: transparent;
+}
+
+.catSidebarFinalCellHeader {
+    -fx-border-color : rgba(0, 0, 0, 0.25);
+    -fx-border-width : 0 0 1 0;
+}
+
 
 
 

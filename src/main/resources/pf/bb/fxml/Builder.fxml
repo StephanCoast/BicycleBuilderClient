@@ -4,6 +4,7 @@
 <?import com.jfoenix.controls.JFXComboBox?>
 <?import com.jfoenix.controls.JFXDrawer?>
 <?import com.jfoenix.controls.JFXListCell?>
+<?import com.jfoenix.controls.JFXTextArea?>
 <?import com.jfoenix.controls.JFXTextField?>
 <?import com.jfoenix.controls.JFXToggleNode?>
 <?import com.jfoenix.validation.RequiredFieldValidator?>
@@ -11,6 +12,7 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
@@ -229,7 +231,7 @@
                                     </Label>
                                     <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="30.0">
                                        <children>
-                                          <JFXToggleNode ellipsisString="" prefHeight="60.0" prefWidth="60.0" styleClass="btn-toggle-cat1Color1">
+                                          <JFXToggleNode fx:id="cat1Color1" ellipsisString="" prefHeight="60.0" prefWidth="60.0" styleClass="btn-toggle-cat1Color1">
                                              <font>
                                                 <Font size="8.0" />
                                              </font>
@@ -237,12 +239,12 @@
                                                 <ToggleGroup fx:id="cat1TogglegroupColor" />
                                              </toggleGroup>
                                           </JFXToggleNode>
-                                          <JFXToggleNode ellipsisString="" prefHeight="60.0" prefWidth="60.0" styleClass="btn-toggle-cat1Color2" toggleGroup="$cat1TogglegroupColor">
+                                          <JFXToggleNode fx:id="cat1Color2" ellipsisString="" prefHeight="60.0" prefWidth="60.0" styleClass="btn-toggle-cat1Color2" toggleGroup="$cat1TogglegroupColor">
                                              <font>
                                                 <Font size="8.0" />
                                              </font>
                                           </JFXToggleNode>
-                                          <JFXToggleNode ellipsisString="" prefHeight="60.0" prefWidth="60.0" styleClass="btn-toggle-cat1Color3" textFill="WHITE" toggleGroup="$cat1TogglegroupColor">
+                                          <JFXToggleNode fx:id="cat1Color3" ellipsisString="" prefHeight="60.0" prefWidth="60.0" styleClass="btn-toggle-cat1Color3" textFill="WHITE" toggleGroup="$cat1TogglegroupColor">
                                              <font>
                                                 <Font size="8.0" />
                                              </font>
@@ -256,7 +258,7 @@
                                     </Label>
                                     <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="30.0">
                                        <children>
-                                          <JFXToggleNode ellipsisString="" prefHeight="60.0" prefWidth="60.0" styleClass="btn-toggle-cats-radioText" text="S">
+                                          <JFXToggleNode fx:id="cat1Size1" ellipsisString="" prefHeight="60.0" prefWidth="60.0" styleClass="btn-toggle-cats-radioText" text="S">
                                              <font>
                                                 <Font size="22.0" />
                                              </font>
@@ -264,12 +266,12 @@
                                                 <ToggleGroup fx:id="cat1TogglegroupSize" />
                                              </toggleGroup>
                                           </JFXToggleNode>
-                                          <JFXToggleNode ellipsisString="" prefHeight="60.0" prefWidth="60.0" styleClass="btn-toggle-cats-radioText" text="M" toggleGroup="$cat1TogglegroupSize">
+                                          <JFXToggleNode fx:id="cat1Size2" ellipsisString="" prefHeight="60.0" prefWidth="60.0" styleClass="btn-toggle-cats-radioText" text="M" toggleGroup="$cat1TogglegroupSize">
                                              <font>
                                                 <Font size="22.0" />
                                              </font>
                                           </JFXToggleNode>
-                                          <JFXToggleNode ellipsisString="" prefHeight="60.0" prefWidth="60.0" styleClass="btn-toggle-cats-radioText" text="L" toggleGroup="$cat1TogglegroupSize">
+                                          <JFXToggleNode fx:id="cat1Size3" ellipsisString="" prefHeight="60.0" prefWidth="60.0" styleClass="btn-toggle-cats-radioText" text="L" toggleGroup="$cat1TogglegroupSize">
                                              <font>
                                                 <Font size="22.0" />
                                              </font>
@@ -384,7 +386,7 @@
                                     </Label>
                                     <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="30.0">
                                        <children>
-                                          <JFXToggleNode ellipsisString="" prefHeight="60.0" prefWidth="60.0" styleClass="btn-toggle-cat2Color1">
+                                          <JFXToggleNode fx:id="cat2Color1" ellipsisString="" prefHeight="60.0" prefWidth="60.0" styleClass="btn-toggle-cat2Color1">
                                              <font>
                                                 <Font size="8.0" />
                                              </font>
@@ -392,12 +394,12 @@
                                                 <ToggleGroup fx:id="cat2TogglegroupColor" />
                                              </toggleGroup>
                                           </JFXToggleNode>
-                                          <JFXToggleNode ellipsisString="" prefHeight="60.0" prefWidth="60.0" styleClass="btn-toggle-cat2Color2" toggleGroup="$cat2TogglegroupColor">
+                                          <JFXToggleNode fx:id="cat2Color2" ellipsisString="" prefHeight="60.0" prefWidth="60.0" styleClass="btn-toggle-cat2Color2" toggleGroup="$cat2TogglegroupColor">
                                              <font>
                                                 <Font size="8.0" />
                                              </font>
                                           </JFXToggleNode>
-                                          <JFXToggleNode ellipsisString="" prefHeight="60.0" prefWidth="60.0" styleClass="btn-toggle-cat2Color3" textFill="WHITE" toggleGroup="$cat2TogglegroupColor">
+                                          <JFXToggleNode fx:id="cat2Color3" ellipsisString="" prefHeight="60.0" prefWidth="60.0" styleClass="btn-toggle-cat2Color3" textFill="WHITE" toggleGroup="$cat2TogglegroupColor">
                                              <font>
                                                 <Font size="8.0" />
                                              </font>
@@ -516,7 +518,7 @@
                                     </Label>
                                     <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="30.0">
                                        <children>
-                                          <JFXToggleNode ellipsisString="" prefHeight="60.0" prefWidth="60.0" styleClass="btn-toggle-cat3Color1" textFill="WHITE">
+                                          <JFXToggleNode fx:id="cat3Color1" ellipsisString="" prefHeight="60.0" prefWidth="60.0" styleClass="btn-toggle-cat3Color1" textFill="WHITE">
                                              <font>
                                                 <Font size="8.0" />
                                              </font>
@@ -524,12 +526,12 @@
                                                 <ToggleGroup fx:id="cat3TogglegroupColor" />
                                              </toggleGroup>
                                           </JFXToggleNode>
-                                          <JFXToggleNode ellipsisString="" prefHeight="60.0" prefWidth="60.0" styleClass="btn-toggle-cat3Color2" toggleGroup="$cat3TogglegroupColor">
+                                          <JFXToggleNode fx:id="cat3Color2" ellipsisString="" prefHeight="60.0" prefWidth="60.0" styleClass="btn-toggle-cat3Color2" toggleGroup="$cat3TogglegroupColor">
                                              <font>
                                                 <Font size="8.0" />
                                              </font>
                                           </JFXToggleNode>
-                                          <JFXToggleNode ellipsisString="" prefHeight="60.0" prefWidth="60.0" styleClass="btn-toggle-cat3Color3" toggleGroup="$cat3TogglegroupColor">
+                                          <JFXToggleNode fx:id="cat3Color3" ellipsisString="" prefHeight="60.0" prefWidth="60.0" styleClass="btn-toggle-cat3Color3" toggleGroup="$cat3TogglegroupColor">
                                              <font>
                                                 <Font size="8.0" />
                                              </font>
@@ -543,7 +545,7 @@
                                     </Label>
                                     <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="30.0">
                                        <children>
-                                          <JFXToggleNode ellipsisString="" prefHeight="60.0" prefWidth="60.0" styleClass="btn-toggle-cats-radioText" text="S">
+                                          <JFXToggleNode fx:id="cat3Size1" ellipsisString="" prefHeight="60.0" prefWidth="60.0" styleClass="btn-toggle-cats-radioText" text="S">
                                              <font>
                                                 <Font size="22.0" />
                                              </font>
@@ -551,12 +553,12 @@
                                                 <ToggleGroup fx:id="cat3TogglegroupSize" />
                                              </toggleGroup>
                                           </JFXToggleNode>
-                                          <JFXToggleNode ellipsisString="" prefHeight="60.0" prefWidth="60.0" styleClass="btn-toggle-cats-radioText" text="M" toggleGroup="$cat3TogglegroupSize">
+                                          <JFXToggleNode fx:id="cat3Size2" ellipsisString="" prefHeight="60.0" prefWidth="60.0" styleClass="btn-toggle-cats-radioText" text="M" toggleGroup="$cat3TogglegroupSize">
                                              <font>
                                                 <Font size="22.0" />
                                              </font>
                                           </JFXToggleNode>
-                                          <JFXToggleNode ellipsisString="" prefHeight="60.0" prefWidth="60.0" styleClass="btn-toggle-cats-radioText" text="L" toggleGroup="$cat3TogglegroupSize">
+                                          <JFXToggleNode fx:id="cat3Size3" ellipsisString="" prefHeight="60.0" prefWidth="60.0" styleClass="btn-toggle-cats-radioText" text="L" toggleGroup="$cat3TogglegroupSize">
                                              <font>
                                                 <Font size="22.0" />
                                              </font>
@@ -676,7 +678,7 @@
                                     </Label>
                                     <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="30.0">
                                        <children>
-                                          <JFXToggleNode ellipsisString="" prefHeight="60.0" prefWidth="60.0" styleClass="btn-toggle-cat4Color1" textFill="WHITE">
+                                          <JFXToggleNode fx:id="cat4Color1" ellipsisString="" prefHeight="60.0" prefWidth="60.0" styleClass="btn-toggle-cat4Color1" textFill="WHITE">
                                              <font>
                                                 <Font size="8.0" />
                                              </font>
@@ -684,12 +686,12 @@
                                                 <ToggleGroup fx:id="cat4TogglegroupColor" />
                                              </toggleGroup>
                                           </JFXToggleNode>
-                                          <JFXToggleNode ellipsisString="" prefHeight="60.0" prefWidth="60.0" styleClass="btn-toggle-cat4Color2" toggleGroup="$cat4TogglegroupColor">
+                                          <JFXToggleNode fx:id="cat4Color2" ellipsisString="" prefHeight="60.0" prefWidth="60.0" styleClass="btn-toggle-cat4Color2" toggleGroup="$cat4TogglegroupColor">
                                              <font>
                                                 <Font size="8.0" />
                                              </font>
                                           </JFXToggleNode>
-                                          <JFXToggleNode ellipsisString="" prefHeight="60.0" prefWidth="60.0" styleClass="btn-toggle-cat4Color3" toggleGroup="$cat4TogglegroupColor">
+                                          <JFXToggleNode fx:id="cat4Color3" ellipsisString="" prefHeight="60.0" prefWidth="60.0" styleClass="btn-toggle-cat4Color3" toggleGroup="$cat4TogglegroupColor">
                                              <font>
                                                 <Font size="8.0" />
                                              </font>
@@ -971,7 +973,7 @@
                            <children>
                               <VBox prefHeight="200.0" prefWidth="100.0">
                                  <children>
-                                    <HBox alignment="CENTER" prefHeight="35.0">
+                                    <HBox alignment="CENTER" prefHeight="35.0" styleClass="catSidebarFinalCellHeader">
                                        <children>
                                           <Label alignment="CENTER" ellipsisString="" styleClass="header-title" text="Kundendaten">
                                              <font>
@@ -979,60 +981,121 @@
                                              </font>
                                           </Label>
                                        </children>
+                                       <VBox.margin>
+                                          <Insets bottom="10.0" left="10.0" right="10.0" />
+                                       </VBox.margin>
                                     </HBox>
                                     <HBox alignment="CENTER_LEFT" prefHeight="35.0">
                                        <children>
-                                          <JFXListCell ellipsisString="" prefWidth="300.0" text="Auftrags-ID" />
-                                          <JFXListCell ellipsisString="" prefWidth="300.0" text="Test" />
+                                          <JFXListCell ellipsisString="" prefWidth="200.0" styleClass="catSidebarFinalCellLeft" text="Auftrags-ID:">
+                                             <HBox.margin>
+                                                <Insets />
+                                             </HBox.margin></JFXListCell>
+                                          <TextField editable="false" prefWidth="275.0" text="123456">
+                                             <HBox.margin>
+                                                <Insets />
+                                             </HBox.margin>
+                                          </TextField>
                                        </children>
+                                       <VBox.margin>
+                                          <Insets left="10.0" right="10.0" />
+                                       </VBox.margin>
                                     </HBox>
                                     <HBox alignment="CENTER_LEFT" prefHeight="35.0">
                                        <children>
-                                          <JFXListCell ellipsisString="" prefWidth="300.0" text="Kunden-ID" />
-                                          <JFXListCell ellipsisString="" prefWidth="300.0" text="Test" />
+                                          <JFXListCell ellipsisString="" prefWidth="200.0" styleClass="catSidebarFinalCellLeft" text="Kunden-ID:">
+                                             <HBox.margin>
+                                                <Insets />
+                                             </HBox.margin></JFXListCell>
+                                          <TextField editable="false" prefWidth="275.0" text="123456" />
                                        </children>
+                                       <VBox.margin>
+                                          <Insets left="10.0" right="10.0" />
+                                       </VBox.margin>
                                     </HBox>
                                     <HBox alignment="CENTER_LEFT" prefHeight="35.0">
                                        <children>
-                                          <JFXListCell ellipsisString="" prefWidth="300.0" text="Vorname" />
-                                          <JFXListCell ellipsisString="" prefWidth="300.0" text="Test" />
+                                          <JFXListCell ellipsisString="" prefWidth="200.0" styleClass="catSidebarFinalCellLeft" text="Vorname:">
+                                             <HBox.margin>
+                                                <Insets />
+                                             </HBox.margin></JFXListCell>
+                                          <TextField editable="false" prefWidth="275.0" text="Max" />
                                        </children>
+                                       <VBox.margin>
+                                          <Insets left="10.0" right="10.0" />
+                                       </VBox.margin>
                                     </HBox>
                                     <HBox alignment="CENTER_LEFT" prefHeight="35.0">
                                        <children>
-                                          <JFXListCell ellipsisString="" prefWidth="300.0" text="Nachname" />
-                                          <JFXListCell ellipsisString="" prefWidth="300.0" text="Test" />
+                                          <JFXListCell ellipsisString="" prefWidth="200.0" styleClass="catSidebarFinalCellLeft" text="Nachname:">
+                                             <HBox.margin>
+                                                <Insets />
+                                             </HBox.margin></JFXListCell>
+                                          <TextField editable="false" prefWidth="275.0" text="Mustermann" />
                                        </children>
+                                       <VBox.margin>
+                                          <Insets left="10.0" right="10.0" />
+                                       </VBox.margin>
                                     </HBox>
                                     <HBox alignment="CENTER_LEFT" prefHeight="35.0">
                                        <children>
-                                          <JFXListCell ellipsisString="" prefWidth="300.0" text="Strasse" />
-                                          <JFXListCell ellipsisString="" prefWidth="300.0" text="Test" />
+                                          <JFXListCell ellipsisString="" prefWidth="200.0" styleClass="catSidebarFinalCellLeft" text="Strasse:">
+                                             <HBox.margin>
+                                                <Insets />
+                                             </HBox.margin></JFXListCell>
+                                          <TextField editable="false" prefWidth="275.0" text="Musterstr." />
                                        </children>
+                                       <VBox.margin>
+                                          <Insets left="10.0" right="10.0" />
+                                       </VBox.margin>
                                     </HBox>
                                     <HBox alignment="CENTER_LEFT" prefHeight="35.0">
                                        <children>
-                                          <JFXListCell ellipsisString="" prefWidth="300.0" text="Hausnummer" />
-                                          <JFXListCell ellipsisString="" prefWidth="300.0" text="Test" />
+                                          <JFXListCell ellipsisString="" prefWidth="200.0" styleClass="catSidebarFinalCellLeft" text="Hausnummer:">
+                                             <HBox.margin>
+                                                <Insets />
+                                             </HBox.margin></JFXListCell>
+                                          <TextField editable="false" prefWidth="275.0" text="11" />
                                        </children>
+                                       <VBox.margin>
+                                          <Insets left="10.0" right="10.0" />
+                                       </VBox.margin>
                                     </HBox>
                                     <HBox alignment="CENTER_LEFT" prefHeight="35.0">
                                        <children>
-                                          <JFXListCell ellipsisString="" prefWidth="300.0" text="PLZ" />
-                                          <JFXListCell ellipsisString="" prefWidth="300.0" text="Test" />
+                                          <JFXListCell ellipsisString="" prefWidth="200.0" styleClass="catSidebarFinalCellLeft" text="PLZ:">
+                                             <HBox.margin>
+                                                <Insets />
+                                             </HBox.margin></JFXListCell>
+                                          <TextField editable="false" prefWidth="275.0" text="12345" />
                                        </children>
+                                       <VBox.margin>
+                                          <Insets left="10.0" right="10.0" />
+                                       </VBox.margin>
                                     </HBox>
                                     <HBox alignment="CENTER_LEFT" prefHeight="35.0">
                                        <children>
-                                          <JFXListCell ellipsisString="" prefWidth="300.0" text="Stadt" />
-                                          <JFXListCell ellipsisString="" prefWidth="300.0" text="Test" />
+                                          <JFXListCell ellipsisString="" prefWidth="200.0" styleClass="catSidebarFinalCellLeft" text="Stadt:">
+                                             <HBox.margin>
+                                                <Insets />
+                                             </HBox.margin></JFXListCell>
+                                          <TextField editable="false" prefWidth="275.0" text="Musterstadt" />
                                        </children>
+                                       <VBox.margin>
+                                          <Insets left="10.0" right="10.0" />
+                                       </VBox.margin>
                                     </HBox>
                                     <HBox alignment="CENTER_LEFT" prefHeight="35.0">
                                        <children>
-                                          <JFXListCell ellipsisString="" prefWidth="300.0" text="E-Mail" />
-                                          <JFXListCell ellipsisString="" prefWidth="300.0" text="Test" />
+                                          <JFXListCell ellipsisString="" prefWidth="200.0" styleClass="catSidebarFinalCellLeft" text="E-Mail:">
+                                             <HBox.margin>
+                                                <Insets />
+                                             </HBox.margin></JFXListCell>
+                                          <TextField editable="false" prefWidth="275.0" text="mustermann@osmi.de" />
                                        </children>
+                                       <VBox.margin>
+                                          <Insets left="10.0" right="10.0" />
+                                       </VBox.margin>
                                     </HBox>
                                  </children>
                               </VBox>
@@ -1228,7 +1291,44 @@
                </StackPane>
             </bottom>
             <center>
-               <StackPane styleClass="container-main-center" BorderPane.alignment="CENTER" />
+               <BorderPane prefHeight="200.0" prefWidth="200.0" styleClass="container-main-center" BorderPane.alignment="CENTER">
+                  <center>
+                     <StackPane fx:id="spaneSVG" prefHeight="150.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                        <BorderPane.margin>
+                           <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                        </BorderPane.margin>
+                     </StackPane>
+                  </center>
+                  <right>
+                     <BorderPane prefWidth="300.0" styleClass="bpaneSVGright" BorderPane.alignment="CENTER">
+                        <top>
+                           <StackPane prefHeight="30.0" styleClass="svg-container-techinfo-header" BorderPane.alignment="CENTER">
+                              <children>
+                                 <Label alignment="CENTER" styleClass="header-title" text="Technische Daten">
+                                    <font>
+                                       <Font size="16.0" />
+                                    </font>
+                                 </Label>
+                              </children>
+                              <BorderPane.margin>
+                                 <Insets />
+                              </BorderPane.margin>
+                           </StackPane>
+                        </top>
+                        <center>
+                           <StackPane prefHeight="150.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                              <children>
+                                 <JFXTextArea fx:id="svgTextarea" editable="false" styleClass="svg-container-techinfo-textarea" wrapText="true">
+                                    <padding>
+                                       <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                    </padding>
+                                 </JFXTextArea>
+                              </children>
+                           </StackPane>
+                        </center>
+                     </BorderPane>
+                  </right>
+               </BorderPane>
             </center>
          </BorderPane>
       </center>
