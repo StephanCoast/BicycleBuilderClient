@@ -1,19 +1,20 @@
 package pf.bb.controller;
 
-import com.jfoenix.controls.JFXButton;
-import com.jfoenix.controls.JFXComboBox;
-import com.jfoenix.controls.JFXDrawer;
-import com.jfoenix.controls.JFXTextField;
+import com.jfoenix.controls.*;
 import com.jfoenix.validation.RequiredFieldValidator;
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
+import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.StackPane;
 import pf.bb.Main;
 import pf.bb.model.Article;
 
@@ -27,6 +28,14 @@ public class BuilderController {
     public JFXTextField tfCustomerID, tfCustomerFirstName, tfCustomerLastName, tfCustomerMail, tfCustomerStreet, tfCustomerNr, tfCustomerZipcode, tfCustomerCity;
     public AnchorPane anchorContainer;
     public JFXButton btnHeaderHome, btnSaveDraft, btnAddCustomerData, btnSidebarHome;
+    public JFXTextArea svgTextarea;
+    public StackPane spaneSVG;
+    private String svgInfoFrameModel, svgInfoFrameColor, svgInfoFrameSize;
+    private String svgInfoHandlebarModel, svgInfoHandlebarColor, svgInfoHandlebarGrip;
+    private String svgInfoWheelsModel, svgInfoWheelsColor, svgInfoWheelsSize, svgInfoWheelsTyre;
+    private String svgInfoSaddleModel, svgInfoSaddleColor;
+    private String svgInfoBrakesModel;
+    private String svgInfoAttachmentsBell, svgInfoAttachmentsStand, svgInfoAttachmentsLight;
     private Boolean catIsOpen;
     public ToggleGroup catsTogglegroup, cat1TogglegroupColor, cat1TogglegroupSize, cat2TogglegroupColor, cat3TogglegroupColor, cat3TogglegroupSize, cat4TogglegroupColor;
     public JFXComboBox<String> cat1SelectName, cat2SelectModel, cat2SelectGrip, cat3SelectModel, cat3SelectTyre, cat4SelectModel, cat5SelectModel, cat6SelectBell, cat6SelectStand, cat6SelectLight;
@@ -35,6 +44,7 @@ public class BuilderController {
     private HashSet<JFXDrawer> drawersBuilderSide, drawersBuilderBottom;
     ViewManager vm = ViewManager.getInstance();
     ValidatorManager validatorManager = ValidatorManager.getInstance();
+    SVGManager svgManager = SVGManager.getInstance();
 
     public BuilderController() {
     }
@@ -56,6 +66,9 @@ public class BuilderController {
         onToggleDeselectSubCat(cat3TogglegroupSize);
         onToggleDeselectSubCat(cat4TogglegroupColor);
         setupValidators();
+        initFirstSVGSet();
+        renderSVGtextarea();
+        initSubcatsListeners();
 
         /* AR: set dummy data for all sidebar cat-selects */
         ObservableList<String> data = FXCollections.observableArrayList("test1", "test2", "test3");
@@ -287,4 +300,340 @@ public class BuilderController {
         btnSaveDraft.setDisable(false);
         btnSidebarHome.setDisable(false);
     }
+
+    private void initFirstSVGSet() {
+        svgManager.setFrame(SVGManager.FRAME1, SVGManager.FRAME1_COLOR);
+        svgManager.setHandlebar(SVGManager.HANDLEBAR1, SVGManager.HANDLEBAR1_COLOR);
+        svgManager.setTire(SVGManager.TIRE1, SVGManager.TIRE1_COLOR);
+        svgManager.setSeat(SVGManager.SEAT1, SVGManager.SEAT1_COLOR);
+        svgManager.setSVGSet();
+        spaneSVG.getChildren().clear();
+        spaneSVG.getChildren().add(SVGManager.svgGroup);
+    }
+
+    private void renderSVGtextarea() {
+        String newline = "\n";
+        String sep = ", ";
+        String frame = "Rahmen: ";
+        String handlebar = "Lenker: ";
+        String wheels = "Räder: ";
+        String saddle = "Sattel: ";
+        String brakes = "Bremsen: ";
+        String attachments = "Zubehör: ";
+
+        svgTextarea.clear();
+
+        // Rahmen
+        svgTextarea.appendText(frame + newline);
+        svgTextarea.appendText(svgInfoFrameModel + sep + svgInfoFrameColor + sep + svgInfoFrameSize + newline + "Beschreibung" + newline + newline);
+        // Lenker
+        svgTextarea.appendText(handlebar + newline);
+        svgTextarea.appendText( svgInfoHandlebarModel + sep + svgInfoHandlebarColor + sep + svgInfoHandlebarGrip + newline + "Beschreibung" + newline + newline);
+        // Räder
+        svgTextarea.appendText(wheels + newline);
+        svgTextarea.appendText(svgInfoWheelsModel + sep + svgInfoWheelsColor + sep + svgInfoWheelsSize + sep + svgInfoWheelsTyre + newline + "Beschreibung" + newline + newline);
+        // Sattel
+        svgTextarea.appendText(saddle + newline);
+        svgTextarea.appendText(svgInfoSaddleModel + sep + svgInfoSaddleColor + newline + "Beschreibung" + newline + newline);
+        // Bremsen
+        svgTextarea.appendText(brakes + newline);
+        svgTextarea.appendText(svgInfoBrakesModel + sep + "Typ" + newline + "Beschreibung" + newline + newline);
+        // Zubehör
+        svgTextarea.appendText(attachments + newline);
+        svgTextarea.appendText(svgInfoAttachmentsBell + sep + svgInfoAttachmentsStand + sep + svgInfoAttachmentsLight + newline);
+    }
+
+    // Rahmen
+    private void initSubcatsListeners() {
+
+        // Rahmen
+        cat1SelectName.valueProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                svgInfoFrameModel = newValue;
+                renderSVGtextarea();
+                switch (svgInfoFrameModel) {
+                    case "test1":
+                        svgManager.setFrame(SVGManager.FRAME1, SVGManager.FRAME1_COLOR);
+                        svgManager.setSVGSet();
+                        break;
+                    case "test2":
+                        svgManager.setFrame(SVGManager.FRAME2, SVGManager.FRAME2_COLOR);
+                        svgManager.setSVGSet();
+                        break;
+                    case "test3":
+                        svgManager.setFrame(SVGManager.FRAME3, SVGManager.FRAME3_COLOR);
+                        svgManager.setSVGSet();
+                        break;
+                }
+                spaneSVG.getChildren().clear();
+                spaneSVG.getChildren().add(SVGManager.svgGroup);
+            }
+        });
+
+        cat1TogglegroupColor.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
+            @Override
+            public void changed(ObservableValue<? extends Toggle> observable, Toggle oldValue, Toggle newValue) {
+                if (cat1TogglegroupColor.getSelectedToggle() != null) {
+                    String fxid = ((JFXToggleNode) cat1TogglegroupColor.getSelectedToggle()).getId();
+                    switch (fxid) {
+                        case "cat1Color1":
+                            svgInfoFrameColor = "schwarz";
+                            renderSVGtextarea();
+                            break;
+                        case "cat1Color2":
+                            svgInfoFrameColor = "weiß";
+                            renderSVGtextarea();
+                            break;
+                        case "cat1Color3":
+                            svgInfoFrameColor = "silber";
+                            renderSVGtextarea();
+                            break;
+                    }
+                }
+            }
+        });
+
+        cat1TogglegroupSize.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
+            @Override
+            public void changed(ObservableValue<? extends Toggle> observable, Toggle oldValue, Toggle newValue) {
+                if (cat1TogglegroupSize.getSelectedToggle() != null) {
+                    String fxid = ((JFXToggleNode) cat1TogglegroupSize.getSelectedToggle()).getId();
+                    switch (fxid) {
+                        case "cat1Size1":
+                            svgInfoFrameSize = "Größe: S";
+                            renderSVGtextarea();
+                            break;
+                        case "cat1Size2":
+                            svgInfoFrameSize = "Größe: M";
+                            renderSVGtextarea();
+                            break;
+                        case "cat1Size3":
+                            svgInfoFrameSize = "Größe: L";
+                            renderSVGtextarea();
+                            break;
+                    }
+                }
+            }
+        });
+
+        // Lenker
+        cat2SelectModel.valueProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                svgInfoHandlebarModel = newValue;
+                renderSVGtextarea();
+                switch (svgInfoHandlebarModel) {
+                    case "test1":
+                        svgManager.setHandlebar(SVGManager.HANDLEBAR1, SVGManager.HANDLEBAR1_COLOR);
+                        svgManager.setSVGSet();
+                        break;
+                    case "test2":
+                        svgManager.setHandlebar(SVGManager.HANDLEBAR2, SVGManager.HANDLEBAR2_COLOR);
+                        svgManager.setSVGSet();
+                        break;
+                    case "test3":
+                        svgManager.setHandlebar(SVGManager.HANDLEBAR3, SVGManager.HANDLEBAR3_COLOR);
+                        svgManager.setSVGSet();
+                        break;
+                }
+                spaneSVG.getChildren().clear();
+                spaneSVG.getChildren().add(SVGManager.svgGroup);
+            }
+        });
+
+        cat2SelectGrip.valueProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                svgInfoHandlebarGrip = newValue;
+                renderSVGtextarea();
+            }
+        });
+
+        cat2TogglegroupColor.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
+            @Override
+            public void changed(ObservableValue<? extends Toggle> observable, Toggle oldValue, Toggle newValue) {
+                if (cat2TogglegroupColor.getSelectedToggle() != null) {
+                    String fxid = ((JFXToggleNode) cat2TogglegroupColor.getSelectedToggle()).getId();
+                    switch (fxid) {
+                        case "cat2Color1":
+                            svgInfoHandlebarColor = "schwarz";
+                            renderSVGtextarea();
+                            break;
+                        case "cat2Color2":
+                            svgInfoHandlebarColor = "weiß";
+                            renderSVGtextarea();
+                            break;
+                        case "cat2Color3":
+                            svgInfoHandlebarColor = "silber";
+                            renderSVGtextarea();
+                            break;
+                    }
+                }
+            }
+        });
+
+        // Räder
+        cat3SelectModel.valueProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                svgInfoWheelsModel = newValue;
+                renderSVGtextarea();
+                switch (svgInfoWheelsModel) {
+                    case "test1":
+                        svgManager.setTire(SVGManager.TIRE1, SVGManager.TIRE1_COLOR);
+                        svgManager.setSVGSet();
+                        break;
+                    case "test2":
+                        svgManager.setTire(SVGManager.TIRE2, SVGManager.TIRE2_COLOR);
+                        svgManager.setSVGSet();
+                        break;
+                    case "test3":
+                        svgManager.setTire(SVGManager.TIRE3, SVGManager.TIRE3_COLOR);
+                        svgManager.setSVGSet();
+                        break;
+                }
+                spaneSVG.getChildren().clear();
+                spaneSVG.getChildren().add(SVGManager.svgGroup);
+            }
+        });
+
+        cat3SelectTyre.valueProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                svgInfoWheelsTyre = newValue;
+                renderSVGtextarea();
+            }
+        });
+
+        cat3TogglegroupColor.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
+            @Override
+            public void changed(ObservableValue<? extends Toggle> observable, Toggle oldValue, Toggle newValue) {
+                if (cat3TogglegroupColor.getSelectedToggle() != null) {
+                    String fxid = ((JFXToggleNode) cat3TogglegroupColor.getSelectedToggle()).getId();
+                    switch (fxid) {
+                        case "cat3Color1":
+                            svgInfoWheelsColor = "schwarz";
+                            renderSVGtextarea();
+                            break;
+                        case "cat3Color2":
+                            svgInfoWheelsColor = "weiß";
+                            renderSVGtextarea();
+                            break;
+                        case "cat3Color3":
+                            svgInfoWheelsColor = "silber";
+                            renderSVGtextarea();
+                            break;
+                    }
+                }
+            }
+        });
+
+        cat3TogglegroupSize.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
+            @Override
+            public void changed(ObservableValue<? extends Toggle> observable, Toggle oldValue, Toggle newValue) {
+                if (cat3TogglegroupSize.getSelectedToggle() != null) {
+                    String fxid = ((JFXToggleNode) cat3TogglegroupSize.getSelectedToggle()).getId();
+                    switch (fxid) {
+                        case "cat3Size1":
+                            svgInfoWheelsSize = "Größe: S";
+                            renderSVGtextarea();
+                            break;
+                        case "cat3Size2":
+                            svgInfoWheelsSize = "Größe: M";
+                            renderSVGtextarea();
+                            break;
+                        case "cat3Size3":
+                            svgInfoWheelsSize = "Größe: L";
+                            renderSVGtextarea();
+                            break;
+                    }
+                }
+            }
+        });
+
+        // Sattel
+        cat4SelectModel.valueProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                svgInfoSaddleModel = newValue;
+                renderSVGtextarea();
+                switch (svgInfoSaddleModel) {
+                    case "test1":
+                        svgManager.setSeat(SVGManager.SEAT1, SVGManager.SEAT1_COLOR);
+                        svgManager.setSVGSet();
+                        break;
+                    case "test2":
+                        svgManager.setSeat(SVGManager.SEAT2, SVGManager.SEAT2_COLOR);
+                        svgManager.setSVGSet();
+                        break;
+                    case "test3":
+                        svgManager.setSeat(SVGManager.SEAT3, SVGManager.SEAT3_COLOR);
+                        svgManager.setSVGSet();
+                        break;
+                }
+                spaneSVG.getChildren().clear();
+                spaneSVG.getChildren().add(SVGManager.svgGroup);
+            }
+        });
+
+        cat4TogglegroupColor.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
+            @Override
+            public void changed(ObservableValue<? extends Toggle> observable, Toggle oldValue, Toggle newValue) {
+                if (cat4TogglegroupColor.getSelectedToggle() != null) {
+                    String fxid = ((JFXToggleNode) cat4TogglegroupColor.getSelectedToggle()).getId();
+                    switch (fxid) {
+                        case "cat4Color1":
+                            svgInfoSaddleColor = "schwarz";
+                            renderSVGtextarea();
+                            break;
+                        case "cat4Color2":
+                            svgInfoSaddleColor = "braun";
+                            renderSVGtextarea();
+                            break;
+                        case "cat4Color3":
+                            svgInfoSaddleColor = "weiß";
+                            renderSVGtextarea();
+                            break;
+                    }
+                }
+            }
+        });
+
+        // Bremsen
+        cat5SelectModel.valueProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                svgInfoBrakesModel = newValue;
+                renderSVGtextarea();
+            }
+        });
+
+        // Zubehör
+        cat6SelectBell.valueProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                svgInfoAttachmentsBell = newValue;
+                renderSVGtextarea();
+            }
+        });
+
+        cat6SelectStand.valueProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                svgInfoAttachmentsStand = newValue;
+                renderSVGtextarea();
+            }
+        });
+
+        cat6SelectLight.valueProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                svgInfoAttachmentsLight = newValue;
+                renderSVGtextarea();
+            }
+        });
+
+    }
+
 }
