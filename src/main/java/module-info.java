@@ -16,6 +16,11 @@ module pf.bb {
     requires org.slf4j;
     requires org.slf4j.simple;
 
+    //Itext PDF
+    requires layout;
+    requires kernel;
+    requires java.desktop;
+
     opens pf.bb to javafx.fxml;
     exports pf.bb;
     exports pf.bb.controller;
