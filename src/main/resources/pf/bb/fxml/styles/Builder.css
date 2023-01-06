@@ -81,6 +81,10 @@
 /* Builder - Main - SVG Container */
 /* ######################################### */
 
+.spaneSVGleft {
+    -fx-background-color: #cfd8dc; /* material palette - blue grey 100 primary */
+}
+
 .bpaneSVGright {
     -fx-border-color : rgba(0, 0, 0, 0.25);
     -fx-border-width : 0 0 0 1;

@@ -2,6 +2,9 @@ package pf.bb.controller;
 
 import com.jfoenix.controls.*;
 import com.jfoenix.validation.RequiredFieldValidator;
+import javafx.animation.FadeTransition;
+import javafx.animation.ScaleTransition;
+import javafx.animation.TranslateTransition;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -9,12 +12,14 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
+import javafx.util.Duration;
 import pf.bb.Main;
 import pf.bb.model.Article;
 
@@ -116,6 +121,10 @@ public class BuilderController {
         closeAllSideDrawers();
         vm.forceDrawerView(drawerCat1, cat1);
 
+        setSubcatInitialSelectbox(cat1SelectName, 0);
+        setSubcatInitialToggle(cat1TogglegroupColor,0);
+        setSubcatInitialToggle(cat1TogglegroupSize,0);
+
         /* AR: for testing only
         for (Article i : Main.ARTICLES) {
             if (i.type.equals("Rahmen")) {
@@ -129,30 +138,60 @@ public class BuilderController {
         catIsOpen = true;
         closeAllSideDrawers();
         vm.forceDrawerView(drawerCat2, cat2);
+
+        setSubcatInitialSelectbox(cat2SelectModel, 0);
+        setSubcatInitialSelectbox(cat2SelectGrip, 0);
+        setSubcatInitialToggle(cat2TogglegroupColor,0);
     }
 
     public void openSidebarCat3(ActionEvent event) throws IOException {
         catIsOpen = true;
         closeAllSideDrawers();
         vm.forceDrawerView(drawerCat3, cat3);
+
+        setSubcatInitialSelectbox(cat3SelectModel, 0);
+        setSubcatInitialSelectbox(cat3SelectTyre, 0);
+        setSubcatInitialToggle(cat3TogglegroupColor,0);
+        setSubcatInitialToggle(cat3TogglegroupSize,0);
     }
 
     public void openSidebarCat4(ActionEvent event) throws IOException {
         catIsOpen = true;
         closeAllSideDrawers();
         vm.forceDrawerView(drawerCat4, cat4);
+
+        setSubcatInitialSelectbox(cat4SelectModel, 0);
+        setSubcatInitialToggle(cat4TogglegroupColor,0);
     }
 
     public void openSidebarCat5(ActionEvent event) throws IOException {
         catIsOpen = true;
         closeAllSideDrawers();
         vm.forceDrawerView(drawerCat5, cat5);
+
+        setSubcatInitialSelectbox(cat5SelectModel, 0);
     }
 
     public void openSidebarCat6(ActionEvent event) throws IOException {
         catIsOpen = true;
         closeAllSideDrawers();
         vm.forceDrawerView(drawerCat6, cat6);
+
+        setSubcatInitialSelectbox(cat6SelectBell, 0);
+        setSubcatInitialSelectbox(cat6SelectStand, 0);
+        setSubcatInitialSelectbox(cat6SelectLight, 0);
+    }
+
+    private void setSubcatInitialSelectbox(JFXComboBox cb, int pos) {
+        if (cb.getSelectionModel().isEmpty()) {
+            cb.getSelectionModel().select(pos);
+        }
+    }
+
+    private void setSubcatInitialToggle(ToggleGroup tg, int pos) {
+        if (tg.getSelectedToggle() == null) {
+            tg.getToggles().get(pos).setSelected(true);
+        }
     }
 
     // AR: hier wird "einzeln" bestimmt was nach dem Speichern der Kategorie 1-8 passieren soll
@@ -302,13 +341,47 @@ public class BuilderController {
     }
 
     private void initFirstSVGSet() {
-        svgManager.setFrame(SVGManager.FRAME1, SVGManager.FRAME1_COLOR);
-        svgManager.setHandlebar(SVGManager.HANDLEBAR1, SVGManager.HANDLEBAR1_COLOR);
-        svgManager.setTire(SVGManager.TIRE1, SVGManager.TIRE1_COLOR);
-        svgManager.setSeat(SVGManager.SEAT1, SVGManager.SEAT1_COLOR);
+        svgManager.setFrame(SVGManager.FRAME1);
+        svgManager.setFrameColor(SVGManager.COLOR_BLACK);
+        svgManager.setHandlebar(SVGManager.HANDLEBAR1);
+        svgManager.setHandlebarColor(SVGManager.COLOR_BLACK);
+        svgManager.setTire(SVGManager.TIRE1);
+        svgManager.setTireColor(SVGManager.COLOR_BLACK);
+        svgManager.setSeat(SVGManager.SEAT1);
+        svgManager.setSeatColor(SVGManager.COLOR_BLACK);
         svgManager.setSVGSet();
         spaneSVG.getChildren().clear();
         spaneSVG.getChildren().add(SVGManager.svgGroup);
+
+        fadeIn(SVGManager.svgGroup.getChildren().get(0), 1000);
+        scaleInX(SVGManager.svgGroup.getChildren().get(1), 1000);
+        scaleIn(SVGManager.svgGroup.getChildren().get(2), 1000);
+        scaleInX(SVGManager.svgGroup.getChildren().get(3), 1000);
+    }
+
+    private void fadeIn(Node node, int ms) {
+        FadeTransition ft = new FadeTransition(Duration.millis(ms), node);
+        ft.setFromValue(0.0);
+        ft.setToValue(1.0);
+        ft.play();
+    }
+
+    private void scaleIn(Node node, int ms) {
+        ScaleTransition st = new ScaleTransition(Duration.millis(ms), node);
+        st.setFromX(0);
+        st.setFromY(0);
+        st.setFromZ(0);
+        st.setByX(1);
+        st.setByY(1);
+        st.setByZ(1);
+        st.play();
+    }
+
+    private void scaleInX(Node node, int ms) {
+        ScaleTransition st = new ScaleTransition(Duration.millis(ms), node);
+        st.setFromX(0);
+        st.setByX(1);
+        st.play();
     }
 
     private void renderSVGtextarea() {
@@ -354,16 +427,19 @@ public class BuilderController {
                 renderSVGtextarea();
                 switch (svgInfoFrameModel) {
                     case "test1":
-                        svgManager.setFrame(SVGManager.FRAME1, SVGManager.FRAME1_COLOR);
+                        svgManager.setFrame(SVGManager.FRAME1);
                         svgManager.setSVGSet();
+                        scaleIn(SVGManager.svgGroup.getChildren().get(0), 500);
                         break;
                     case "test2":
-                        svgManager.setFrame(SVGManager.FRAME2, SVGManager.FRAME2_COLOR);
+                        svgManager.setFrame(SVGManager.FRAME2);
                         svgManager.setSVGSet();
+                        scaleIn(SVGManager.svgGroup.getChildren().get(0), 500);
                         break;
                     case "test3":
-                        svgManager.setFrame(SVGManager.FRAME3, SVGManager.FRAME3_COLOR);
+                        svgManager.setFrame(SVGManager.FRAME3);
                         svgManager.setSVGSet();
+                        scaleIn(SVGManager.svgGroup.getChildren().get(0), 500);
                         break;
                 }
                 spaneSVG.getChildren().clear();
@@ -380,14 +456,20 @@ public class BuilderController {
                         case "cat1Color1":
                             svgInfoFrameColor = "schwarz";
                             renderSVGtextarea();
+                            svgManager.setFrameColor(SVGManager.COLOR_BLACK);
+                            svgManager.setSVGSet();
                             break;
                         case "cat1Color2":
                             svgInfoFrameColor = "weiß";
                             renderSVGtextarea();
+                            svgManager.setFrameColor(SVGManager.COLOR_WHITE);
+                            svgManager.setSVGSet();
                             break;
                         case "cat1Color3":
                             svgInfoFrameColor = "silber";
                             renderSVGtextarea();
+                            svgManager.setFrameColor(SVGManager.COLOR_SILVER);
+                            svgManager.setSVGSet();
                             break;
                     }
                 }
@@ -425,16 +507,19 @@ public class BuilderController {
                 renderSVGtextarea();
                 switch (svgInfoHandlebarModel) {
                     case "test1":
-                        svgManager.setHandlebar(SVGManager.HANDLEBAR1, SVGManager.HANDLEBAR1_COLOR);
+                        svgManager.setHandlebar(SVGManager.HANDLEBAR1);
                         svgManager.setSVGSet();
+                        scaleIn(SVGManager.svgGroup.getChildren().get(3), 500);
                         break;
                     case "test2":
-                        svgManager.setHandlebar(SVGManager.HANDLEBAR2, SVGManager.HANDLEBAR2_COLOR);
+                        svgManager.setHandlebar(SVGManager.HANDLEBAR2);
                         svgManager.setSVGSet();
+                        scaleIn(SVGManager.svgGroup.getChildren().get(3), 500);
                         break;
                     case "test3":
-                        svgManager.setHandlebar(SVGManager.HANDLEBAR3, SVGManager.HANDLEBAR3_COLOR);
+                        svgManager.setHandlebar(SVGManager.HANDLEBAR3);
                         svgManager.setSVGSet();
+                        scaleIn(SVGManager.svgGroup.getChildren().get(3), 500);
                         break;
                 }
                 spaneSVG.getChildren().clear();
@@ -459,14 +544,20 @@ public class BuilderController {
                         case "cat2Color1":
                             svgInfoHandlebarColor = "schwarz";
                             renderSVGtextarea();
+                            svgManager.setHandlebarColor(SVGManager.COLOR_BLACK);
+                            svgManager.setSVGSet();
                             break;
                         case "cat2Color2":
                             svgInfoHandlebarColor = "weiß";
                             renderSVGtextarea();
+                            svgManager.setHandlebarColor(SVGManager.COLOR_WHITE);
+                            svgManager.setSVGSet();
                             break;
                         case "cat2Color3":
                             svgInfoHandlebarColor = "silber";
                             renderSVGtextarea();
+                            svgManager.setHandlebarColor(SVGManager.COLOR_SILVER);
+                            svgManager.setSVGSet();
                             break;
                     }
                 }
@@ -481,16 +572,19 @@ public class BuilderController {
                 renderSVGtextarea();
                 switch (svgInfoWheelsModel) {
                     case "test1":
-                        svgManager.setTire(SVGManager.TIRE1, SVGManager.TIRE1_COLOR);
+                        svgManager.setTire(SVGManager.TIRE1);
                         svgManager.setSVGSet();
+                        fadeIn(SVGManager.svgGroup.getChildren().get(2), 1000);
                         break;
                     case "test2":
-                        svgManager.setTire(SVGManager.TIRE2, SVGManager.TIRE2_COLOR);
+                        svgManager.setTire(SVGManager.TIRE2);
                         svgManager.setSVGSet();
+                        fadeIn(SVGManager.svgGroup.getChildren().get(2), 1000);
                         break;
                     case "test3":
-                        svgManager.setTire(SVGManager.TIRE3, SVGManager.TIRE3_COLOR);
+                        svgManager.setTire(SVGManager.TIRE3);
                         svgManager.setSVGSet();
+                        fadeIn(SVGManager.svgGroup.getChildren().get(2), 1000);
                         break;
                 }
                 spaneSVG.getChildren().clear();
@@ -515,14 +609,20 @@ public class BuilderController {
                         case "cat3Color1":
                             svgInfoWheelsColor = "schwarz";
                             renderSVGtextarea();
+                            svgManager.setTireColor(SVGManager.COLOR_BLACK);
+                            svgManager.setSVGSet();
                             break;
                         case "cat3Color2":
                             svgInfoWheelsColor = "weiß";
                             renderSVGtextarea();
+                            svgManager.setTireColor(SVGManager.COLOR_WHITE);
+                            svgManager.setSVGSet();
                             break;
                         case "cat3Color3":
                             svgInfoWheelsColor = "silber";
                             renderSVGtextarea();
+                            svgManager.setTireColor(SVGManager.COLOR_SILVER);
+                            svgManager.setSVGSet();
                             break;
                     }
                 }
@@ -560,16 +660,19 @@ public class BuilderController {
                 renderSVGtextarea();
                 switch (svgInfoSaddleModel) {
                     case "test1":
-                        svgManager.setSeat(SVGManager.SEAT1, SVGManager.SEAT1_COLOR);
+                        svgManager.setSeat(SVGManager.SEAT1);
                         svgManager.setSVGSet();
+                        scaleIn(SVGManager.svgGroup.getChildren().get(1), 500);
                         break;
                     case "test2":
-                        svgManager.setSeat(SVGManager.SEAT2, SVGManager.SEAT2_COLOR);
+                        svgManager.setSeat(SVGManager.SEAT2);
                         svgManager.setSVGSet();
+                        scaleIn(SVGManager.svgGroup.getChildren().get(1), 500);
                         break;
                     case "test3":
-                        svgManager.setSeat(SVGManager.SEAT3, SVGManager.SEAT3_COLOR);
+                        svgManager.setSeat(SVGManager.SEAT3);
                         svgManager.setSVGSet();
+                        scaleIn(SVGManager.svgGroup.getChildren().get(1), 500);
                         break;
                 }
                 spaneSVG.getChildren().clear();
@@ -586,14 +689,20 @@ public class BuilderController {
                         case "cat4Color1":
                             svgInfoSaddleColor = "schwarz";
                             renderSVGtextarea();
+                            svgManager.setSeatColor(SVGManager.COLOR_BLACK);
+                            svgManager.setSVGSet();
                             break;
                         case "cat4Color2":
                             svgInfoSaddleColor = "braun";
                             renderSVGtextarea();
+                            svgManager.setSeatColor(SVGManager.COLOR_BROWN);
+                            svgManager.setSVGSet();
                             break;
                         case "cat4Color3":
                             svgInfoSaddleColor = "weiß";
                             renderSVGtextarea();
+                            svgManager.setSeatColor(SVGManager.COLOR_WHITE);
+                            svgManager.setSVGSet();
                             break;
                     }
                 }
