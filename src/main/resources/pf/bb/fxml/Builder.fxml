@@ -132,7 +132,7 @@
                      </center>
                   </BorderPane>
                </children></JFXDrawer>
-            <JFXDrawer fx:id="drawerCat1" alignment="TOP_LEFT" defaultDrawerSize="350.0" direction="RIGHT" visible="false">
+            <JFXDrawer fx:id="drawerCat1" alignment="TOP_LEFT" defaultDrawerSize="350.0" direction="RIGHT">
                <children>
                   <BorderPane fx:id="cat1">
                      <top>
@@ -1293,9 +1293,9 @@
             <center>
                <BorderPane prefHeight="200.0" prefWidth="200.0" styleClass="container-main-center" BorderPane.alignment="CENTER">
                   <center>
-                     <StackPane fx:id="spaneSVG" prefHeight="150.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                     <StackPane fx:id="spaneSVG" prefHeight="150.0" prefWidth="200.0" styleClass="spaneSVGleft" BorderPane.alignment="CENTER">
                         <BorderPane.margin>
-                           <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                           <Insets />
                         </BorderPane.margin>
                      </StackPane>
                   </center>
