@@ -32,10 +32,11 @@ public class PostOrderTask extends Task<OrderClass> {
 
         try {
             HttpResponse<JsonNode> res = Unirest.post(OrderClass.getUrl()).header("Content-Type", "application/json").header("Authorization", user.jsonWebToken).body(this.configJSON).asJson();
-            String location = res.getHeaders().getFirst("Location");
-            order.id = Integer.parseInt(location.substring(location.lastIndexOf("/") + 1));
-            return order;
-
+            String json = res.getBody().toString();
+            OrderClass tempOrder = new Gson().fromJson(json, OrderClass.class);
+            this.order.id = tempOrder.id;
+            this.order.timestampCreated = tempOrder.timestampCreated;
+            return this.order;
         } catch (UnirestException e) {
             e.printStackTrace();
         }

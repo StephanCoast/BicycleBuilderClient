@@ -32,11 +32,13 @@ public class PostConfigurationTask extends Task<Configuration> {
 
         try {
             HttpResponse<JsonNode> res = Unirest.post(Configuration.getUrl()).header("Content-Type", "application/json").header("Authorization", user.jsonWebToken).body(this.configJSON).asJson();
-
-            String location = res.getHeaders().getFirst("Location");
-            configuration.id = Integer.parseInt(location.substring(location.lastIndexOf("/") + 1));
-
-            return configuration;
+            String json = res.getBody().toString();
+            Configuration tempConfig = new Gson().fromJson(json, Configuration.class);
+            // Add db-generated values to Object
+            this.configuration.id = tempConfig.id;
+            this.configuration.timestampCreated = tempConfig.timestampCreated;
+            this.configuration.timestampLastTouched = tempConfig.timestampLastTouched;
+            return this.configuration;
         } catch (UnirestException e) {
             e.printStackTrace();
         }

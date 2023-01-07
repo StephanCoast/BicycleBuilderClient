@@ -11,7 +11,7 @@ public class OrderClass extends EntityWithID {
 	public Customer customer;
 	@Expose
 	public float priceTotal;
-	@Expose
+
 	public Bill bill;
 	@Expose
 	public String timestampCreated;

@@ -32,9 +32,10 @@ public class PostBillTask extends Task<Bill> {
 
         try{
             HttpResponse<JsonNode> res = Unirest.post(Bill.getUrl()).header("Content-Type", "application/json").header("Authorization", user.jsonWebToken).body(this.configJSON).asJson();
-
-            String location = res.getHeaders().getFirst("Location");
-            bill.id = Integer.parseInt(location.substring(location.lastIndexOf("/") + 1));
+            String json = res.getBody().toString();
+            Bill tempBill = new Gson().fromJson(json, Bill.class);
+            this.bill.id = tempBill.id;
+            this.bill.timestampCreated = tempBill.timestampCreated;
 
             return bill;
         } catch (UnirestException e) {
