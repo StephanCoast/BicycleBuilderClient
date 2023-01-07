@@ -4,7 +4,6 @@ import com.jfoenix.controls.*;
 import com.jfoenix.validation.RequiredFieldValidator;
 import javafx.animation.FadeTransition;
 import javafx.animation.ScaleTransition;
-import javafx.animation.TranslateTransition;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -12,7 +11,6 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
@@ -35,12 +33,12 @@ public class BuilderController {
     public JFXButton btnHeaderHome, btnSaveDraft, btnAddCustomerData, btnSidebarHome;
     public JFXTextArea svgTextarea;
     public StackPane spaneSVG;
-    private String svgInfoFrameModel, svgInfoFrameColor, svgInfoFrameSize;
-    private String svgInfoHandlebarModel, svgInfoHandlebarColor, svgInfoHandlebarGrip;
-    private String svgInfoWheelsModel, svgInfoWheelsColor, svgInfoWheelsSize, svgInfoWheelsTyre;
-    private String svgInfoSaddleModel, svgInfoSaddleColor;
-    private String svgInfoBrakesModel;
-    private String svgInfoAttachmentsBell, svgInfoAttachmentsStand, svgInfoAttachmentsLight;
+    private String svgInfoFrameModel, svgInfoFrameColor, svgInfoFrameSize, svgInfoFrameProducerName, svgInfoFrameDesc;
+    private String svgInfoHandlebarModel, svgInfoHandlebarColor, svgInfoHandlebarGrip, svgInfoHandlebarProducerName, svgInfoHandlebarGripProducerName, svgInfoHandlebarDesc;
+    private String svgInfoWheelsModel, svgInfoWheelsColor, svgInfoWheelsSize, svgInfoWheelsTyre, svgInfoWheelsProducerName, svgInfoTyresProducerName, svgInfoWheelDesc;
+    private String svgInfoSaddleModel, svgInfoSaddleColor, svgInfoSaddleProducerName, svgInfoSaddleDesc;
+    private String svgInfoBrakesModel, svgInfoBrakesProducerName, svgInfoBrakesTypeName, svgInfoBrakeDesc;
+    private String svgInfoAttachmentsBell, svgInfoAttachmentsStand, svgInfoAttachmentsLight, svgInfoBellProducerName, svgInfoStandProducerName, svgInfoLightProducerName;
     private Boolean catIsOpen;
     public ToggleGroup catsTogglegroup, cat1TogglegroupColor, cat1TogglegroupSize, cat2TogglegroupColor, cat3TogglegroupColor, cat3TogglegroupSize, cat4TogglegroupColor;
     public JFXComboBox<String> cat1SelectName, cat2SelectModel, cat2SelectGrip, cat3SelectModel, cat3SelectTyre, cat4SelectModel, cat5SelectModel, cat6SelectBell, cat6SelectStand, cat6SelectLight;
@@ -71,22 +69,11 @@ public class BuilderController {
         onToggleDeselectSubCat(cat3TogglegroupSize);
         onToggleDeselectSubCat(cat4TogglegroupColor);
         setupValidators();
+        initSubcatsItems();
+        initSubcatsListeners();
+        initSubcatsInitialValues();
         initFirstSVGSet();
         renderSVGtextarea();
-        initSubcatsListeners();
-
-        /* AR: set dummy data for all sidebar cat-selects */
-        ObservableList<String> data = FXCollections.observableArrayList("test1", "test2", "test3");
-        cat1SelectName.setItems(data);
-        cat2SelectModel.setItems(data);
-        cat2SelectGrip.setItems(data);
-        cat3SelectModel.setItems(data);
-        cat3SelectTyre.setItems(data);
-        cat4SelectModel.setItems(data);
-        cat5SelectModel.setItems(data);
-        cat6SelectBell.setItems(data);
-        cat6SelectStand.setItems(data);
-        cat6SelectLight.setItems(data);
     }
 
     public void logout(ActionEvent event) throws IOException {
@@ -120,78 +107,36 @@ public class BuilderController {
         catIsOpen = true;
         closeAllSideDrawers();
         vm.forceDrawerView(drawerCat1, cat1);
-
-        setSubcatInitialSelectbox(cat1SelectName, 0);
-        setSubcatInitialToggle(cat1TogglegroupColor,0);
-        setSubcatInitialToggle(cat1TogglegroupSize,0);
-
-        /* AR: for testing only
-        for (Article i : Main.ARTICLES) {
-            if (i.type.equals("Rahmen")) {
-                System.out.println("AR-Test: " + i.name);
-            }
-        }
-         */
     }
 
     public void openSidebarCat2(ActionEvent event) throws IOException {
         catIsOpen = true;
         closeAllSideDrawers();
         vm.forceDrawerView(drawerCat2, cat2);
-
-        setSubcatInitialSelectbox(cat2SelectModel, 0);
-        setSubcatInitialSelectbox(cat2SelectGrip, 0);
-        setSubcatInitialToggle(cat2TogglegroupColor,0);
     }
 
     public void openSidebarCat3(ActionEvent event) throws IOException {
         catIsOpen = true;
         closeAllSideDrawers();
         vm.forceDrawerView(drawerCat3, cat3);
-
-        setSubcatInitialSelectbox(cat3SelectModel, 0);
-        setSubcatInitialSelectbox(cat3SelectTyre, 0);
-        setSubcatInitialToggle(cat3TogglegroupColor,0);
-        setSubcatInitialToggle(cat3TogglegroupSize,0);
     }
 
     public void openSidebarCat4(ActionEvent event) throws IOException {
         catIsOpen = true;
         closeAllSideDrawers();
         vm.forceDrawerView(drawerCat4, cat4);
-
-        setSubcatInitialSelectbox(cat4SelectModel, 0);
-        setSubcatInitialToggle(cat4TogglegroupColor,0);
     }
 
     public void openSidebarCat5(ActionEvent event) throws IOException {
         catIsOpen = true;
         closeAllSideDrawers();
         vm.forceDrawerView(drawerCat5, cat5);
-
-        setSubcatInitialSelectbox(cat5SelectModel, 0);
     }
 
     public void openSidebarCat6(ActionEvent event) throws IOException {
         catIsOpen = true;
         closeAllSideDrawers();
         vm.forceDrawerView(drawerCat6, cat6);
-
-        setSubcatInitialSelectbox(cat6SelectBell, 0);
-        setSubcatInitialSelectbox(cat6SelectStand, 0);
-        setSubcatInitialSelectbox(cat6SelectLight, 0);
-    }
-
-    private void setSubcatInitialSelectbox(JFXComboBox cb, int pos) {
-        if (cb.getSelectionModel().isEmpty()) {
-            cb.getSelectionModel().select(pos);
-        }
-    }
-
-    private void setSubcatInitialToggle(ToggleGroup tg, int pos) {
-        if (tg.getSelectedToggle() == null) {
-            tg.getToggles().get(pos).setSelected(true);
-        }
     }
 
     // AR: hier wird "einzeln" bestimmt was nach dem Speichern der Kategorie 1-8 passieren soll
@@ -384,6 +329,42 @@ public class BuilderController {
         st.play();
     }
 
+    private void initSubcatsInitialValues() {
+        setSubcatInitialSelectbox(cat1SelectName, 0);
+        setSubcatInitialToggle(cat1TogglegroupColor,0);
+        setSubcatInitialToggle(cat1TogglegroupSize,0);
+
+        setSubcatInitialSelectbox(cat2SelectModel, 0);
+        setSubcatInitialSelectbox(cat2SelectGrip, 0);
+        setSubcatInitialToggle(cat2TogglegroupColor,0);
+
+        setSubcatInitialSelectbox(cat3SelectModel, 0);
+        setSubcatInitialSelectbox(cat3SelectTyre, 0);
+        setSubcatInitialToggle(cat3TogglegroupColor,0);
+        setSubcatInitialToggle(cat3TogglegroupSize,0);
+
+        setSubcatInitialSelectbox(cat4SelectModel, 0);
+        setSubcatInitialToggle(cat4TogglegroupColor,0);
+
+        setSubcatInitialSelectbox(cat5SelectModel, 0);
+
+        setSubcatInitialSelectbox(cat6SelectBell, 0);
+        setSubcatInitialSelectbox(cat6SelectStand, 0);
+        setSubcatInitialSelectbox(cat6SelectLight, 0);
+    }
+
+    private void setSubcatInitialSelectbox(JFXComboBox cb, int pos) {
+        if (cb.getSelectionModel().isEmpty()) {
+            cb.getSelectionModel().select(pos);
+        }
+    }
+
+    private void setSubcatInitialToggle(ToggleGroup tg, int pos) {
+        if (tg.getSelectedToggle() == null) {
+            tg.getToggles().get(pos).setSelected(true);
+        }
+    }
+
     private void renderSVGtextarea() {
         String newline = "\n";
         String sep = ", ";
@@ -396,24 +377,84 @@ public class BuilderController {
 
         svgTextarea.clear();
 
-        // Rahmen
-        svgTextarea.appendText(frame + newline);
-        svgTextarea.appendText(svgInfoFrameModel + sep + svgInfoFrameColor + sep + svgInfoFrameSize + newline + "Beschreibung" + newline + newline);
-        // Lenker
-        svgTextarea.appendText(handlebar + newline);
-        svgTextarea.appendText( svgInfoHandlebarModel + sep + svgInfoHandlebarColor + sep + svgInfoHandlebarGrip + newline + "Beschreibung" + newline + newline);
-        // Räder
-        svgTextarea.appendText(wheels + newline);
-        svgTextarea.appendText(svgInfoWheelsModel + sep + svgInfoWheelsColor + sep + svgInfoWheelsSize + sep + svgInfoWheelsTyre + newline + "Beschreibung" + newline + newline);
-        // Sattel
-        svgTextarea.appendText(saddle + newline);
-        svgTextarea.appendText(svgInfoSaddleModel + sep + svgInfoSaddleColor + newline + "Beschreibung" + newline + newline);
-        // Bremsen
-        svgTextarea.appendText(brakes + newline);
-        svgTextarea.appendText(svgInfoBrakesModel + sep + "Typ" + newline + "Beschreibung" + newline + newline);
-        // Zubehör
-        svgTextarea.appendText(attachments + newline);
-        svgTextarea.appendText(svgInfoAttachmentsBell + sep + svgInfoAttachmentsStand + sep + svgInfoAttachmentsLight + newline);
+        // AR: must be setText() to prevent textarea scrollToTop bug
+        svgTextarea.setText(
+                frame + newline
+                + svgInfoFrameModel + " von " + svgInfoFrameProducerName + newline + svgInfoFrameColor + sep + svgInfoFrameSize + newline + "Info: " + svgInfoFrameDesc + newline + newline
+                + handlebar + newline
+                + svgInfoHandlebarModel + " von " + svgInfoHandlebarProducerName + " in " + svgInfoHandlebarColor + newline + "Info: " + svgInfoHandlebarDesc + newline + "Griff: " + svgInfoHandlebarGrip + " von " + svgInfoHandlebarGripProducerName + newline + newline
+                + wheels + newline
+                + svgInfoWheelsModel + " von " + svgInfoWheelsProducerName + newline
+                + svgInfoWheelsColor + sep + svgInfoWheelsSize + newline
+                + "Info: " + svgInfoWheelDesc + newline
+                + "Reifen: " + svgInfoWheelsTyre + " von " + svgInfoTyresProducerName + newline + newline
+                + saddle + newline
+                + svgInfoSaddleModel + " von " + svgInfoSaddleProducerName + " in " + svgInfoSaddleColor + newline
+                + "Info: " + svgInfoSaddleDesc + newline + newline
+                + brakes + newline
+                + svgInfoBrakesModel + " von " + svgInfoBrakesProducerName + sep + svgInfoBrakesTypeName + newline
+                + "Info: " + svgInfoBrakeDesc + newline + newline
+                + attachments + newline
+                + svgInfoAttachmentsBell + " von " + svgInfoBellProducerName + newline
+                + svgInfoAttachmentsStand + " von " + svgInfoStandProducerName + newline
+                + "Beleuchtung: " + svgInfoAttachmentsLight + " von " + svgInfoLightProducerName + newline
+        );
+    }
+
+    private void initSubcatsItems() {
+        cat1SelectName.setItems(getNameFromTypeCollection("Rahmen"));
+        cat2SelectModel.setItems(getNameFromTypeCollection("Lenker"));
+        cat2SelectGrip.setItems(getNameFromTypeCollection("Griff"));
+        cat3SelectModel.setItems(getNameFromTypeCollection("Laufrad"));
+        cat3SelectTyre.setItems(getNameFromTypeCollection("Reifen"));
+        cat4SelectModel.setItems(getNameFromTypeCollection("Sattel"));
+        cat5SelectModel.setItems(getNameFromTypeCollection("Bremse"));
+        cat6SelectBell.setItems(getNameFromTypeCollection("Klingel"));
+        cat6SelectStand.setItems(getNameFromTypeCollection("Ständer"));
+        cat6SelectLight.setItems(getNameFromTypeCollection("Licht"));
+    }
+
+    // AR: get model names from DB with the given type, remove duplicates
+    private ObservableList<String> getNameFromTypeCollection(String typeString) {
+        ObservableList<String> data = FXCollections.observableArrayList();
+        for (Article i : Main.ARTICLES) {
+            if (i.type.equals(typeString)) {
+                if (!data.contains(i.name)) {
+                    data.add(i.name);
+                }
+            }
+        }
+        return data;
+    }
+
+    private String getProducerNameFromModel(String modelString) {
+        String pName = "";
+        for (Article i : Main.ARTICLES) {
+            if (i.name.equals(modelString)) {
+                pName = i.producer;
+            }
+        }
+        return pName;
+    }
+
+    private String getBrakesTypeNameFromModel(String modelString) {
+        String tName = "";
+        for (Article i : Main.ARTICLES) {
+            if (i.name.equals(modelString)) {
+                tName = i.characteristic;
+            }
+        }
+        return tName;
+    }
+
+    private String getDescriptionTextFromModel(String modelString) {
+        String dText = "";
+        for (Article i : Main.ARTICLES) {
+            if (i.name.equals(modelString)) {
+                dText = i.description;
+            }
+        }
+        return dText;
     }
 
     // Rahmen
@@ -424,19 +465,27 @@ public class BuilderController {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
                 svgInfoFrameModel = newValue;
+                svgInfoFrameProducerName = getProducerNameFromModel(cat1SelectName.getValue());
+                svgInfoFrameDesc = getDescriptionTextFromModel(cat1SelectName.getValue());
                 renderSVGtextarea();
-                switch (svgInfoFrameModel) {
-                    case "test1":
+                switch (cat1SelectName.getSelectionModel().getSelectedIndex()) {
+                    case 0:
+                        svgInfoFrameProducerName = getProducerNameFromModel(cat1SelectName.getValue());
+                        svgInfoFrameDesc = getDescriptionTextFromModel(cat1SelectName.getValue());
                         svgManager.setFrame(SVGManager.FRAME1);
                         svgManager.setSVGSet();
                         scaleIn(SVGManager.svgGroup.getChildren().get(0), 500);
                         break;
-                    case "test2":
+                    case 1:
+                        svgInfoFrameProducerName = getProducerNameFromModel(cat1SelectName.getValue());
+                        svgInfoFrameDesc = getDescriptionTextFromModel(cat1SelectName.getValue());
                         svgManager.setFrame(SVGManager.FRAME2);
                         svgManager.setSVGSet();
                         scaleIn(SVGManager.svgGroup.getChildren().get(0), 500);
                         break;
-                    case "test3":
+                    case 2:
+                        svgInfoFrameProducerName = getProducerNameFromModel(cat1SelectName.getValue());
+                        svgInfoFrameDesc = getDescriptionTextFromModel(cat1SelectName.getValue());
                         svgManager.setFrame(SVGManager.FRAME3);
                         svgManager.setSVGSet();
                         scaleIn(SVGManager.svgGroup.getChildren().get(0), 500);
@@ -504,19 +553,27 @@ public class BuilderController {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
                 svgInfoHandlebarModel = newValue;
+                svgInfoHandlebarProducerName = getProducerNameFromModel(cat2SelectModel.getValue());
+                svgInfoHandlebarDesc = getDescriptionTextFromModel(cat2SelectModel.getValue());
                 renderSVGtextarea();
-                switch (svgInfoHandlebarModel) {
-                    case "test1":
+                switch (cat2SelectModel.getSelectionModel().getSelectedIndex()) {
+                    case 0:
+                        svgInfoHandlebarProducerName = getProducerNameFromModel(cat2SelectModel.getValue());
+                        svgInfoHandlebarDesc = getDescriptionTextFromModel(cat2SelectModel.getValue());
                         svgManager.setHandlebar(SVGManager.HANDLEBAR1);
                         svgManager.setSVGSet();
                         scaleIn(SVGManager.svgGroup.getChildren().get(3), 500);
                         break;
-                    case "test2":
+                    case 1:
+                        svgInfoHandlebarProducerName = getProducerNameFromModel(cat2SelectModel.getValue());
+                        svgInfoHandlebarDesc = getDescriptionTextFromModel(cat2SelectModel.getValue());
                         svgManager.setHandlebar(SVGManager.HANDLEBAR2);
                         svgManager.setSVGSet();
                         scaleIn(SVGManager.svgGroup.getChildren().get(3), 500);
                         break;
-                    case "test3":
+                    case 2:
+                        svgInfoHandlebarProducerName = getProducerNameFromModel(cat2SelectModel.getValue());
+                        svgInfoHandlebarDesc = getDescriptionTextFromModel(cat2SelectModel.getValue());
                         svgManager.setHandlebar(SVGManager.HANDLEBAR3);
                         svgManager.setSVGSet();
                         scaleIn(SVGManager.svgGroup.getChildren().get(3), 500);
@@ -531,6 +588,7 @@ public class BuilderController {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
                 svgInfoHandlebarGrip = newValue;
+                svgInfoHandlebarGripProducerName = getProducerNameFromModel(cat2SelectGrip.getValue());
                 renderSVGtextarea();
             }
         });
@@ -569,19 +627,27 @@ public class BuilderController {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
                 svgInfoWheelsModel = newValue;
+                svgInfoWheelsProducerName = getProducerNameFromModel(cat3SelectModel.getValue());
+                svgInfoWheelDesc = getDescriptionTextFromModel(cat3SelectModel.getValue());
                 renderSVGtextarea();
-                switch (svgInfoWheelsModel) {
-                    case "test1":
+                switch (cat3SelectModel.getSelectionModel().getSelectedIndex()) {
+                    case 0:
+                        svgInfoWheelsProducerName = getProducerNameFromModel(cat3SelectModel.getValue());
+                        svgInfoWheelDesc = getDescriptionTextFromModel(cat3SelectModel.getValue());
                         svgManager.setTire(SVGManager.TIRE1);
                         svgManager.setSVGSet();
                         fadeIn(SVGManager.svgGroup.getChildren().get(2), 1000);
                         break;
-                    case "test2":
+                    case 1:
+                        svgInfoWheelsProducerName = getProducerNameFromModel(cat3SelectModel.getValue());
+                        svgInfoWheelDesc = getDescriptionTextFromModel(cat3SelectModel.getValue());
                         svgManager.setTire(SVGManager.TIRE2);
                         svgManager.setSVGSet();
                         fadeIn(SVGManager.svgGroup.getChildren().get(2), 1000);
                         break;
-                    case "test3":
+                    case 2:
+                        svgInfoWheelsProducerName = getProducerNameFromModel(cat3SelectModel.getValue());
+                        svgInfoWheelDesc = getDescriptionTextFromModel(cat3SelectModel.getValue());
                         svgManager.setTire(SVGManager.TIRE3);
                         svgManager.setSVGSet();
                         fadeIn(SVGManager.svgGroup.getChildren().get(2), 1000);
@@ -596,6 +662,7 @@ public class BuilderController {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
                 svgInfoWheelsTyre = newValue;
+                svgInfoTyresProducerName = getProducerNameFromModel(cat3SelectTyre.getValue());
                 renderSVGtextarea();
             }
         });
@@ -657,19 +724,27 @@ public class BuilderController {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
                 svgInfoSaddleModel = newValue;
+                svgInfoSaddleProducerName = getProducerNameFromModel(cat4SelectModel.getValue());
+                svgInfoSaddleDesc = getDescriptionTextFromModel(cat4SelectModel.getValue());
                 renderSVGtextarea();
-                switch (svgInfoSaddleModel) {
-                    case "test1":
+                switch (cat4SelectModel.getSelectionModel().getSelectedIndex()) {
+                    case 0:
+                        svgInfoSaddleProducerName = getProducerNameFromModel(cat4SelectModel.getValue());
+                        svgInfoSaddleDesc = getDescriptionTextFromModel(cat4SelectModel.getValue());
                         svgManager.setSeat(SVGManager.SEAT1);
                         svgManager.setSVGSet();
                         scaleIn(SVGManager.svgGroup.getChildren().get(1), 500);
                         break;
-                    case "test2":
+                    case 1:
+                        svgInfoSaddleProducerName = getProducerNameFromModel(cat4SelectModel.getValue());
+                        svgInfoSaddleDesc = getDescriptionTextFromModel(cat4SelectModel.getValue());
                         svgManager.setSeat(SVGManager.SEAT2);
                         svgManager.setSVGSet();
                         scaleIn(SVGManager.svgGroup.getChildren().get(1), 500);
                         break;
-                    case "test3":
+                    case 2:
+                        svgInfoSaddleProducerName = getProducerNameFromModel(cat4SelectModel.getValue());
+                        svgInfoSaddleDesc = getDescriptionTextFromModel(cat4SelectModel.getValue());
                         svgManager.setSeat(SVGManager.SEAT3);
                         svgManager.setSVGSet();
                         scaleIn(SVGManager.svgGroup.getChildren().get(1), 500);
@@ -714,6 +789,9 @@ public class BuilderController {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
                 svgInfoBrakesModel = newValue;
+                svgInfoBrakesProducerName = getProducerNameFromModel(cat5SelectModel.getValue());
+                svgInfoBrakesTypeName = getBrakesTypeNameFromModel(cat5SelectModel.getValue());
+                svgInfoBrakeDesc = getDescriptionTextFromModel(cat5SelectModel.getValue());
                 renderSVGtextarea();
             }
         });
@@ -723,6 +801,7 @@ public class BuilderController {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
                 svgInfoAttachmentsBell = newValue;
+                svgInfoBellProducerName = getProducerNameFromModel(cat6SelectBell.getValue());
                 renderSVGtextarea();
             }
         });
@@ -731,6 +810,7 @@ public class BuilderController {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
                 svgInfoAttachmentsStand = newValue;
+                svgInfoStandProducerName = getProducerNameFromModel(cat6SelectStand.getValue());
                 renderSVGtextarea();
             }
         });
@@ -739,10 +819,10 @@ public class BuilderController {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
                 svgInfoAttachmentsLight = newValue;
+                svgInfoLightProducerName = getProducerNameFromModel(cat6SelectLight.getValue());
                 renderSVGtextarea();
             }
         });
 
     }
-
 }
