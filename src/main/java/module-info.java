@@ -20,6 +20,7 @@ module pf.bb {
     requires layout;
     requires kernel;
     requires java.desktop;
+    requires io;
 
     opens pf.bb to javafx.fxml;
     exports pf.bb;

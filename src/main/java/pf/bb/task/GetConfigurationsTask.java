@@ -26,8 +26,8 @@ public class GetConfigurationsTask extends Task<List<Configuration>> {
 	protected List<Configuration> call() throws Exception {
 		try{
 		String url = Main.API_HOST + "/configurations";
-		HttpResponse<JsonNode> resJson = Unirest.get(url).header("Accept", "application/json").header("Authorization", user.jsonWebToken).asJson();
-		String json = resJson.getBody().toString();
+		HttpResponse<JsonNode> res = Unirest.get(url).header("Accept", "application/json").header("Authorization", user.jsonWebToken).asJson();
+		String json = res.getBody().toString();
 		return new Gson().fromJson(json, new TypeToken<ArrayList<Configuration>>() {}.getType());
 
 		} catch (UnirestException e) {

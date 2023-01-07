@@ -152,9 +152,15 @@ public class LoginController {
         // Example data
         Configuration config1 = new Configuration(activeUser);
         config1.articles.add(Main.ARTICLES.get(2 - off));
-        config1.articles.add(Main.ARTICLES.get(5 - off));
-        config1.articles.add(Main.ARTICLES.get(7 - off));
-        config1.articles.add(Main.ARTICLES.get(9 - off));
+        config1.articles.add(Main.ARTICLES.get(31 - off));
+        config1.articles.add(Main.ARTICLES.get(38 - off));
+        config1.articles.add(Main.ARTICLES.get(43 - off));
+        config1.articles.add(Main.ARTICLES.get(48 - off));
+        config1.articles.add(Main.ARTICLES.get(52 - off));
+        config1.articles.add(Main.ARTICLES.get(58 - off));
+        config1.articles.add(Main.ARTICLES.get(61 - off));
+        config1.articles.add(Main.ARTICLES.get(64 - off));
+        config1.articles.add(Main.ARTICLES.get(67 - off));
 
         // Test POST
         PostConfigurationTask configurationsTask1 = new PostConfigurationTask(activeUser, config1);
@@ -219,7 +225,6 @@ public class LoginController {
 
 
 
-
                                 // Order mit Kundendaten und Gesamtpreis zur Konfiguration hinzufügen
                                 Customer newCustomer = new Customer("customer" + randInt + "@shopping.de", "Caro", "Customer", "Mallway", 17, "D-32423", "Mallland");
                                 // Customer in DB erzeugen, um unique ID zu bekommen
@@ -237,13 +242,12 @@ public class LoginController {
                                     for (Article article : updatedConfig.articles) {
                                         priceTotal += article.price;
                                     }
-                                    OrderClass newOrder = new OrderClass(configurationsTask3.getValue(), customerTask1.getValue(), priceTotal);
+                                    OrderClass newOrder = new OrderClass(configurationsTask4.getValue(), customerTask1.getValue(), priceTotal);
 
                                     PostOrderTask orderTask1 = new PostOrderTask(activeUser, newOrder);
                                     //Erst Task definieren incl. WorkerStateEvent als Flag, um zu wissen, wann fertig
                                     orderTask1.setOnSucceeded((WorkerStateEvent orderCreated) -> {
                                         System.out.println("order created id:" + orderTask1.getValue().id);
-
 
                                         // CREATE BILL
                                         Bill newBill = new Bill(orderTask1.getValue());
@@ -253,14 +257,15 @@ public class LoginController {
                                             System.out.println("bill created id:" + billTask1.getValue().id);
 
 
+                                            if (Main.CONFIGURATIONS.size() > 4) {
 
-                                            // DELETE A CONFIGURATION REQUIRES: DELETE BILL -> DELETE ORDER -> DELETE CONFIGURATION
+                                                // TEST PDF output → möglich wenn Bill vorhanden!
+                                                // Main.CONFIGURATIONS.get(1).createAndOpenTempPdfBill();
 
-                                            // Test DELETE BILL
-                                            if (Main.CONFIGURATIONS.size() > 2) {
+                                                // DELETE A CONFIGURATION REQUIRES: DELETE BILL -> DELETE ORDER -> DELETE CONFIGURATION
+                                                // Test DELETE BILL
                                                 int billId = Main.CONFIGURATIONS.get(0).order.bill.id; // DELETE OLDEST ELEMENT
                                                 DeleteBillTask billTask2 = new DeleteBillTask(activeUser, billId);
-                                                //Erst Task definieren incl. WorkerStateEvent als Flag, um zu wissen, wann fertig
                                                 billTask2.setOnSucceeded((WorkerStateEvent billDeleted) -> {
                                                     System.out.println("bill id=" + billId + " deleted=" +  billTask2.getValue());
 
