@@ -171,6 +171,8 @@ public class DashboardController {
 
                 iconSearch.setStyleClass("table-icon-search");
                 iconRemove.setStyleClass("table-icon-remove");
+                detailButton.getStyleClass().add("btn-table-icon-search");
+                removeButton.getStyleClass().add("btn-table-icon-remove");
                 detailButton.setGraphic(iconSearch);
                 removeButton.setGraphic(iconRemove);
                 detailButton.setTooltip(new Tooltip("Konfiguration öffnen"));
