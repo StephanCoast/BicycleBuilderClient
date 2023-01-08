@@ -81,7 +81,7 @@ public class BuilderController {
     }
 
     public void openDashboard(ActionEvent event) throws IOException {
-        vm.forceView(event, "Dashboard.fxml", "Bicycle Builder - Dashboard");
+        vm.forceView(event, "Dashboard.fxml", "Bicycle Builder - Dashboard", false);
     }
 
     public void openCustomerDataView(ActionEvent event) throws IOException {
@@ -100,7 +100,7 @@ public class BuilderController {
     // todo: aktueller Entwurf/Konfiguration muss gespeichert werden -> Server? danach Weiterleitung Dashboard
     // Stephan
     public void onSaveDraft(ActionEvent event) throws IOException {
-        vm.forceView(event, "Dashboard.fxml", "Bicycle Builder - Dashboard");
+        vm.forceView(event, "Dashboard.fxml", "Bicycle Builder - Dashboard", false);
     }
 
     public void openSidebarCat1(ActionEvent event) throws IOException {

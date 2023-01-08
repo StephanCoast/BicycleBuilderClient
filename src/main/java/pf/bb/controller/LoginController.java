@@ -78,7 +78,7 @@ public class LoginController {
 
 
                         try {
-                            vm.forceView(event, "Dashboard.fxml", "Bicycle Builder - Dashboard");
+                            vm.forceView(event, "Dashboard.fxml", "Bicycle Builder - Dashboard", true);
                         } catch (IOException e) {
                             throw new RuntimeException(e);
                         }
@@ -263,6 +263,7 @@ public class LoginController {
 
 
                                             // TEST PDF output → möglich wenn Bill vorhanden!
+                                            // todo: AR: deactivated, causes App-Freezing with Linux OS
                                             finalConfig.createAndOpenTempPdfBill();
 
 
