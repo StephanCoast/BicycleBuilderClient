@@ -41,7 +41,7 @@ public class LoginController {
         password.setText("osmi");
     }
 
-    public void authenticate(ActionEvent event) throws IOException {
+    public void authenticate(ActionEvent event){
         // uncomment to bypass Server-Login, for developing only
         //vm.forceView(event, "Dashboard.fxml", "Bicycle Builder - Dashboard");
 
@@ -222,7 +222,7 @@ public class LoginController {
                             configurationsTask4.setOnRunning((successEvent) -> System.out.println("trying to update configuration..."));
                             configurationsTask4.setOnSucceeded((WorkerStateEvent configTask4) -> {
                                 System.out.println("configuration updated id: " + configurationsTask4.getValue().id);
-
+                                Configuration finalConfig = configurationsTask4.getValue();
 
 
                                 // Order mit Kundendaten und Gesamtpreis zur Konfiguration hinzufügen
@@ -248,6 +248,9 @@ public class LoginController {
                                     //Erst Task definieren incl. WorkerStateEvent als Flag, um zu wissen, wann fertig
                                     orderTask1.setOnSucceeded((WorkerStateEvent orderCreated) -> {
                                         System.out.println("order created id:" + orderTask1.getValue().id);
+                                        //Client Config Objekt aktualisieren
+                                        finalConfig.setOrder(orderTask1.getValue());
+
 
                                         // CREATE BILL
                                         Bill newBill = new Bill(orderTask1.getValue());
@@ -255,12 +258,15 @@ public class LoginController {
                                         //Erst Task definieren incl. WorkerStateEvent als Flag, um zu wissen, wann fertig
                                         billTask1.setOnSucceeded((WorkerStateEvent billCreated) -> {
                                             System.out.println("bill created id:" + billTask1.getValue().id);
+                                            //Client Config Objekt aktualisieren
+                                            finalConfig.order.setBill(billTask1.getValue());
 
 
-                                            if (Main.CONFIGURATIONS.size() > 4) {
+                                            // TEST PDF output → möglich wenn Bill vorhanden!
+                                            finalConfig.createAndOpenTempPdfBill();
 
-                                                // TEST PDF output → möglich wenn Bill vorhanden!
-                                                // Main.CONFIGURATIONS.get(1).createAndOpenTempPdfBill();
+
+                                            if (Main.CONFIGURATIONS.size() > 3) {
 
                                                 // DELETE A CONFIGURATION REQUIRES: DELETE BILL -> DELETE ORDER -> DELETE CONFIGURATION
                                                 // Test DELETE BILL

@@ -12,6 +12,12 @@ public class OrderClass extends EntityWithID {
 	@Expose
 	public float priceTotal;
 
+	public void setBill(Bill bill) {
+		bill.order = null; // must be null otherwise GSON serialize in loop
+		this.bill = bill;
+	}
+
+	@Expose
 	public Bill bill;
 	@Expose
 	public String timestampCreated;
