@@ -27,7 +27,8 @@ import java.util.Locale;
 import java.util.Objects;
 
 public class Configuration extends EntityWithID {
-    //required
+
+    //@Expose fields are serialized to JSON via Gson -> fields must be public for Gson
     @Expose
     public String writeAccess;
 
@@ -41,9 +42,14 @@ public class Configuration extends EntityWithID {
     @Expose
     public String status;
 
-    //optional
     @Expose
     public ArrayList<Article> articles;
+
+    public void setOrder(OrderClass order) {
+        order.configuration = null; // must be null otherwise GSON serialize in loop
+        this.order = order;
+    }
+
     @Expose
     public OrderClass order;
 
