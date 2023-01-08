@@ -264,7 +264,7 @@ public class LoginController {
 
                                             // TEST PDF output → möglich wenn Bill vorhanden!
                                             // todo: AR: deactivated, causes App-Freezing with Linux OS
-                                            finalConfig.createAndOpenTempPdfBill();
+                                            //finalConfig.createAndOpenTempPdfBill();
 
 
                                             if (Main.CONFIGURATIONS.size() > 3) {

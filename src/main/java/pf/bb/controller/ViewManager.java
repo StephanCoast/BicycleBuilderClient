@@ -21,11 +21,11 @@ public class ViewManager {
     private static final ViewManager instance = new ViewManager();
     private Stage stage;
     private Scene scene;
-    private Double defaultWidth = 1440.00;
-    private Double defaultHeight = 900.00;
+    private final Double defaultWidth = 1280.00;
+    private final Double defaultHeight = 800.00;
     private Double oldWidth;
     private Double oldHeight;
-    private Boolean sizeHasChanged = false;
+    private static final String OS = System.getProperty("os.name");
 
     public ViewManager() {
     }
@@ -54,8 +54,14 @@ public class ViewManager {
         stage.setHeight(defaultHeight);
         stage.setResizable(true);
         stage.setScene(scene);
+
+        // for testing
+        System.out.println("OS: " + OS);
+
+        if (!OS.equals("Linux")) {stage.sizeToScene();} /* AR: fix window stage scaling anomalies with Linux/Windows */
         stage.show();
         calcWindowSize(stage, oldWidth, oldHeight);
+        if (comingFromLogin) { stage.centerOnScreen(); }
     }
 
     public void forceLoginView(ActionEvent e, String fileNameLogin, String title) throws IOException {
@@ -67,6 +73,7 @@ public class ViewManager {
         stage.setHeight(325.00); /* AR: for some reason original SB size of 275 got compressed */
         stage.setResizable(false);
         stage.setScene(scene);
+        stage.sizeToScene();
         stage.show();
         centerLoginScene(stage);
     }
@@ -85,13 +92,9 @@ public class ViewManager {
     }
 
     private void calcWindowSize(Stage stage, Double oldWidth, Double oldHeight) {
-        if (oldWidth < defaultWidth || oldWidth > defaultWidth || oldHeight < defaultHeight || oldHeight > defaultHeight) { sizeHasChanged = true; }
-        if (sizeHasChanged) {
+        if (oldWidth < defaultWidth || oldWidth > defaultWidth || oldHeight < defaultHeight || oldHeight > defaultHeight) {
             stage.setWidth(oldWidth);
             stage.setHeight(oldHeight);
-        } else {
-            stage.setWidth(defaultWidth);
-            stage.setHeight(defaultHeight);
         }
     }
 }
