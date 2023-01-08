@@ -60,7 +60,7 @@ public class DashboardController {
     }
 
     public void openDashboard(ActionEvent event) throws IOException {
-        vm.forceView(event, "Dashboard.fxml", "Bicycle Builder - Dashboard");
+        vm.forceView(event, "Dashboard.fxml", "Bicycle Builder - Dashboard", false);
     }
 
     public void openAdmin(ActionEvent event) throws IOException {
@@ -81,7 +81,7 @@ public class DashboardController {
     }
 
     public void openBuilder(ActionEvent event) throws IOException {
-        vm.forceView(event, "Builder.fxml", "Bicycle Builder - Konfigurator");
+        vm.forceView(event, "Builder.fxml", "Bicycle Builder - Konfigurator", false);
     }
 
     public void onBottomBarClose(ActionEvent event) {

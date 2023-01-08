@@ -23,6 +23,8 @@ public class ViewManager {
     private Scene scene;
     private Double defaultWidth = 1440.00;
     private Double defaultHeight = 900.00;
+    private Double oldWidth;
+    private Double oldHeight;
     private Boolean sizeHasChanged = false;
 
     public ViewManager() {
@@ -32,13 +34,20 @@ public class ViewManager {
         return instance;
     }
 
-    public void forceView(ActionEvent e, String fileName, String title) throws IOException {
+    public void forceView(ActionEvent e, String fileName, String title, Boolean comingFromLogin) throws IOException {
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/pf/bb/fxml/" + fileName)));
         stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
-        Double oldWidth = stage.getWidth();
-        Double oldHeight = stage.getHeight();
         scene = new Scene(root);
         stage.setTitle(title);
+
+        if (comingFromLogin) {
+            oldWidth = defaultWidth;
+            oldHeight = defaultHeight;
+        } else {
+            oldWidth = stage.getWidth();
+            oldHeight = stage.getHeight();
+        }
+
         stage.setMinWidth(1280.00); /* AR: must be set here to prevent resizing to zero, SC ignores */
         stage.setMinHeight(800.00);
         stage.setWidth(defaultWidth);
