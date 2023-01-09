@@ -54,10 +54,6 @@ public class ViewManager {
         stage.setHeight(defaultHeight);
         stage.setResizable(true);
         stage.setScene(scene);
-
-        // for testing
-        System.out.println("OS: " + OS);
-
         if (!OS.equals("Linux")) {stage.sizeToScene();} /* AR: fix window stage scaling anomalies with Linux/Windows */
         stage.show();
         calcWindowSize(stage, oldWidth, oldHeight);

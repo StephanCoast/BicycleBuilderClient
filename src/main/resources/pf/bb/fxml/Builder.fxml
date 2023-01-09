@@ -65,7 +65,7 @@
    </top>
       <right>
          <StackPane prefHeight="669.0" prefWidth="350.0" styleClass="container-sidebar" BorderPane.alignment="CENTER">
-            <JFXDrawer fx:id="drawerDefault" defaultDrawerSize="350.0" direction="RIGHT" visible="false">
+            <JFXDrawer fx:id="drawerDefault" defaultDrawerSize="350.0" direction="RIGHT">
                <children>
                   <BorderPane fx:id="catDefault">
                      <top>
@@ -87,7 +87,7 @@
                                     </HBox>
                                     <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
                                        <children>
-                                          <Label fx:id="catDefaultPriceValue" ellipsisString="" styleClass="label-price-value" text="1000">
+                                          <Label fx:id="catLabelDefaultPrice" ellipsisString="" styleClass="label-price-value" text="1000">
                                              <font>
                                                 <Font name="System Bold" size="24.0" />
                                              </font>
@@ -132,7 +132,7 @@
                      </center>
                   </BorderPane>
                </children></JFXDrawer>
-            <JFXDrawer fx:id="drawerCat1" alignment="TOP_LEFT" defaultDrawerSize="350.0" direction="RIGHT">
+            <JFXDrawer fx:id="drawerCat1" alignment="TOP_LEFT" defaultDrawerSize="350.0" direction="RIGHT" visible="false">
                <children>
                   <BorderPane fx:id="cat1">
                      <top>
@@ -184,7 +184,7 @@
                                                 <Font size="18.0" />
                                              </font>
                                           </Label>
-                                          <Label ellipsisString="" text="0">
+                                          <Label fx:id="cat1LabelPrice" ellipsisString="" text="0">
                                              <font>
                                                 <Font name="System Bold" size="22.0" />
                                              </font>
@@ -340,7 +340,7 @@
                                                 <Font size="18.0" />
                                              </font>
                                           </Label>
-                                          <Label ellipsisString="" text="0">
+                                          <Label fx:id="cat2LabelPrice" ellipsisString="" text="0">
                                              <font>
                                                 <Font name="System Bold" size="22.0" />
                                              </font>
@@ -472,7 +472,7 @@
                                                 <Font size="18.0" />
                                              </font>
                                           </Label>
-                                          <Label ellipsisString="" text="0">
+                                          <Label fx:id="cat3LabelPrice" ellipsisString="" text="0">
                                              <font>
                                                 <Font name="System Bold" size="22.0" />
                                              </font>
@@ -632,7 +632,7 @@
                                                 <Font size="18.0" />
                                              </font>
                                           </Label>
-                                          <Label ellipsisString="" text="0">
+                                          <Label fx:id="cat4LabelPrice" ellipsisString="" text="0">
                                              <font>
                                                 <Font name="System Bold" size="22.0" />
                                              </font>
@@ -760,7 +760,7 @@
                                                 <Font size="18.0" />
                                              </font>
                                           </Label>
-                                          <Label ellipsisString="" text="0">
+                                          <Label fx:id="cat5LabelPrice" ellipsisString="" text="0">
                                              <font>
                                                 <Font name="System Bold" size="22.0" />
                                              </font>
@@ -858,7 +858,7 @@
                                                 <Font size="18.0" />
                                              </font>
                                           </Label>
-                                          <Label ellipsisString="" text="0">
+                                          <Label fx:id="cat6LabelPrice" ellipsisString="" text="0">
                                              <font>
                                                 <Font name="System Bold" size="22.0" />
                                              </font>
@@ -928,7 +928,7 @@
                                           <Font size="22.0" />
                                        </font>
                                     </Label>
-                                    <Label ellipsisString="" styleClass="label-price-value" text="1000">
+                                    <Label fx:id="catLabelFinishPrice" ellipsisString="" styleClass="label-price-value" text="1000">
                                        <font>
                                           <Font name="System Bold" size="24.0" />
                                        </font>
