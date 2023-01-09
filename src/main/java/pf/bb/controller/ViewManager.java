@@ -54,10 +54,6 @@ public class ViewManager {
         stage.setHeight(defaultHeight);
         stage.setResizable(true);
         stage.setScene(scene);
-
-        // for testing
-        System.out.println("OS: " + OS);
-
         if (!OS.equals("Linux")) {stage.sizeToScene();} /* AR: fix window stage scaling anomalies with Linux/Windows */
         stage.show();
         calcWindowSize(stage, oldWidth, oldHeight);
@@ -69,8 +65,8 @@ public class ViewManager {
         stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
         scene = new Scene(rootLogin);
         stage.setTitle(title);
-        stage.setWidth(325.00);
-        stage.setHeight(325.00); /* AR: for some reason original SB size of 275 got compressed */
+        stage.setWidth(400.00);
+        stage.setHeight(475.00);
         stage.setResizable(false);
         stage.setScene(scene);
         stage.sizeToScene();

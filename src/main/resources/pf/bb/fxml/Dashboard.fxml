@@ -18,16 +18,13 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" stylesheets="@styles/Dashboard.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pf.bb.controller.DashboardController">
+<AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" styleClass="apane-dashboard" stylesheets="@styles/Dashboard.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pf.bb.controller.DashboardController">
    <BorderPane layoutY="99.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
       <top>
          <BorderPane prefHeight="48.0" prefWidth="625.0" styleClass="header-borderpane" BorderPane.alignment="CENTER">
-            <cursor>
-               <Cursor fx:constant="HAND" />
-            </cursor>
             <left>
-               <StackPane prefWidth="200.0" BorderPane.alignment="CENTER">
-                  <FontAwesomeIconView glyphName="BICYCLE" size="38" styleClass="header-icon-bicycle" textOrigin="TOP" wrappingWidth="48.85714340209961" />
+               <StackPane prefWidth="335.0" BorderPane.alignment="CENTER">
+                  <FontAwesomeIconView glyphName="BICYCLE" size="75" styleClass="header-icon-bicycle" textOrigin="TOP" wrappingWidth="48.85714340209961" />
                </StackPane>
             </left>
             <center>
@@ -40,27 +37,39 @@
                </StackPane>
             </center>
             <right>
-               <StackPane prefWidth="200.0" BorderPane.alignment="CENTER">
+               <StackPane prefWidth="270.0" BorderPane.alignment="CENTER">
                   <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="50.0">
                      <JFXButton ellipsisString="" onAction="#openDashboard" prefHeight="28.0" prefWidth="28.0" styleClass="header-icon-home">
                         <graphic>
                            <FontAwesomeIconView glyphName="HOME" size="28" styleClass="header-icon-home" />
                         </graphic>
+                        <cursor>
+                           <Cursor fx:constant="HAND" />
+                        </cursor>
                      </JFXButton>
                      <JFXButton ellipsisString="" onAction="#openAdmin" prefHeight="28.0" prefWidth="28.0" styleClass="header-icon-admin">
                         <graphic>
                            <FontAwesomeIconView glyphName="USER_PLUS" size="28" styleClass="header-icon-admin" />
                         </graphic>
+                        <cursor>
+                           <Cursor fx:constant="HAND" />
+                        </cursor>
                      </JFXButton>
                      <JFXButton ellipsisString="" onAction="#openProfile" prefHeight="28.0" prefWidth="28.0" styleClass="header-icon-profile">
                         <graphic>
                            <FontAwesomeIconView glyphName="USER_CIRCLE" size="28" styleClass="header-icon-profile" />
                         </graphic>
+                        <cursor>
+                           <Cursor fx:constant="HAND" />
+                        </cursor>
                      </JFXButton>
                      <JFXButton ellipsisString="" onAction="#logout" prefHeight="28.0" prefWidth="28.0" styleClass="header-icon-logout">
                         <graphic>
                            <FontAwesomeIconView glyphName="SIGN_OUT" size="28" styleClass="header-icon-logout" />
                         </graphic>
+                        <cursor>
+                           <Cursor fx:constant="HAND" />
+                        </cursor>
                      </JFXButton>
                   </HBox>
                </StackPane>
@@ -68,14 +77,14 @@
          </BorderPane>
       </top>
       <center>
-         <StackPane BorderPane.alignment="CENTER">
+         <StackPane styleClass="table-stack" BorderPane.alignment="CENTER">
             <children>
-               <TableView fx:id="dboard_table" prefHeight="200.0" prefWidth="200.0">
+               <TableView fx:id="dboard_table" prefHeight="200.0" prefWidth="200.0" styleClass="table-main">
                   <columns>
-                     <TableColumn fx:id="dboard_col1" editable="false" maxWidth="200.0" minWidth="100.0" prefWidth="100.0" resizable="false" styleClass="table-col" text="ID" />
-                     <TableColumn fx:id="dboard_col2" editable="false" maxWidth="200.0" minWidth="100.0" prefWidth="100.0" resizable="false" styleClass="table-col" text="Datum" />
+                     <TableColumn fx:id="dboard_col1" editable="false" maxWidth="200.0" minWidth="100.0" prefWidth="100.0" resizable="false" styleClass="table-col, table-col-id" text="ID" />
+                     <TableColumn fx:id="dboard_col2" editable="false" maxWidth="200.0" minWidth="100.0" prefWidth="100.0" resizable="false" styleClass="table-col, table-col-date" text="Datum" />
                      <TableColumn fx:id="dboard_col3" editable="false" maxWidth="400.0" minWidth="200.0" prefWidth="200.0" styleClass="table-col-customer" text="Kunde" />
-                     <TableColumn fx:id="dboard_col4" editable="false" maxWidth="200.0" minWidth="100.0" prefWidth="100.0" resizable="false" styleClass="table-col" text="Kunden-ID" />
+                     <TableColumn fx:id="dboard_col4" editable="false" maxWidth="200.0" minWidth="100.0" prefWidth="100.0" resizable="false" styleClass="table-col, table-col-cust-id" text="Kunden-ID" />
                      <TableColumn fx:id="dboard_col5" editable="false" maxWidth="200.0" minWidth="100.0" prefWidth="100.0" resizable="false" styleClass="table-col" text="Status" />
                      <TableColumn fx:id="dboard_col6" editable="false" maxWidth="150.0" minWidth="75.0" prefWidth="75.0" resizable="false" sortable="false" styleClass="table-col" text="Aktion" />
                   </columns>
@@ -87,9 +96,9 @@
          <BorderPane prefHeight="225.0" styleClass="footer-borderpane" BorderPane.alignment="CENTER">
             <left>
                <StackPane prefHeight="150.0" prefWidth="300.0" BorderPane.alignment="CENTER">
-                  <JFXButton fx:id="btnNewConfig" buttonType="RAISED" contentDisplay="TOP" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#openBuilder" prefHeight="150.0" prefWidth="200.0" styleClass="btn-builder" text="Neue Konfiguration">
+                  <JFXButton fx:id="btnNewConfig" buttonType="RAISED" contentDisplay="TOP" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#openBuilder" prefHeight="150.0" prefWidth="200.0" styleClass="btn-builder, btn-large-comp" text="Neue Konfiguration">
                      <graphic>
-                        <FontAwesomeIconView fill="WHITE" glyphName="BICYCLE" size="38" textOrigin="TOP" wrappingWidth="48.85714340209961" />
+                        <FontAwesomeIconView fill="WHITE" glyphName="BICYCLE" size="38" styleClass="btn-icon-bicycle" textOrigin="TOP" wrappingWidth="48.85714340209961" />
                      </graphic></JFXButton>
                </StackPane>
             </left>
@@ -101,7 +110,7 @@
                   <children>
                      <JFXDrawer fx:id="drawerAdmin" defaultDrawerSize="225.0" direction="BOTTOM" prefHeight="125.0" prefWidth="900.0">
                         <children>
-                           <BorderPane fx:id="bpAdmin" prefHeight="200.0" prefWidth="200.0" styleClass="bpAdmin">
+                           <BorderPane fx:id="bpAdmin" prefHeight="225.0" styleClass="bpAdmin">
                               <center>
                                  <StackPane prefHeight="225.0" BorderPane.alignment="CENTER">
                                     <children>
@@ -122,7 +131,7 @@
                                                 <center>
                                                    <StackPane BorderPane.alignment="CENTER">
                                                       <children>
-                                                         <Label alignment="CENTER" styleClass="header-title" text="Nutzer anlegen">
+                                                         <Label alignment="CENTER" styleClass="header-title, subpane-title" text="Nutzer anlegen">
                                                             <font>
                                                                <Font size="20.0" />
                                                             </font>
@@ -133,9 +142,9 @@
                                              </BorderPane>
                                              <BorderPane prefHeight="200.0" prefWidth="200.0">
                                                 <center>
-                                                   <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+                                                   <VBox BorderPane.alignment="CENTER">
                                                       <children>
-                                                         <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="20.0">
+                                                         <HBox alignment="CENTER_LEFT" prefHeight="100.0" spacing="20.0">
                                                             <children>
                                                                <JFXTextField fx:id="tfAdminUserID" labelFloat="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="150.0" promptText=" Benutzer-ID" />
                                                                <JFXTextField fx:id="tfAdminFirstName" labelFloat="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="150.0" promptText=" Vorname" />
@@ -160,11 +169,11 @@
                                                                <Insets left="10.0" />
                                                             </padding>
                                                          </HBox>
-                                                         <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="20.0">
+                                                         <HBox alignment="CENTER_LEFT" prefHeight="100.0" spacing="20.0">
                                                             <children>
                                                                <JFXTextField fx:id="tfAdminUserName" labelFloat="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="150.0" promptText=" Benutzername" />
                                                                <JFXTextField fx:id="tfAdminMail" labelFloat="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="150.0" promptText=" E-Mail" />
-                                                               <JFXPasswordField fx:id="pfAdminPW" labelFloat="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="150.0" promptText=" Passwort" />
+                                                               <JFXPasswordField fx:id="pfAdminPW" labelFloat="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="150.0" promptText=" Passwort" styleClass="jfx-text-field" />
                                                                <RequiredFieldValidator fx:id="validatorAdminUserName" message="Benutzername fehlt">
                                                                   <cursor>
                                                                      <Cursor fx:constant="NONE" />
@@ -191,7 +200,7 @@
                                                 <right>
                                                    <StackPane alignment="BOTTOM_CENTER" prefWidth="225.0" BorderPane.alignment="CENTER">
                                                       <children>
-                                                         <JFXButton buttonType="RAISED" ellipsisString="" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#onBottomBarSaveAdmin" prefHeight="40.0" prefWidth="150.0" styleClass="btn-builder" text="Speichern" />
+                                                         <JFXButton buttonType="RAISED" ellipsisString="" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#onBottomBarSaveAdmin" prefHeight="40.0" prefWidth="120.0" styleClass="btn-builder, btn-standard-comp" text="SPEICHERN" />
                                                       </children>
                                                       <BorderPane.margin>
                                                          <Insets />
@@ -233,7 +242,7 @@
                                                 <center>
                                                    <StackPane BorderPane.alignment="CENTER">
                                                       <children>
-                                                         <Label alignment="CENTER" styleClass="header-title" text="Profildaten bearbeiten">
+                                                         <Label alignment="CENTER" styleClass="header-title, subpane-title" text="Profildaten bearbeiten">
                                                             <font>
                                                                <Font size="20.0" />
                                                             </font>
@@ -296,7 +305,7 @@
                                                 <right>
                                                    <StackPane alignment="BOTTOM_CENTER" prefWidth="225.0" BorderPane.alignment="CENTER">
                                                       <children>
-                                                         <JFXButton buttonType="RAISED" ellipsisString="" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#onBottomBarSaveProfile" prefHeight="40.0" prefWidth="150.0" styleClass="btn-builder" text="Speichern" />
+                                                         <JFXButton buttonType="RAISED" ellipsisString="" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#onBottomBarSaveProfile" prefHeight="40.0" prefWidth="150.0" styleClass="btn-builder, btn-standard-comp" text="SPEICHERN" />
                                                       </children>
                                                       <padding>
                                                          <Insets bottom="20.0" />

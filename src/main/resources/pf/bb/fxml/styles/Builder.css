@@ -1,3 +1,148 @@
+/** KARRE BEGINN**/
+
+/** Root-Schriftgrösse **/
+.apane-builder {
+    -fx-font-size: 14px !important;
+}
+/** Trennlinie zwischen Header und Hauptbereich **/
+.header-borderpane {
+    -fx-background-color: #ffffff;
+    -fx-border-width: 10px 0px 0px 0px !important;
+    -fx-border-color: #7a7cff !important;
+}
+/* Trennlinie der Sidebar */
+.container-sidebar {
+    -fx-border-color : #304ffe !important;
+    -fx-border-width : 1 0 0 1 !important;
+}
+.bpaneSVGright {
+    -fx-border-color : #304ffe !important;
+    -fx-border-width : 0 0 0 1 !important;
+}
+.svg-container-techinfo-header {
+    -fx-border-color : #304ffe !important;
+    -fx-border-width : 0 0 1 0 !important;
+}
+.container-main-center {
+    -fx-border-color : #304ffe !important;
+    -fx-border-width : 1 0 0 0 !important;
+}
+/* Hintergrund im Footer & Trennlinie */
+.container-main-bottom {
+    /**-fx-background-color: linear-gradient(from 25% 25% to 100% 100%, rgba(48, 79, 254, 0.1), rgba(255, 143, 0, 0.3)) !important;
+    **/-fx-border-color : #304ffe !important;
+    -fx-border-width : 1 0 0 0 !important;
+}
+
+.header-icon-bicycle {
+    -fx-font-size: 85px !important;
+    -fx-fill: #000000/***#304fff***/ !important;
+}
+
+/** Titel für Unteransichten
+.subpane-title {
+    -fx-text-fill: #7a7cff !important;
+} **/
+/* Button Design des Login-Fensters */
+.btn-standard-comp {
+    -fx-text-fill: white;
+    /*neu karre*/-fx-min-width: 64px !important;
+    /*neu karre*/-fx-min-height: 36px !important;
+    /*neu karre*/-fx-max-height: 36px !important;
+    /*neu karre*/-fx-padding: 0px 16px 0px 16px;
+    -fx-background-color: #ff8f00 !important;/*#2196f3;*/ /* material palette - blue 500 primary */
+    -fx-background-radius: 50px;
+}
+
+.btn-standard-comp:hover,
+.btn-large-comp:hover {
+    /***-fx-effect: dropshadow(three-pass-box, rgba(255,143,0,1), 5, 0.4, 0.0, 0.0) !important;***//*dropshadow(three-pass-box, rgba(33, 150, 243, 0.5), 5, 0.4, 0.0, 0.0);*/
+    -fx-scale-x: 1.05;
+    -fx-scale-y: 1.05;
+    -fx-scale-z: 1.05;
+}
+/***
+.btn-large-comp {
+    -fx-text-fill: white;***/
+/*neu karre-fx-min-width: 64px !important;*/
+/*neu karre-fx-min-height: 36px !important;*/
+/*neu karre-fx-max-height: 36px !important;*/
+/**neu karre-fx-padding: 0px 12px 0px 16px;
+-fx-background-color: #ff8f00 !important; **//*#2196f3;*/ /* material palette - blue 500 primary */
+/**-fx-background-radius: 50px;
+}
+**/
+
+.sidebar-icon-close {
+    -fx-fill: #ff8f00 !important;
+    -fx-padding: 0 0 0 20px !important;
+}
+.sidebar-icon-close-kunden {
+    -fx-fill: #ff8f00 !important;
+    -fx-padding: 0 0 0 30px !important;
+}
+
+/* Input-Felder Benutzer und PW*/
+.jfx-text-field {
+    -jfx-focus-color: #ff8f00;
+    -jfx-unfocus-color: black;
+    -fx-text-fill: black;
+    /*    -jfx-focus-text-fill: blue;*/
+    /****-fx-pref-width: 200px;****//***280px;***/
+    -fx-pref-height: 48px;
+    /*neu karre*/-fx-padding: 0px 16px 15px 12px;
+}
+
+/* Error-Message des Validators */
+.error-label {
+    -fx-text-fill: red !important; /**entfernt durch karre #ba000d;**/ /* material palette - red 500 primary dark */
+    -fx-font-size: 10px;
+    -fx-font-weight: bold;
+    -fx-padding: 0px 0px 0px 5px;
+    -fx-pref-height: 16px;
+
+}
+
+.jfx-text-field:error {
+    -jfx-focus-color: #ff8f00;
+    -jfx-unfocus-color: red;
+    -fx-pref-height: 48px;
+}
+.jfx-text-field .error-label {
+    -fx-text-fill: red;
+}
+
+.header-icon-home, .header-icon-admin, .header-icon-profile, .header-icon-logout {
+    -fx-fill: #ff8f00 !important;
+}
+
+
+/* Design der Kategorie-Buttons im Footer */
+.btn-toggle-cats {
+    -fx-text-fill: #ff8f00 !important;
+    -fx-background-radius: 50px !important;
+    -fx-background-insets: 50px !important;
+    -fx-border-color : #ff8f00 !important; /* material palette - blue 300 primary dark */
+    -fx-border-radius: 50px !important;
+    -fx-border-width : 1 1 1 1 !important;
+    -jfx-toggle-color: white !important; /* material palette - blue 300 primary dark */
+    -jfx-untoggle-color: white !important; /* material palette - blue 400 primary */
+}
+
+.btn-toggle-cats:selected {
+    -fx-border-color : #ff8f00 !important; /* material palette - cyan 400 primary light */
+    -fx-border-width : 4 4 4 4 !important;
+}
+
+.btn-toggle-cats:hover {
+    -fx-border-color : #ff8f00 !important; /* material palette - cyan 400 primary light */
+    -fx-border-width : 4 4 4 4 !important;
+}
+
+
+
+/** KARRE ENDE **/
+
 /* ######################################### */
 /* Builder - Header */
 /* ######################################### */
@@ -22,7 +167,7 @@
 
 .header-icon-home:hover, .header-icon-admin:hover, .header-icon-profile:hover, .header-icon-logout:hover {
     /* -fx-effect: dropshadow(blurType, color, radius, spread, offsetX, offsetY); */
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 5, 0.4, 0.0, 0.0);
+    /**durch Karre entfernt!-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 5, 0.4, 0.0, 0.0);**/
     -fx-scale-x: 1.2;
     -fx-scale-y: 1.2;
     -fx-scale-z: 1.2;
@@ -34,12 +179,12 @@
 
 /* Hintergrund im Hauptbereich */
 .container-main-center {
-    //-fx-background-color: white;
+    -fx-background-color: white;
 }
 
 /* Hintergrund im Footer & Trennlinie */
 .container-main-bottom {
-    //-fx-background-color: white;
+    /** aukommentiert durch karre-fx-background-color: white;**/
     -fx-border-color : black;
     -fx-border-width : 1 0 0 0;
 }
@@ -130,7 +275,7 @@
 }
 
 .btn-sidebar-save:hover {
-    -fx-effect: dropshadow(three-pass-box, rgba(33, 150, 243, 0.5), 5, 0.4, 0.0, 0.0);
+    /**auskommentiert durch karre -fx-effect: dropshadow(three-pass-box, rgba(33, 150, 243, 0.5), 5, 0.4, 0.0, 0.0);**/
     -fx-scale-x: 1.05;
     -fx-scale-y: 1.05;
     -fx-scale-z: 1.05;
@@ -172,7 +317,7 @@
 .btn-toggle-cat4Color2:selected,
 .btn-toggle-cat4Color3:selected {
     -fx-border-color : #76ff03; /* material palette - light green 400 A primary */
-    -fx-effect: dropshadow(gaussian, rgba(118, 255, 3, .5), 5, 0.4, 0.0, 0.0); /* material palette - light green 400 A primary */
+    /**auskommentiert durch karre -fx-effect: dropshadow(gaussian, rgba(118, 255, 3, .5), 5, 0.4, 0.0, 0.0);**/ /* material palette - light green 400 A primary */
 }
 
 .btn-toggle-cat1Color1:hover,
@@ -202,7 +347,7 @@
 
 .btn-toggle-cats-radioText:selected {
     -fx-border-color : #76ff03; /* material palette - light green 400 A primary */
-    -fx-effect: dropshadow(gaussian, rgba(118, 255, 3, .5), 5, 0.4, 0.0, 0.0); /* material palette - light green 400 A primary */
+    /** auskommentiert durch karre -fx-effect: dropshadow(gaussian, rgba(118, 255, 3, .5), 5, 0.4, 0.0, 0.0); **//* material palette - light green 400 A primary */
 }
 
 .btn-toggle-cats-radioText:hover {

@@ -2,28 +2,80 @@
 /* Login */
 /* ######################################### */
 
+
+/*neu karre*/
+/** Root-Schriftgrösse **/
+.apane {
+    -fx-font-size: 14px;
+    -fx-border-width: 10px 0 0 0 !important;
+    -fx-border-color: #7b7cff;
+}
+
 /* Hintergrund des Login-Fensters */
 .apane {
-    -fx-background-color: white;
+    -fx-background-color: linear-gradient(from 25% 25% to 100% 100%, rgba(48, 79, 254, 0.1), rgba(255, 143, 0, 0.4));
+}
+
+/*neu karre*/
+/** Logo Fahrrad **/
+.logo {
+    -fx-font-size: 75px !important;
+    -fx-fill: #000000;
+}
+
+/** Input-Felder Benutzer und PW **/
+.jfx-text-field {
+    -jfx-focus-color: #ff8f00;
+    -jfx-unfocus-color: black;
+    -fx-text-fill: black;
+    /*    -jfx-focus-text-fill: blue;*/
+    -fx-pref-width: 280px;
+    -fx-pref-height: 48px;
+    -fx-padding: 0px 16px 15px 12px;
 }
 
 /* Button Design des Login-Fensters */
-.btn-close, .btn-login {
+/**.btn-close, .btn-login,**/
+.btn-standard-comp {
     -fx-text-fill: white;
-    -fx-background-color: #2196f3; /* material palette - blue 500 primary */
+    -fx-background-radius: 50px;
+    /*neu karre*/-fx-background-color: #ff8f00; /*#2196f3;*/ /* material palette - blue 500 primary *//*neu karre*/-fx-min-width: 64px !important;
+    /*neu karre*/-fx-min-width: 64px !important;
+    /*neu karre*/-fx-min-height: 36px !important;
+    /*neu karre*/-fx-max-height: 36px !important;
+    /*neu karre*/-fx-padding: 0px 16px 0px 16px;
+    /*neu karre*/-fx-font-size: 14px;
 }
 
 /* Hovereffekte für die Buttons des Login-Fensters */
-.btn-close:hover, .btn-login:hover {
-    -fx-effect: dropshadow(three-pass-box, rgba(33, 150, 243, 0.5), 5, 0.4, 0.0, 0.0);
-    -fx-scale-x: 1.05;
-    -fx-scale-y: 1.05;
-    -fx-scale-z: 1.05;
-}
+/**.btn-close:hover,
+.btn-login:hover**/
+/*neu karre klasse*/.btn-standard-comp:hover {
+                        /**auskommentiert durch karre -fx-effect: dropshadow(three-pass-box, rgba(255,143,0,1), 5, 0.4, 0.0, 0.0);**//*dropshadow(three-pass-box, rgba(33, 150, 243, 0.5), 5, 0.4, 0.0, 0.0);*/
+                        -fx-scale-x: 1.05;
+                        -fx-scale-y: 1.05;
+                        -fx-scale-z: 1.05;
+                    }
 
 /* Error-Message des Validators */
-.error-label {
-    -fx-text-fill: #ba000d; /* material palette - red 500 primary dark */
+/**.error-label {
+    -fx-text-fill: #ba000d; **//* material palette - red 500 primary dark */
+/** -fx-font-size: 10px;
+ -fx-padding: 0 0 0 5px;
+**/
+
+/*karre neu*/
+.jfx-text-field .error-label {
+    -fx-text-fill: red; /**entfernt durch karre #ba000d;**//* material palette - red 500 primary dark */
     -fx-font-size: 10px;
     -fx-padding: 0 0 0 5px;
+    /*karre neu*/-fx-pref-height: 16px;
+    /*karre neu*/-fx-font-weight: bold;
+}
+
+/** Textfeld-Verhalten bei Error **/
+.jfx-text-field:error {
+    -jfx-focus-color: #ff8f00;
+    -jfx-unfocus-color: red;
+    -fx-pref-height: 48px;
 }
