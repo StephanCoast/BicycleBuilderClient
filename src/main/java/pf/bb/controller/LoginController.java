@@ -74,7 +74,7 @@ public class LoginController {
 
 
                         // Todo Remove before production - TEST Configuration Api
-                        testConfigurationApi();
+                        //testConfigurationApi();
 
 
                         try {

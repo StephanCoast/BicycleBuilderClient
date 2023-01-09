@@ -24,7 +24,6 @@ public class Main extends Application {
     public static List<Configuration> CONFIGURATIONS = new ArrayList<>();
     public static final String API_HOST = "http://localhost:8080";
 
-
     @Override
     public void start(Stage stageMain) throws IOException {
         loadFirstClientView(stageMain);
@@ -46,7 +45,6 @@ public class Main extends Application {
         });
         //Tasks in eigenem Thread ausführen
         new Thread(articlesTask).start();
-
     }
 
     private void loadFirstClientView(Stage stageMain) throws IOException {
@@ -67,7 +65,6 @@ public class Main extends Application {
         stage.setY((sb.getHeight() - stage.getHeight()) / 2);
     }
 
-    // AR: aktuell nur zum Testen
     private void fadeLoginScene(AnchorPane pane) {
         FadeTransition ft = new FadeTransition(Duration.millis(2000), pane);
         ft.setFromValue(0.0);

@@ -8,6 +8,7 @@ public class BicycleConfiguration extends EntityWithID {
     int configCustomerID;
     String configState;
 
+
     // constructor
     public BicycleConfiguration(int configID, String configDate, String configCustomer, int configCustomerID, String configState) {
         this.configID = configID;
