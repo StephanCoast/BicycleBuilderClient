@@ -11,6 +11,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableFloatArray;
 import javafx.collections.ObservableIntegerArray;
 import javafx.collections.ObservableList;
+import javafx.concurrent.WorkerStateEvent;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -23,9 +24,13 @@ import javafx.scene.layout.StackPane;
 import javafx.util.Duration;
 import pf.bb.Main;
 import pf.bb.model.Article;
+import pf.bb.model.Configuration;
+import pf.bb.task.PostConfigurationTask;
 
 import java.io.IOException;
 import java.util.HashSet;
+
+import static pf.bb.controller.LoginController.activeUser;
 
 public class BuilderController {
 
@@ -106,9 +111,53 @@ public class BuilderController {
     }
 
     // AR: "Entwurf speichern"
-    // todo: aktueller Entwurf/Konfiguration muss gespeichert werden -> Server? danach Weiterleitung Dashboard
-    // Stephan
     public void onSaveDraft(ActionEvent event) throws IOException {
+        saveNewConfiguration(event);
+    }
+
+    private void saveNewConfiguration(ActionEvent event) throws IOException {
+        finalArticleIdArray = FXCollections.observableIntegerArray();
+        finalArticleIdArray.addAll(
+                getArticleIDBySizeAndColorFromModel(cat1SelectName.getValue(), svgInfoFrameSize, svgInfoFrameColorHex),
+                getArticleIDByColorFromModel(cat2SelectModel.getValue(), svgInfoHandlebarColorHex),
+                getArticleIDFromModel(cat2SelectGrip.getValue()),
+                getArticleIDBySizeAndColorFromModel(cat3SelectModel.getValue(), svgInfoWheelsSize, svgInfoWheelsColorHex),
+                getArticleIDFromModel(cat3SelectTyre.getValue()),
+                getArticleIDByColorFromModel(cat4SelectModel.getValue(), svgInfoSaddleColorHex),
+                getArticleIDFromModel(cat5SelectModel.getValue()),
+                getArticleIDFromModel(cat6SelectBell.getValue()),
+                getArticleIDFromModel(cat6SelectStand.getValue()),
+                getArticleIDFromModel(cat6SelectLight.getValue())
+        );
+
+        System.out.println("BuilderController: Article-ID Collection = " + finalArticleIdArray);
+
+        int decrement = 1;
+        Configuration configNew = new Configuration(activeUser);
+        configNew.articles.add(Main.ARTICLES.get(finalArticleIdArray.get(0) - decrement)); // Rahmen
+        configNew.articles.add(Main.ARTICLES.get(finalArticleIdArray.get(1) - decrement)); // Lenker
+        configNew.articles.add(Main.ARTICLES.get(finalArticleIdArray.get(2) - decrement)); // Griffe
+        configNew.articles.add(Main.ARTICLES.get(finalArticleIdArray.get(3) - decrement)); // Räder
+        configNew.articles.add(Main.ARTICLES.get(finalArticleIdArray.get(4) - decrement)); // Reifen
+        configNew.articles.add(Main.ARTICLES.get(finalArticleIdArray.get(5) - decrement)); // Sattel
+        configNew.articles.add(Main.ARTICLES.get(finalArticleIdArray.get(6) - decrement)); // Bremsen
+        configNew.articles.add(Main.ARTICLES.get(finalArticleIdArray.get(7) - decrement)); // Klingel
+        configNew.articles.add(Main.ARTICLES.get(finalArticleIdArray.get(8) - decrement)); // Ständer
+        configNew.articles.add(Main.ARTICLES.get(finalArticleIdArray.get(9) - decrement)); // Licht
+
+        System.out.println("BuilderController: Article-ID config object = " + configNew.articles);
+
+        PostConfigurationTask configNewPostTask1 = new PostConfigurationTask(activeUser, configNew);
+        configNewPostTask1.setOnRunning((successEvent) -> System.out.println("BuilderController: trying to save configuration..."));
+        configNewPostTask1.setOnSucceeded((WorkerStateEvent e1) -> {
+            System.out.println("BuilderController: configurations saved. id=" + configNewPostTask1.getValue());
+            Configuration createdConfiguration = configNewPostTask1.getValue();
+            System.out.println("BuilderController: Created Configuration = " + createdConfiguration.toString());
+        });
+
+        configNewPostTask1.setOnFailed((WorkerStateEvent e11) -> System.out.println("BuilderController: saving failed" + configNewPostTask1.getException()));
+        new Thread(configNewPostTask1).start();
+
         vm.forceView(event, "Dashboard.fxml", "Bicycle Builder - Dashboard", false);
     }
 
