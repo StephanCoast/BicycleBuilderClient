@@ -134,16 +134,16 @@ public class BuilderController {
 
         int decrement = 1;
         Configuration configNew = new Configuration(activeUser);
-        configNew.articles.add(Main.ARTICLES.get(finalArticleIdArray.get(0) - decrement)); // Rahmen
-        configNew.articles.add(Main.ARTICLES.get(finalArticleIdArray.get(1) - decrement)); // Lenker
-        configNew.articles.add(Main.ARTICLES.get(finalArticleIdArray.get(2) - decrement)); // Griffe
-        configNew.articles.add(Main.ARTICLES.get(finalArticleIdArray.get(3) - decrement)); // Räder
-        configNew.articles.add(Main.ARTICLES.get(finalArticleIdArray.get(4) - decrement)); // Reifen
-        configNew.articles.add(Main.ARTICLES.get(finalArticleIdArray.get(5) - decrement)); // Sattel
-        configNew.articles.add(Main.ARTICLES.get(finalArticleIdArray.get(6) - decrement)); // Bremsen
-        configNew.articles.add(Main.ARTICLES.get(finalArticleIdArray.get(7) - decrement)); // Klingel
-        configNew.articles.add(Main.ARTICLES.get(finalArticleIdArray.get(8) - decrement)); // Ständer
-        configNew.articles.add(Main.ARTICLES.get(finalArticleIdArray.get(9) - decrement)); // Licht
+        configNew.articles.add(Main.ARTICLES.get((finalArticleIdArray.get(0)) - decrement)); // Rahmen
+        configNew.articles.add(Main.ARTICLES.get((finalArticleIdArray.get(1)) - decrement)); // Lenker
+        configNew.articles.add(Main.ARTICLES.get((finalArticleIdArray.get(2)) - decrement)); // Griffe
+        configNew.articles.add(Main.ARTICLES.get((finalArticleIdArray.get(3)) - decrement)); // Räder
+        configNew.articles.add(Main.ARTICLES.get((finalArticleIdArray.get(4)) - decrement)); // Reifen
+        configNew.articles.add(Main.ARTICLES.get((finalArticleIdArray.get(5)) - decrement)); // Sattel
+        configNew.articles.add(Main.ARTICLES.get((finalArticleIdArray.get(6)) - decrement)); // Bremsen
+        configNew.articles.add(Main.ARTICLES.get((finalArticleIdArray.get(7)) - decrement)); // Klingel
+        configNew.articles.add(Main.ARTICLES.get((finalArticleIdArray.get(8)) - decrement)); // Ständer
+        configNew.articles.add(Main.ARTICLES.get((finalArticleIdArray.get(9)) - decrement)); // Licht
 
         System.out.println("BuilderController: Article-ID config object = " + configNew.articles);
 
@@ -545,17 +545,6 @@ public class BuilderController {
         cat6SelectStand.setItems(getNameFromTypeCollection("Ständer"));
         cat6SelectLight.setItems(getNameFromTypeCollection("Licht"));
     }
-/*
-    boolean notNull(Object... args) {
-        for (Object arg : args) {
-            if (arg == null) {
-                return false;
-            }
-        }
-        return true;
-    }
-
- */
 
     // AR: get model names from DB with the given type, remove duplicates
     private ObservableList<String> getNameFromTypeCollection(String typeString) {
