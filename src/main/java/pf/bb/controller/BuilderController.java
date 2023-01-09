@@ -47,12 +47,12 @@ public class BuilderController {
     private String svgInfoSaddleModel, svgInfoSaddleColor, svgInfoSaddleProducerName, svgInfoSaddleDesc, svgInfoSaddleColorHex;
     private String svgInfoBrakesModel, svgInfoBrakesProducerName, svgInfoBrakesTypeName, svgInfoBrakeDesc;
     private String svgInfoAttachmentsBell, svgInfoAttachmentsStand, svgInfoAttachmentsLight, svgInfoBellProducerName, svgInfoStandProducerName, svgInfoLightProducerName;
-    private Float cat1FramePrice, cat2HandlebarPrice, cat2GripPrice, cat3WheelPrice, cat3TyrePrice, cat4SaddlePrice, cat5BrakePrice, cat6BellPrice, cat6StandPrice, cat6LightPrice, catDefaultFinalPrice;
+    private float cat1FramePrice, cat2HandlebarPrice, cat2GripPrice, cat3WheelPrice, cat3TyrePrice, cat4SaddlePrice, cat5BrakePrice, cat6BellPrice, cat6StandPrice, cat6LightPrice, catDefaultFinalPrice;
     public Label cat1LabelPrice, cat2LabelPrice, cat3LabelPrice, cat4LabelPrice, cat5LabelPrice, cat6LabelPrice;
     public ObservableFloatArray finalPriceArray;
     public ObservableIntegerArray finalArticleIdArray;
     public Label catLabelDefaultPrice, catLabelFinishPrice;
-    private Boolean catIsOpen;
+    private boolean catIsOpen;
     public ToggleGroup catsTogglegroup, cat1TogglegroupColor, cat1TogglegroupSize, cat2TogglegroupColor, cat3TogglegroupColor, cat3TogglegroupSize, cat4TogglegroupColor;
     public JFXComboBox<String> cat1SelectName, cat2SelectModel, cat2SelectGrip, cat3SelectModel, cat3SelectTyre, cat4SelectModel, cat5SelectModel, cat6SelectBell, cat6SelectStand, cat6SelectLight;
     public BorderPane cat1, cat2, cat3, cat4, cat5, cat6, catDefault, catFinish, bpCats, bpCustomerData;
@@ -198,8 +198,6 @@ public class BuilderController {
     }
 
     // AR: hier wird "einzeln" bestimmt was nach dem Speichern der Kategorie 1-8 passieren soll
-    // todo: gespeicherte Lenker, Räder etc. Einstellung muss in die Konfiguration überführt werden -> Server?
-    // Stephan
     public void onCat1Save(ActionEvent event) throws IOException {
         finalPriceArray.set(0, cat1FramePrice);
         calcFinalPriceFromArray(finalPriceArray);
@@ -248,8 +246,6 @@ public class BuilderController {
     }
 
     // AR: hier wird "allgemein" bestimmt was nach dem Speichern der Kategorie 1-8 passieren soll
-    // todo: gespeicherte Lenker, Räder etc. Einstellung muss in die Konfiguration überführt werden -> Server?
-    // Stephan
     private void onCatSave(ActionEvent e) throws IOException {
         closeAllSideDrawers();
         vm.forceDrawerView(drawerDefault, catDefault);
@@ -461,22 +457,18 @@ public class BuilderController {
         cat6StandPrice = getPriceFromModel(cat6SelectStand.getValue());
         cat6LightPrice = getPriceFromModel(cat6SelectLight.getValue());
 
-        if (notNull(cat1FramePrice, cat2HandlebarPrice, cat2GripPrice, cat3WheelPrice, cat3TyrePrice, cat4SaddlePrice, cat5BrakePrice, cat6BellPrice, cat6StandPrice, cat6LightPrice)) {
-            cat1LabelPrice.setText(strPriceBeautify(cat1FramePrice));
-            cat2LabelPrice.setText(strPriceBeautify(Float.sum(cat2HandlebarPrice, cat2GripPrice)));
-            cat3LabelPrice.setText(strPriceBeautify(Float.sum(cat3WheelPrice, cat3TyrePrice)));
-            cat4LabelPrice.setText(strPriceBeautify(cat4SaddlePrice));
-            cat5LabelPrice.setText(strPriceBeautify(cat5BrakePrice));
-            cat6LabelPrice.setText(strPriceBeautify(Float.sum(Float.sum(cat6BellPrice, cat6StandPrice), cat6LightPrice)));
-        }
+        cat1LabelPrice.setText(strPriceBeautify(cat1FramePrice));
+        cat2LabelPrice.setText(strPriceBeautify(Float.sum(cat2HandlebarPrice, cat2GripPrice)));
+        cat3LabelPrice.setText(strPriceBeautify(Float.sum(cat3WheelPrice, cat3TyrePrice)));
+        cat4LabelPrice.setText(strPriceBeautify(cat4SaddlePrice));
+        cat5LabelPrice.setText(strPriceBeautify(cat5BrakePrice));
+        cat6LabelPrice.setText(strPriceBeautify(Float.sum(Float.sum(cat6BellPrice, cat6StandPrice), cat6LightPrice)));
     }
 
     private void initFinalPriceArray() {
         catDefaultFinalPrice = 0.0f;
         finalPriceArray = FXCollections.observableFloatArray();
-        if (notNull(cat1FramePrice, cat2HandlebarPrice, cat2GripPrice, cat3WheelPrice, cat3TyrePrice, cat4SaddlePrice, cat5BrakePrice, cat6BellPrice, cat6StandPrice, cat6LightPrice)) {
-            finalPriceArray.addAll(cat1FramePrice, cat2HandlebarPrice, cat2GripPrice, cat3WheelPrice, cat3TyrePrice, cat4SaddlePrice, cat5BrakePrice, cat6BellPrice, cat6StandPrice, cat6LightPrice);
-        }
+        finalPriceArray.addAll(cat1FramePrice, cat2HandlebarPrice, cat2GripPrice, cat3WheelPrice, cat3TyrePrice, cat4SaddlePrice, cat5BrakePrice, cat6BellPrice, cat6StandPrice, cat6LightPrice);
         calcFinalPriceFromArray(finalPriceArray);
         catLabelDefaultPrice.setText(strPriceBeautify(catDefaultFinalPrice));
         catLabelFinishPrice.setText(strPriceBeautify(catDefaultFinalPrice));
@@ -494,7 +486,7 @@ public class BuilderController {
         }
     }
 
-    private String strPriceBeautify(Float value) {
+    private String strPriceBeautify(float value) {
         return String.valueOf(String.format("%.02f", value));
     }
 
@@ -553,7 +545,7 @@ public class BuilderController {
         cat6SelectStand.setItems(getNameFromTypeCollection("Ständer"));
         cat6SelectLight.setItems(getNameFromTypeCollection("Licht"));
     }
-
+/*
     boolean notNull(Object... args) {
         for (Object arg : args) {
             if (arg == null) {
@@ -562,6 +554,8 @@ public class BuilderController {
         }
         return true;
     }
+
+ */
 
     // AR: get model names from DB with the given type, remove duplicates
     private ObservableList<String> getNameFromTypeCollection(String typeString) {
@@ -606,8 +600,8 @@ public class BuilderController {
         return dText;
     }
 
-    private Float getPriceFromModel(String modelString) {
-        Float price = null;
+    private float getPriceFromModel(String modelString) {
+        float price = 0.0f;
         for (Article i : Main.ARTICLES) {
             if (i.name.equals(modelString)) {
                 price = i.price;
@@ -616,8 +610,8 @@ public class BuilderController {
         return price;
     }
 
-    private Float getPriceBySizeFromModel(String modelString, String size) {
-        Float price = null;
+    private float getPriceBySizeFromModel(String modelString, String size) {
+        float price = 0.0f;
         for (Article i : Main.ARTICLES) {
             if (i.name.equals(modelString)) {
                 if (i.characteristic.equals(size)) {
@@ -680,10 +674,8 @@ public class BuilderController {
                         svgManager.setFrame(SVGManager.FRAME1);
                         svgManager.setSVGSet();
                         scaleIn(SVGManager.svgGroup.getChildren().get(0), 500);
-                        if (cat1FramePrice != null) {
-                            cat1FramePrice = getPriceBySizeFromModel(cat1SelectName.getValue(), svgInfoFrameSize);
-                            cat1LabelPrice.setText(strPriceBeautify(cat1FramePrice));
-                        }
+                        cat1FramePrice = getPriceBySizeFromModel(cat1SelectName.getValue(), svgInfoFrameSize);
+                        cat1LabelPrice.setText(strPriceBeautify(cat1FramePrice));
                         break;
                     case 1:
                         svgInfoFrameProducerName = getProducerNameFromModel(cat1SelectName.getValue());
@@ -691,10 +683,8 @@ public class BuilderController {
                         svgManager.setFrame(SVGManager.FRAME2);
                         svgManager.setSVGSet();
                         scaleIn(SVGManager.svgGroup.getChildren().get(0), 500);
-                        if (cat1FramePrice != null) {
-                            cat1FramePrice = getPriceBySizeFromModel(cat1SelectName.getValue(), svgInfoFrameSize);
-                            cat1LabelPrice.setText(strPriceBeautify(cat1FramePrice));
-                        }
+                        cat1FramePrice = getPriceBySizeFromModel(cat1SelectName.getValue(), svgInfoFrameSize);
+                        cat1LabelPrice.setText(strPriceBeautify(cat1FramePrice));
                         break;
                     case 2:
                         svgInfoFrameProducerName = getProducerNameFromModel(cat1SelectName.getValue());
@@ -702,10 +692,8 @@ public class BuilderController {
                         svgManager.setFrame(SVGManager.FRAME3);
                         svgManager.setSVGSet();
                         scaleIn(SVGManager.svgGroup.getChildren().get(0), 500);
-                        if (cat1FramePrice != null) {
-                            cat1FramePrice = getPriceBySizeFromModel(cat1SelectName.getValue(), svgInfoFrameSize);
-                            cat1LabelPrice.setText(strPriceBeautify(cat1FramePrice));
-                        }
+                        cat1FramePrice = getPriceBySizeFromModel(cat1SelectName.getValue(), svgInfoFrameSize);
+                        cat1LabelPrice.setText(strPriceBeautify(cat1FramePrice));
                         break;
                 }
                 spaneSVG.getChildren().clear();
@@ -754,26 +742,20 @@ public class BuilderController {
                         case "cat1Size1":
                             svgInfoFrameSize = "S";
                             renderSVGtextarea();
-                            if (cat1FramePrice != null) {
-                                cat1FramePrice = getPriceBySizeFromModel(cat1SelectName.getValue(), svgInfoFrameSize);
-                                cat1LabelPrice.setText(strPriceBeautify(cat1FramePrice));
-                            }
+                            cat1FramePrice = getPriceBySizeFromModel(cat1SelectName.getValue(), svgInfoFrameSize);
+                            cat1LabelPrice.setText(strPriceBeautify(cat1FramePrice));
                             break;
                         case "cat1Size2":
                             svgInfoFrameSize = "M";
                             renderSVGtextarea();
-                            if (cat1FramePrice != null) {
-                                cat1FramePrice = getPriceBySizeFromModel(cat1SelectName.getValue(), svgInfoFrameSize);
-                                cat1LabelPrice.setText(strPriceBeautify(cat1FramePrice));
-                            }
+                            cat1FramePrice = getPriceBySizeFromModel(cat1SelectName.getValue(), svgInfoFrameSize);
+                            cat1LabelPrice.setText(strPriceBeautify(cat1FramePrice));
                             break;
                         case "cat1Size3":
                             svgInfoFrameSize = "L";
                             renderSVGtextarea();
-                            if (cat1FramePrice != null) {
-                                cat1FramePrice = getPriceBySizeFromModel(cat1SelectName.getValue(), svgInfoFrameSize);
-                                cat1LabelPrice.setText(strPriceBeautify(cat1FramePrice));
-                            }
+                            cat1FramePrice = getPriceBySizeFromModel(cat1SelectName.getValue(), svgInfoFrameSize);
+                            cat1LabelPrice.setText(strPriceBeautify(cat1FramePrice));
                             break;
                     }
                 }
@@ -795,11 +777,9 @@ public class BuilderController {
                         svgManager.setHandlebar(SVGManager.HANDLEBAR1);
                         svgManager.setSVGSet();
                         scaleIn(SVGManager.svgGroup.getChildren().get(3), 500);
-                        if (cat2HandlebarPrice != null || cat2GripPrice != null) {
-                            cat2HandlebarPrice = getPriceFromModel(cat2SelectModel.getValue());
-                            cat2GripPrice = getPriceFromModel(cat2SelectGrip.getValue());
-                            cat2LabelPrice.setText(strPriceBeautify(Float.sum(cat2HandlebarPrice, cat2GripPrice)));
-                        }
+                        cat2HandlebarPrice = getPriceFromModel(cat2SelectModel.getValue());
+                        cat2GripPrice = getPriceFromModel(cat2SelectGrip.getValue());
+                        cat2LabelPrice.setText(strPriceBeautify(Float.sum(cat2HandlebarPrice, cat2GripPrice)));
                         break;
                     case 1:
                         svgInfoHandlebarProducerName = getProducerNameFromModel(cat2SelectModel.getValue());
@@ -807,11 +787,9 @@ public class BuilderController {
                         svgManager.setHandlebar(SVGManager.HANDLEBAR2);
                         svgManager.setSVGSet();
                         scaleIn(SVGManager.svgGroup.getChildren().get(3), 500);
-                        if (cat2HandlebarPrice != null || cat2GripPrice != null) {
-                            cat2HandlebarPrice = getPriceFromModel(cat2SelectModel.getValue());
-                            cat2GripPrice = getPriceFromModel(cat2SelectGrip.getValue());
-                            cat2LabelPrice.setText(strPriceBeautify(Float.sum(cat2HandlebarPrice, cat2GripPrice)));
-                        }
+                        cat2HandlebarPrice = getPriceFromModel(cat2SelectModel.getValue());
+                        cat2GripPrice = getPriceFromModel(cat2SelectGrip.getValue());
+                        cat2LabelPrice.setText(strPriceBeautify(Float.sum(cat2HandlebarPrice, cat2GripPrice)));
                         break;
                     case 2:
                         svgInfoHandlebarProducerName = getProducerNameFromModel(cat2SelectModel.getValue());
@@ -819,11 +797,9 @@ public class BuilderController {
                         svgManager.setHandlebar(SVGManager.HANDLEBAR3);
                         svgManager.setSVGSet();
                         scaleIn(SVGManager.svgGroup.getChildren().get(3), 500);
-                        if (cat2HandlebarPrice != null || cat2GripPrice != null) {
-                            cat2HandlebarPrice = getPriceFromModel(cat2SelectModel.getValue());
-                            cat2GripPrice = getPriceFromModel(cat2SelectGrip.getValue());
-                            cat2LabelPrice.setText(strPriceBeautify(Float.sum(cat2HandlebarPrice, cat2GripPrice)));
-                        }
+                        cat2HandlebarPrice = getPriceFromModel(cat2SelectModel.getValue());
+                        cat2GripPrice = getPriceFromModel(cat2SelectGrip.getValue());
+                        cat2LabelPrice.setText(strPriceBeautify(Float.sum(cat2HandlebarPrice, cat2GripPrice)));
                         break;
                 }
                 spaneSVG.getChildren().clear();
@@ -837,11 +813,9 @@ public class BuilderController {
                 svgInfoHandlebarGrip = newValue;
                 svgInfoHandlebarGripProducerName = getProducerNameFromModel(cat2SelectGrip.getValue());
                 renderSVGtextarea();
-                if (cat2HandlebarPrice != null || cat2GripPrice != null) {
-                    cat2HandlebarPrice = getPriceFromModel(cat2SelectModel.getValue());
-                    cat2GripPrice = getPriceFromModel(cat2SelectGrip.getValue());
-                    cat2LabelPrice.setText(strPriceBeautify(Float.sum(cat2HandlebarPrice, cat2GripPrice)));
-                }
+                cat2HandlebarPrice = getPriceFromModel(cat2SelectModel.getValue());
+                cat2GripPrice = getPriceFromModel(cat2SelectGrip.getValue());
+                cat2LabelPrice.setText(strPriceBeautify(Float.sum(cat2HandlebarPrice, cat2GripPrice)));
             }
         });
 
@@ -892,11 +866,9 @@ public class BuilderController {
                         svgManager.setTire(SVGManager.TIRE1);
                         svgManager.setSVGSet();
                         fadeIn(SVGManager.svgGroup.getChildren().get(2), 1000);
-                        if (cat3WheelPrice != null || cat3TyrePrice != null) {
-                            cat3WheelPrice = getPriceBySizeFromModel(cat3SelectModel.getValue(), svgInfoWheelsSize);
-                            cat3TyrePrice = getPriceFromModel(cat3SelectTyre.getValue());
-                            cat3LabelPrice.setText(strPriceBeautify(Float.sum(cat3WheelPrice, cat3TyrePrice)));
-                        }
+                        cat3WheelPrice = getPriceBySizeFromModel(cat3SelectModel.getValue(), svgInfoWheelsSize);
+                        cat3TyrePrice = getPriceFromModel(cat3SelectTyre.getValue());
+                        cat3LabelPrice.setText(strPriceBeautify(Float.sum(cat3WheelPrice, cat3TyrePrice)));
                         break;
                     case 1:
                         svgInfoWheelsProducerName = getProducerNameFromModel(cat3SelectModel.getValue());
@@ -904,11 +876,9 @@ public class BuilderController {
                         svgManager.setTire(SVGManager.TIRE2);
                         svgManager.setSVGSet();
                         fadeIn(SVGManager.svgGroup.getChildren().get(2), 1000);
-                        if (cat3WheelPrice != null || cat3TyrePrice != null) {
-                            cat3WheelPrice = getPriceBySizeFromModel(cat3SelectModel.getValue(), svgInfoWheelsSize);
-                            cat3TyrePrice = getPriceFromModel(cat3SelectTyre.getValue());
-                            cat3LabelPrice.setText(strPriceBeautify(Float.sum(cat3WheelPrice, cat3TyrePrice)));
-                        }
+                        cat3WheelPrice = getPriceBySizeFromModel(cat3SelectModel.getValue(), svgInfoWheelsSize);
+                        cat3TyrePrice = getPriceFromModel(cat3SelectTyre.getValue());
+                        cat3LabelPrice.setText(strPriceBeautify(Float.sum(cat3WheelPrice, cat3TyrePrice)));
                         break;
                     case 2:
                         svgInfoWheelsProducerName = getProducerNameFromModel(cat3SelectModel.getValue());
@@ -916,11 +886,9 @@ public class BuilderController {
                         svgManager.setTire(SVGManager.TIRE3);
                         svgManager.setSVGSet();
                         fadeIn(SVGManager.svgGroup.getChildren().get(2), 1000);
-                        if (cat3WheelPrice != null || cat3TyrePrice != null) {
-                            cat3WheelPrice = getPriceBySizeFromModel(cat3SelectModel.getValue(), svgInfoWheelsSize);
-                            cat3TyrePrice = getPriceFromModel(cat3SelectTyre.getValue());
-                            cat3LabelPrice.setText(strPriceBeautify(Float.sum(cat3WheelPrice, cat3TyrePrice)));
-                        }
+                        cat3WheelPrice = getPriceBySizeFromModel(cat3SelectModel.getValue(), svgInfoWheelsSize);
+                        cat3TyrePrice = getPriceFromModel(cat3SelectTyre.getValue());
+                        cat3LabelPrice.setText(strPriceBeautify(Float.sum(cat3WheelPrice, cat3TyrePrice)));
                         break;
                 }
                 spaneSVG.getChildren().clear();
@@ -934,11 +902,9 @@ public class BuilderController {
                 svgInfoWheelsTyre = newValue;
                 svgInfoTyresProducerName = getProducerNameFromModel(cat3SelectTyre.getValue());
                 renderSVGtextarea();
-                if (cat3WheelPrice != null || cat3TyrePrice != null) {
-                    cat3WheelPrice = getPriceBySizeFromModel(cat3SelectModel.getValue(), svgInfoWheelsSize);
-                    cat3TyrePrice = getPriceFromModel(cat3SelectTyre.getValue());
-                    cat3LabelPrice.setText(strPriceBeautify(Float.sum(cat3WheelPrice, cat3TyrePrice)));
-                }
+                cat3WheelPrice = getPriceBySizeFromModel(cat3SelectModel.getValue(), svgInfoWheelsSize);
+                cat3TyrePrice = getPriceFromModel(cat3SelectTyre.getValue());
+                cat3LabelPrice.setText(strPriceBeautify(Float.sum(cat3WheelPrice, cat3TyrePrice)));
             }
         });
 
@@ -983,29 +949,23 @@ public class BuilderController {
                         case "cat3Size1":
                             svgInfoWheelsSize = "S";
                             renderSVGtextarea();
-                            if (cat3WheelPrice != null || cat3TyrePrice != null) {
-                                cat3WheelPrice = getPriceBySizeFromModel(cat3SelectModel.getValue(), svgInfoWheelsSize);
-                                cat3TyrePrice = getPriceFromModel(cat3SelectTyre.getValue());
-                                cat3LabelPrice.setText(strPriceBeautify(Float.sum(cat3WheelPrice, cat3TyrePrice)));
-                            }
+                            cat3WheelPrice = getPriceBySizeFromModel(cat3SelectModel.getValue(), svgInfoWheelsSize);
+                            cat3TyrePrice = getPriceFromModel(cat3SelectTyre.getValue());
+                            cat3LabelPrice.setText(strPriceBeautify(Float.sum(cat3WheelPrice, cat3TyrePrice)));
                             break;
                         case "cat3Size2":
                             svgInfoWheelsSize = "M";
                             renderSVGtextarea();
-                            if (cat3WheelPrice != null || cat3TyrePrice != null) {
-                                cat3WheelPrice = getPriceBySizeFromModel(cat3SelectModel.getValue(), svgInfoWheelsSize);
-                                cat3TyrePrice = getPriceFromModel(cat3SelectTyre.getValue());
-                                cat3LabelPrice.setText(strPriceBeautify(Float.sum(cat3WheelPrice, cat3TyrePrice)));
-                            }
+                            cat3WheelPrice = getPriceBySizeFromModel(cat3SelectModel.getValue(), svgInfoWheelsSize);
+                            cat3TyrePrice = getPriceFromModel(cat3SelectTyre.getValue());
+                            cat3LabelPrice.setText(strPriceBeautify(Float.sum(cat3WheelPrice, cat3TyrePrice)));
                             break;
                         case "cat3Size3":
                             svgInfoWheelsSize = "L";
                             renderSVGtextarea();
-                            if (cat3WheelPrice != null || cat3TyrePrice != null) {
-                                cat3WheelPrice = getPriceBySizeFromModel(cat3SelectModel.getValue(), svgInfoWheelsSize);
-                                cat3TyrePrice = getPriceFromModel(cat3SelectTyre.getValue());
-                                cat3LabelPrice.setText(strPriceBeautify(Float.sum(cat3WheelPrice, cat3TyrePrice)));
-                            }
+                            cat3WheelPrice = getPriceBySizeFromModel(cat3SelectModel.getValue(), svgInfoWheelsSize);
+                            cat3TyrePrice = getPriceFromModel(cat3SelectTyre.getValue());
+                            cat3LabelPrice.setText(strPriceBeautify(Float.sum(cat3WheelPrice, cat3TyrePrice)));
                             break;
                     }
                 }
@@ -1027,10 +987,8 @@ public class BuilderController {
                         svgManager.setSeat(SVGManager.SEAT1);
                         svgManager.setSVGSet();
                         scaleIn(SVGManager.svgGroup.getChildren().get(1), 500);
-                        if (cat4SaddlePrice != null) {
-                            cat4SaddlePrice = getPriceFromModel(cat4SelectModel.getValue());
-                            cat4LabelPrice.setText(strPriceBeautify(cat4SaddlePrice));
-                        }
+                        cat4SaddlePrice = getPriceFromModel(cat4SelectModel.getValue());
+                        cat4LabelPrice.setText(strPriceBeautify(cat4SaddlePrice));
                         break;
                     case 1:
                         svgInfoSaddleProducerName = getProducerNameFromModel(cat4SelectModel.getValue());
@@ -1038,10 +996,8 @@ public class BuilderController {
                         svgManager.setSeat(SVGManager.SEAT2);
                         svgManager.setSVGSet();
                         scaleIn(SVGManager.svgGroup.getChildren().get(1), 500);
-                        if (cat4SaddlePrice != null) {
-                            cat4SaddlePrice = getPriceFromModel(cat4SelectModel.getValue());
-                            cat4LabelPrice.setText(strPriceBeautify(cat4SaddlePrice));
-                        }
+                        cat4SaddlePrice = getPriceFromModel(cat4SelectModel.getValue());
+                        cat4LabelPrice.setText(strPriceBeautify(cat4SaddlePrice));
                         break;
                     case 2:
                         svgInfoSaddleProducerName = getProducerNameFromModel(cat4SelectModel.getValue());
@@ -1049,10 +1005,8 @@ public class BuilderController {
                         svgManager.setSeat(SVGManager.SEAT3);
                         svgManager.setSVGSet();
                         scaleIn(SVGManager.svgGroup.getChildren().get(1), 500);
-                        if (cat4SaddlePrice != null) {
-                            cat4SaddlePrice = getPriceFromModel(cat4SelectModel.getValue());
-                            cat4LabelPrice.setText(strPriceBeautify(cat4SaddlePrice));
-                        }
+                        cat4SaddlePrice = getPriceFromModel(cat4SelectModel.getValue());
+                        cat4LabelPrice.setText(strPriceBeautify(cat4SaddlePrice));
                         break;
                 }
                 spaneSVG.getChildren().clear();
@@ -1101,10 +1055,8 @@ public class BuilderController {
                 svgInfoBrakesTypeName = getBrakesTypeNameFromModel(cat5SelectModel.getValue());
                 svgInfoBrakeDesc = getDescriptionTextFromModel(cat5SelectModel.getValue());
                 renderSVGtextarea();
-                if (cat5BrakePrice != null) {
-                    cat5BrakePrice = getPriceFromModel(cat5SelectModel.getValue());
-                    cat5LabelPrice.setText(strPriceBeautify(cat5BrakePrice));
-                }
+                cat5BrakePrice = getPriceFromModel(cat5SelectModel.getValue());
+                cat5LabelPrice.setText(strPriceBeautify(cat5BrakePrice));
             }
         });
 
@@ -1115,12 +1067,10 @@ public class BuilderController {
                 svgInfoAttachmentsBell = newValue;
                 svgInfoBellProducerName = getProducerNameFromModel(cat6SelectBell.getValue());
                 renderSVGtextarea();
-                if (cat6BellPrice != null || cat6StandPrice != null || cat6LightPrice != null) {
-                    cat6BellPrice = getPriceFromModel(cat6SelectBell.getValue());
-                    cat6StandPrice = getPriceFromModel(cat6SelectStand.getValue());
-                    cat6LightPrice = getPriceFromModel(cat6SelectLight.getValue());
-                    cat6LabelPrice.setText(strPriceBeautify(Float.sum(Float.sum(cat6BellPrice, cat6StandPrice), cat6LightPrice)));
-                }
+                cat6BellPrice = getPriceFromModel(cat6SelectBell.getValue());
+                cat6StandPrice = getPriceFromModel(cat6SelectStand.getValue());
+                cat6LightPrice = getPriceFromModel(cat6SelectLight.getValue());
+                cat6LabelPrice.setText(strPriceBeautify(Float.sum(Float.sum(cat6BellPrice, cat6StandPrice), cat6LightPrice)));
             }
         });
 
@@ -1130,12 +1080,10 @@ public class BuilderController {
                 svgInfoAttachmentsStand = newValue;
                 svgInfoStandProducerName = getProducerNameFromModel(cat6SelectStand.getValue());
                 renderSVGtextarea();
-                if (cat6BellPrice != null || cat6StandPrice != null || cat6LightPrice != null) {
-                    cat6BellPrice = getPriceFromModel(cat6SelectBell.getValue());
-                    cat6StandPrice = getPriceFromModel(cat6SelectStand.getValue());
-                    cat6LightPrice = getPriceFromModel(cat6SelectLight.getValue());
-                    cat6LabelPrice.setText(strPriceBeautify(Float.sum(Float.sum(cat6BellPrice, cat6StandPrice), cat6LightPrice)));
-                }
+                cat6BellPrice = getPriceFromModel(cat6SelectBell.getValue());
+                cat6StandPrice = getPriceFromModel(cat6SelectStand.getValue());
+                cat6LightPrice = getPriceFromModel(cat6SelectLight.getValue());
+                cat6LabelPrice.setText(strPriceBeautify(Float.sum(Float.sum(cat6BellPrice, cat6StandPrice), cat6LightPrice)));
             }
         });
 
@@ -1145,12 +1093,10 @@ public class BuilderController {
                 svgInfoAttachmentsLight = newValue;
                 svgInfoLightProducerName = getProducerNameFromModel(cat6SelectLight.getValue());
                 renderSVGtextarea();
-                if (cat6BellPrice != null || cat6StandPrice != null || cat6LightPrice != null) {
-                    cat6BellPrice = getPriceFromModel(cat6SelectBell.getValue());
-                    cat6StandPrice = getPriceFromModel(cat6SelectStand.getValue());
-                    cat6LightPrice = getPriceFromModel(cat6SelectLight.getValue());
-                    cat6LabelPrice.setText(strPriceBeautify(Float.sum(Float.sum(cat6BellPrice, cat6StandPrice), cat6LightPrice)));
-                }
+                cat6BellPrice = getPriceFromModel(cat6SelectBell.getValue());
+                cat6StandPrice = getPriceFromModel(cat6SelectStand.getValue());
+                cat6LightPrice = getPriceFromModel(cat6SelectLight.getValue());
+                cat6LabelPrice.setText(strPriceBeautify(Float.sum(Float.sum(cat6BellPrice, cat6StandPrice), cat6LightPrice)));
             }
         });
 

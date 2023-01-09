@@ -21,10 +21,10 @@ public class ViewManager {
     private static final ViewManager instance = new ViewManager();
     private Stage stage;
     private Scene scene;
-    private final Double defaultWidth = 1280.00;
-    private final Double defaultHeight = 800.00;
-    private Double oldWidth;
-    private Double oldHeight;
+    private final double defaultWidth = 1280.00;
+    private final double defaultHeight = 800.00;
+    private double oldWidth;
+    private double oldHeight;
     private static final String OS = System.getProperty("os.name");
 
     public ViewManager() {
@@ -34,7 +34,7 @@ public class ViewManager {
         return instance;
     }
 
-    public void forceView(ActionEvent e, String fileName, String title, Boolean comingFromLogin) throws IOException {
+    public void forceView(ActionEvent e, String fileName, String title, boolean comingFromLogin) throws IOException {
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/pf/bb/fxml/" + fileName)));
         stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
         scene = new Scene(root);
@@ -87,7 +87,7 @@ public class ViewManager {
         stage.setY((sb.getHeight() - stage.getHeight()) / 2);
     }
 
-    private void calcWindowSize(Stage stage, Double oldWidth, Double oldHeight) {
+    private void calcWindowSize(Stage stage, double oldWidth, double oldHeight) {
         if (oldWidth < defaultWidth || oldWidth > defaultWidth || oldHeight < defaultHeight || oldHeight > defaultHeight) {
             stage.setWidth(oldWidth);
             stage.setHeight(oldHeight);
