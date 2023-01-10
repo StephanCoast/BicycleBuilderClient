@@ -23,6 +23,7 @@
     /*neu karre*/-fx-padding: 0px 16px 0px 16px;
     -fx-background-color: #ff8f00 !important; /*#2196f3;*/ /* material palette - blue 500 primary */
     -fx-background-radius: 50px;
+
 }
 
 .btn-standard-comp:hover,
@@ -31,6 +32,7 @@
     -fx-scale-x: 1.05;
     -fx-scale-y: 1.05;
     -fx-scale-z: 1.05;
+    -fx-cursor: hand;
 }
 /***
 .btn-large-comp {
@@ -120,7 +122,7 @@
 }
 
 .table-view:row-selection .table-row-cell:filled:hover {
-    -fx-background-color: rgba(123, 124, 255, 0.3);
+    -fx-background-color: rgba(48, 79, 255, 0.2);
 }
 .table-view:row-selection .table-row-cell:filled:hover .text{
     -fx-fill: black;
@@ -179,6 +181,7 @@
     -fx-scale-x: 1.1;
     -fx-scale-y: 1.1;
     -fx-scale-z: 1.1;
+    /*neu karre*/-fx-cursor: hand;
 }
 
 /*
@@ -198,17 +201,18 @@
 
 .bottombar-icon-close {
     -fx-padding: 0 0 0 20px !important;
+    /*neu karre*/-fx-cursor: hand;
 }
 
 /* Input-Felder Benutzer und PW*/
 .jfx-text-field {
-    -jfx-focus-color: #ff8f00;
+    -jfx-focus-color: #304ffe;
     -jfx-unfocus-color: black;
     -fx-text-fill: black;
     /*    -jfx-focus-text-fill: blue;*/
     -fx-pref-width: 200px;/***280px;***/
     -fx-pref-height: 48px;
-    /*neu karre*/-fx-padding: 0px 16px 15px 12px;
+    /*neu karre*/-fx-padding: 26px 16px 2px 12px;
 }
 /* Error-Message des Validators */
 .error-label {
@@ -239,7 +243,7 @@
 
 .footer-borderpane {
     -fx-background-color: white;
-    -fx-border-color : #304ffe !important;
+    -fx-border-color : #7a7cff !important;
     -fx-border-width : 1 0 0 0 !important;
 }
 .bpAdmin, .bpProfile {
@@ -328,6 +332,7 @@
     -fx-scale-x: 1.05;
     -fx-scale-y: 1.05;
     -fx-scale-z: 1.05;
+    -fx-cursor: hand;
 }
 
 /* Trennlinie links im Footer wenn Admin- bzw Benutzerprofil aufgerufen wird */
@@ -352,6 +357,7 @@
     -fx-font-size: 10px;
     -fx-padding: 0 0 0 5px;
 }
+
 
 
 

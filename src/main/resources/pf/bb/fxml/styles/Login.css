@@ -25,13 +25,13 @@
 
 /** Input-Felder Benutzer und PW **/
 .jfx-text-field {
-    -jfx-focus-color: #ff8f00;
+    -jfx-focus-color: #304ffe;
     -jfx-unfocus-color: black;
     -fx-text-fill: black;
-    /*    -jfx-focus-text-fill: blue;*/
+    /***-jfx-focus-text-fill: #304ffe;***/
     -fx-pref-width: 280px;
     -fx-pref-height: 48px;
-    -fx-padding: 0px 16px 15px 12px;
+    -fx-padding: 26px 16px 2px 12px;
 }
 
 /* Button Design des Login-Fensters */
@@ -45,6 +45,7 @@
     /*neu karre*/-fx-max-height: 36px !important;
     /*neu karre*/-fx-padding: 0px 16px 0px 16px;
     /*neu karre*/-fx-font-size: 14px;
+    /*neu karre*/-fx-cursor: hand !important;
 }
 
 /* Hovereffekte für die Buttons des Login-Fensters */
