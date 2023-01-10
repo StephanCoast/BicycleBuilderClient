@@ -4,6 +4,10 @@
 .apane-builder {
     -fx-font-size: 14px !important;
 }
+
+.spaneSVGleft {
+    -fx-background-color: #e6e6e6 !important;
+}
 /** Trennlinie zwischen Header und Hauptbereich **/
 .header-borderpane {
     -fx-background-color: #ffffff;
@@ -12,26 +16,36 @@
 }
 /* Trennlinie der Sidebar */
 .container-sidebar {
-    -fx-border-color : #304ffe !important;
-    -fx-border-width : 1 0 0 1 !important;
+    -fx-border-color: #7b7cff !important;
+    -fx-border-width: 1 0 0 0 !important;
 }
 .bpaneSVGright {
-    -fx-border-color : #304ffe !important;
-    -fx-border-width : 0 0 0 1 !important;
+    -fx-border-color: #7b7cff !important;
+    -fx-border-width: 0 0 0 1 !important;
 }
 .svg-container-techinfo-header {
-    -fx-border-color : #304ffe !important;
-    -fx-border-width : 0 0 1 0 !important;
+    -fx-border-color: #7b7cff !important;
+    -fx-border-width: 0 1 1 0 !important;
+    -fx-background-color: #7b7cff !important;
+}
+.title-techinfo {
+    -fx-text-fill: white !important;
+    -fx-font-weight: bold !important;
+}
+.svg-container-techinfo-textarea {
+    -fx-border-color : #7b7cff !important;
+    -fx-border-width : 0 1 0 0 !important;
+
 }
 .container-main-center {
-    -fx-border-color : #304ffe !important;
+    -fx-border-color : #7b7cff !important;
     -fx-border-width : 1 0 0 0 !important;
 }
 /* Hintergrund im Footer & Trennlinie */
 .container-main-bottom {
     /**-fx-background-color: linear-gradient(from 25% 25% to 100% 100%, rgba(48, 79, 254, 0.1), rgba(255, 143, 0, 0.3)) !important;
-    **/-fx-border-color : #304ffe !important;
-    -fx-border-width : 1 0 0 0 !important;
+    **/-fx-border-color : #7b7cff !important;
+    -fx-border-width : 1 1 0 0 !important;
 }
 
 .header-icon-bicycle {
@@ -39,9 +53,20 @@
     -fx-fill: #000000/***#304fff***/ !important;
 }
 
+/* Anzeige abgeschlossener Kundendaten in Sidebar */
+.catSidebarFinalCellLeft {
+    -fx-font-weight: bold !important;
+}
+.FinalCellLeftBlue {
+    -fx-text-fill: #304fff;
+}
+.catSidebarFinalCellRight {
+    -fx-border-width: 0 0 0 1 !important;
+    -fx-background-color: #f2f2f2;
+}
 /** Titel für Unteransichten
 .subpane-title {
-    -fx-text-fill: #7a7cff !important;
+    -fx-text-fill: #304fff !important;
 } **/
 /* Button Design des Login-Fensters */
 .btn-standard-comp {
@@ -52,6 +77,13 @@
     /*neu karre*/-fx-padding: 0px 16px 0px 16px;
     -fx-background-color: #ff8f00 !important;/*#2196f3;*/ /* material palette - blue 500 primary */
     -fx-background-radius: 50px;
+    /*neu karre*/-fx-cursor: hand;
+}
+.aufpreis {
+    fx-label-padding: 0 0 30px 0 !important;
+    fx-padding: 0 0 30px 0 !important;
+    fx-label-margin: 0 0 30px 0 !important;
+    fx-margin: 0 0 30px 0 !important;
 }
 
 .btn-standard-comp:hover,
@@ -75,23 +107,138 @@
 
 .sidebar-icon-close {
     -fx-fill: #ff8f00 !important;
-    -fx-padding: 0 0 0 20px !important;
+    -fx-padding: 0 0 0 30px !important;
+
 }
 .sidebar-icon-close-kunden {
     -fx-fill: #ff8f00 !important;
     -fx-padding: 0 0 0 30px !important;
 }
+.sidebar-icon-close-kunden {
+    -fx-cursor: hand;
+}
+.combo-box {
+    /*    -jfx-focus-text-fill: blue;*/
+    /****-fx-pref-width: 200px;****//***280px;***/
+    -fx-pref-width: 280px !important;
+    -fx-pref-height: 48px;
+    /*neu karre*/-fx-padding: 26px 16px 2px 12px;
+    -jfx-focus-color: #304ffe;
+    -jfx-unfocus-color: black;
+}
+
+.combo-box .list-cell {
+    -fx-text-fill: black;
+    -fx-font-weight: bold;
+}
+.combo-box:selected {
+    -jfx-focus-color: #304fff/***#ff8f00***/;
+    -jfx-unfocus-color: black;
+    /*    -jfx-focus-text-fill: blue;*/
+    /****-fx-pref-width: 200px;****//***280px;***/
+    -fx-pref-width: 280px !important;
+    -fx-pref-height: 48px !important;
+}
+
+.combo-box:hover {
+    -fx-cursor: hand;
+}
+
+.combo-box-popup .list-view .list-cell:filled:selected {
+    -fx-background-color: #304ffe;
+    -fx-text-fill: white !important;
+}
+.combo-box-popup .list-view .list-cell:filled:hover {
+    -fx-background-color: #304ffe;
+    -fx-text-fill: white !important;
+}
+.btn-toggle-cat1Color1,
+.btn-toggle-cat1Color2,
+.btn-toggle-cat1Color3,
+.btn-toggle-cat2Color1,
+.btn-toggle-cat2Color2,
+.btn-toggle-cat2Color3,
+.btn-toggle-cat3Color1,
+.btn-toggle-cat3Color2,
+.btn-toggle-cat3Color3,
+.btn-toggle-cat4Color1,
+.btn-toggle-cat4Color2,
+.btn-toggle-cat4Color3 {
+    -fx-background-radius: 50% !important;
+    -fx-background-insets: 3px !important;
+    -fx-border-color : black !important;
+    -fx-border-radius: 50% !important;
+    -fx-border-width : 1 1 1 1 !important;
+}
+
+.btn-toggle-cat1Color1:selected,
+.btn-toggle-cat1Color2:selected,
+.btn-toggle-cat1Color3:selected,
+.btn-toggle-cat2Color1:selected,
+.btn-toggle-cat2Color2:selected,
+.btn-toggle-cat2Color3:selected,
+.btn-toggle-cat3Color1:selected,
+.btn-toggle-cat3Color2:selected,
+.btn-toggle-cat3Color3:selected,
+.btn-toggle-cat4Color1:selected,
+.btn-toggle-cat4Color2:selected,
+.btn-toggle-cat4Color3:selected {
+    -fx-background-radius: 50% !important;
+    -fx-background-insets: 3px !important;
+    -fx-border-color : #304ffe !important;
+    -fx-border-radius: 50% !important;
+    -fx-border-width : 3 3 3 3 !important;
+    /**auskommentiert durch karre -fx-effect: dropshadow(gaussian, rgba(118, 255, 3, .5), 5, 0.4, 0.0, 0.0);**/ /* material palette - light green 400 A primary */
+}
+
+.btn-toggle-cat1Color1:hover,
+.btn-toggle-cat1Color2:hover,
+.btn-toggle-cat1Color3:hover,
+.btn-toggle-cat2Color1:hover,
+.btn-toggle-cat2Color2:hover,
+.btn-toggle-cat2Color3:hover,
+.btn-toggle-cat3Color1:hover,
+.btn-toggle-cat3Color2:hover,
+.btn-toggle-cat3Color3:hover,
+.btn-toggle-cat4Color1:hover,
+.btn-toggle-cat4Color2:hover,
+.btn-toggle-cat4Color3:hover {
+    -fx-background-radius: 50% !important;
+    -fx-background-insets: 3px !important;
+    -fx-border-color : #304ffe !important;
+    -fx-border-radius: 50% !important;
+    -fx-border-width : 3 3 3 3 !important;
+    -fx-cursor: hand;
+}
+.btn-toggle-cats-radioText {
+    -fx-background-radius: 2px !important;
+    -fx-background-insets: 3px !important;
+    -fx-border-color : black;
+    -fx-border-radius: 2px !important;
+    -fx-border-width : 1 1 1 1;
+    -jfx-toggle-color: transparent;
+    -jfx-untoggle-color: transparent;
+}
+
+.btn-toggle-cats-radioText:selected,
+.btn-toggle-cats-radioText:hover{
+    -fx-border-color : #304ffe !important;
+    -fx-text-fill: #304ffe !important;
+    -fx-border-width : 3 3 3 3 !important;
+    -fx-cursor: hand;
+}
 
 /* Input-Felder Benutzer und PW*/
 .jfx-text-field {
-    -jfx-focus-color: #ff8f00;
+    -jfx-focus-color: #304fff/***#ff8f00***/;
     -jfx-unfocus-color: black;
     -fx-text-fill: black;
-    /*    -jfx-focus-text-fill: blue;*/
+    /***-jfx-focus-text-fill: #304fff !important;***/
     /****-fx-pref-width: 200px;****//***280px;***/
     -fx-pref-height: 48px;
-    /*neu karre*/-fx-padding: 0px 16px 15px 12px;
+    /*neu karre*/-fx-padding: 26px 16px 2px 12px;
 }
+
 
 /* Error-Message des Validators */
 .error-label {
@@ -104,7 +251,7 @@
 }
 
 .jfx-text-field:error {
-    -jfx-focus-color: #ff8f00;
+    -jfx-focus-color: #304fff/***#ff8f00***/;
     -jfx-unfocus-color: red;
     -fx-pref-height: 48px;
 }
@@ -112,36 +259,52 @@
     -fx-text-fill: red;
 }
 
-.header-icon-home, .header-icon-admin, .header-icon-profile, .header-icon-logout {
+.header-icon-home, .header-icon-logout {
     -fx-fill: #ff8f00 !important;
 }
-
+.header-icon-logout {
+    -fx-padding: 0 30px 0 0 !important;
+}
+.header-icon-home {
+    -fx-padding: 0 20px 0 0;
+    -fx-background-color: none !important;
+    -fx-background-insets: 0.0 !important;
+    /***PRÜFEN***/
+}
 
 /* Design der Kategorie-Buttons im Footer */
-.btn-toggle-cats {
+
+.btn-toggle-cats
+    /*.jfx-toggle-node*/ {
     -fx-text-fill: #ff8f00 !important;
-    -fx-background-radius: 50px !important;
-    -fx-background-insets: 50px !important;
-    -fx-border-color : #ff8f00 !important; /* material palette - blue 300 primary dark */
+    -fx-padding: 5px !important;
+    -fx-font-weight: bold !important;
+    -fx-background-radius: 50% !important;
+    -fx-background-insets: 3px !important;
+    -fx-border-color: #ff8f00 !important;
     -fx-border-radius: 50px !important;
-    -fx-border-width : 1 1 1 1 !important;
-    -jfx-toggle-color: white !important; /* material palette - blue 300 primary dark */
-    -jfx-untoggle-color: white !important; /* material palette - blue 400 primary */
+    -fx-border-width : 3 3 3 3 !important;
+    -jfx-toggle-color: #304fff !important;
+    -jfx-untoggle-color: white !important;
+
 }
 
 .btn-toggle-cats:selected {
-    -fx-border-color : #ff8f00 !important; /* material palette - cyan 400 primary light */
-    -fx-border-width : 4 4 4 4 !important;
+    -fx-text-fill: white !important;
+    -fx-border-color : #304fff !important;
+    -fx-border-width : 3 3 3 3 !important;
 }
 
 .btn-toggle-cats:hover {
-    -fx-border-color : #ff8f00 !important; /* material palette - cyan 400 primary light */
-    -fx-border-width : 4 4 4 4 !important;
+    -fx-border-color : #304fff/*rgba(48, 79, 255, 0.2) */!important; /***#ff8f00 !important;***/ /* material palette - cyan 400 primary light */
+    -fx-border-width : 3 3 3 3 !important;
+    -fx-text-fill:  #304fff !important;
 }
 
 
 
 /** KARRE ENDE **/
+
 
 /* ######################################### */
 /* Builder - Header */
@@ -152,6 +315,8 @@
     -fx-border-color : black;
     -fx-border-width : 0 0 1 0;
 }
+
+
 /* Bicycle Icon im Header */
 .header-icon-bicycle {
     -fx-fill: black;
@@ -168,9 +333,9 @@
 .header-icon-home:hover, .header-icon-admin:hover, .header-icon-profile:hover, .header-icon-logout:hover {
     /* -fx-effect: dropshadow(blurType, color, radius, spread, offsetX, offsetY); */
     /**durch Karre entfernt!-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 5, 0.4, 0.0, 0.0);**/
-    -fx-scale-x: 1.2;
-    -fx-scale-y: 1.2;
-    -fx-scale-z: 1.2;
+    -fx-scale-x: 1.2 !important;
+    -fx-scale-y: 1.2 !important;
+    -fx-scale-z: 1.2 !important;
 }
 
 /* ######################################### */
@@ -263,6 +428,7 @@
     -fx-scale-x: 1.1;
     -fx-scale-y: 1.1;
     -fx-scale-z: 1.1;
+    /*neu karre*/-fx-cursor: hand;
 }
 /* Titel in allen Sidebar-Container */
 .label-cat-title {
@@ -442,7 +608,3 @@
     -fx-border-color : rgba(0, 0, 0, 0.25);
     -fx-border-width : 0 0 1 0;
 }
-
-
-
-

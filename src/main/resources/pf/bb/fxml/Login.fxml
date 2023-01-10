@@ -23,7 +23,7 @@
                   <Font size="80.0" />
                </font>
                <VBox.margin>
-                  <Insets bottom="60.0" />
+                  <Insets bottom="40.0" />
                </VBox.margin>
             </FontAwesomeIconView>
             <RequiredFieldValidator fx:id="validatorName" message="Benutzername fehlt">
@@ -45,7 +45,7 @@
             </JFXTextField>
             <JFXPasswordField fx:id="password" labelFloat="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="200.0" promptText=" Passwort" styleClass="jfx-text-field">
                <VBox.margin>
-                  <Insets bottom="15.0" left="5.0" right="5.0" top="20.0" />
+                  <Insets bottom="40.0" left="5.0" right="5.0" />
                </VBox.margin>
             </JFXPasswordField>
             <HBox alignment="CENTER" nodeOrientation="LEFT_TO_RIGHT" prefHeight="40.0" prefWidth="300.0" spacing="36.0">
@@ -54,7 +54,7 @@
                   <JFXButton buttonType="RAISED" onAction="#authenticate" prefHeight="36.0" prefWidth="110.0" styleClass="btn-login, btn-standard-comp" text="LOGIN" />
                </children>
                <VBox.margin>
-                  <Insets top="20.0" />
+                  <Insets bottom="20.0" />
                </VBox.margin>
             </HBox>
             <Label fx:id="loginFailure" text="Login fehlgeschlagen" visible="false"></Label>

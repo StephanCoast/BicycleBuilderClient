@@ -23,7 +23,7 @@
       <top>
          <BorderPane prefHeight="48.0" prefWidth="625.0" styleClass="header-borderpane" BorderPane.alignment="CENTER">
             <left>
-               <StackPane prefWidth="335.0" BorderPane.alignment="CENTER">
+               <StackPane prefWidth="335" BorderPane.alignment="CENTER">
                   <FontAwesomeIconView glyphName="BICYCLE" size="75" styleClass="header-icon-bicycle" textOrigin="TOP" wrappingWidth="48.85714340209961" />
                </StackPane>
             </left>
@@ -96,15 +96,17 @@
          <BorderPane prefHeight="225.0" styleClass="footer-borderpane" BorderPane.alignment="CENTER">
             <left>
                <StackPane prefHeight="150.0" prefWidth="300.0" BorderPane.alignment="CENTER">
-                  <JFXButton fx:id="btnNewConfig" buttonType="RAISED" contentDisplay="TOP" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#openBuilder" prefHeight="150.0" prefWidth="200.0" styleClass="btn-builder, btn-large-comp" text="Neue Konfiguration">
+                  <JFXButton fx:id="btnNewConfig" buttonType="RAISED" contentDisplay="TOP" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#openBuilder" prefHeight="150.0" prefWidth="200.0" styleClass="btn-builder, btn-large-comp" text="NEUE KONFIGURATION">
                      <graphic>
                         <FontAwesomeIconView fill="WHITE" glyphName="BICYCLE" size="38" styleClass="btn-icon-bicycle" textOrigin="TOP" wrappingWidth="48.85714340209961" />
                      </graphic></JFXButton>
                </StackPane>
             </left>
+            <!--
             <cursor>
                <Cursor fx:constant="HAND" />
             </cursor>
+            -->
             <center>
                <StackPane prefHeight="150.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                   <children>
@@ -328,3 +330,4 @@
       </bottom>
    </BorderPane>
 </AnchorPane>
+
