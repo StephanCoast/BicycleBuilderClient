@@ -13,15 +13,12 @@ import javafx.collections.ObservableList;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.TableCell;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.Tooltip;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import pf.bb.Main;
-import pf.bb.model.BicycleConfiguration;
+import pf.bb.model.DashboardRecord;
 import pf.bb.model.Configuration;
 import pf.bb.task.GetConfigurationsTask;
 
@@ -41,15 +38,14 @@ public class DashboardController {
     public JFXDrawer drawerAdmin, drawerProfile;
     private HashSet<JFXDrawer> drawersDashboard;
     public BorderPane bpAdmin, bpProfile;
-    @FXML private TableView<BicycleConfiguration> dboard_table;
-    @FXML private TableColumn<BicycleConfiguration, Integer> dboard_col1;
-    @FXML private TableColumn<BicycleConfiguration, String> dboard_col2;
-    @FXML private TableColumn<BicycleConfiguration, String> dboard_col3;
-    @FXML private TableColumn<BicycleConfiguration, Integer> dboard_col4;
-    @FXML private TableColumn<BicycleConfiguration, String> dboard_col5;
-    @FXML private TableColumn<BicycleConfiguration, Void> dboard_col6;
-    private ObservableList<BicycleConfiguration> list = FXCollections.observableArrayList();
-
+    @FXML private TableView<DashboardRecord> dboard_table;
+    @FXML private TableColumn<DashboardRecord, Integer> dboard_col1;
+    @FXML private TableColumn<DashboardRecord, String> dboard_col2;
+    @FXML private TableColumn<DashboardRecord, String> dboard_col3;
+    @FXML private TableColumn<DashboardRecord, Integer> dboard_col4;
+    @FXML private TableColumn<DashboardRecord, String> dboard_col5;
+    @FXML private TableColumn<DashboardRecord, Void> dboard_col6;
+    private ObservableList<DashboardRecord> list = FXCollections.observableArrayList();
     ViewManager vm = ViewManager.getInstance();
     ValidatorManager validatorManager = ValidatorManager.getInstance();
 
@@ -58,13 +54,14 @@ public class DashboardController {
 
     @FXML
     public void initialize() {
+        dboard_table.refresh();
         setupDrawersSet();
         closeAllDrawers();
         setupValidators();
         setDefaultFocus();
         setupTableView();
         addActionButtonsToTable();
-        //loadConfigs();
+        loadConfigs();
     }
 
     public void openDashboard(ActionEvent event) throws IOException {
@@ -99,8 +96,7 @@ public class DashboardController {
     }
 
     // AR: hier speichert der Admin einen neuen User
-    // todo: speichern des neuen Users -> Server? bzw. DB?
-    // Stephan
+    // todo: speichern des neuen Users
     public void onBottomBarSaveAdmin(ActionEvent event) {
         btnNewConfig.setDisable(false);
         closeAllDrawers();
@@ -108,8 +104,7 @@ public class DashboardController {
     }
 
     // AR: hier speichert der User neue Daten für sein Profil
-    // todo: speichern des neuen Profils -> Server? bzw. DB?
-    // Stephan
+    // todo: speichern des neuen Profils
     public void onBottomBarSaveProfile(ActionEvent event) {
         btnNewConfig.setDisable(false);
         closeAllDrawers();
@@ -117,42 +112,43 @@ public class DashboardController {
     }
 
     private void loadConfigs() {
-        // todo: not finished yet, got data twice in tabelview
-        GetConfigurationsTask configurationsTask2 = new GetConfigurationsTask(activeUser);
-        configurationsTask2.setOnRunning((successEvent) -> System.out.println("DashboardController: loading  configurations..."));
-        configurationsTask2.setOnSucceeded((WorkerStateEvent e2) -> {
+        GetConfigurationsTask configurationsTask = new GetConfigurationsTask(activeUser);
+        configurationsTask.setOnRunning((successEvent) -> System.out.println("DashboardController: loading  configurations..."));
+        configurationsTask.setOnSucceeded((WorkerStateEvent e2) -> {
             System.out.println("DashboardController: configurations loaded.");
-            Main.CONFIGURATIONS.addAll(configurationsTask2.getValue());
+            Main.CONFIGURATIONS.clear();
+            Main.CONFIGURATIONS.addAll(configurationsTask.getValue());
             list.clear();
             // todo: AR: get Customer + ID
             for (Configuration config : Main.CONFIGURATIONS) {
-                list.add(new BicycleConfiguration(config.id, config.timestampCreated, "Mustermann, Max", 12345, config.status));
+                list.add(new DashboardRecord(config.id, config.timestampCreated, "Mustermann, Max", 12345, config.status));
             }
-            dboard_table.getItems().clear();
             dboard_table.setItems(list);
         });
-        // todo: AR: add setOnFailed
-        new Thread(configurationsTask2).start();
+        configurationsTask.setOnFailed((WorkerStateEvent e21) -> System.out.println("DashboardController: loading configuration failed."));
+        new Thread(configurationsTask).start();
     }
 
     private void setupTableView() {
-        dboard_col1.setCellValueFactory(new PropertyValueFactory<BicycleConfiguration, Integer>("configID"));
-        dboard_col2.setCellValueFactory(new PropertyValueFactory<BicycleConfiguration, String>("configDate"));
-        dboard_col3.setCellValueFactory(new PropertyValueFactory<BicycleConfiguration, String>("configCustomer"));
-        dboard_col4.setCellValueFactory(new PropertyValueFactory<BicycleConfiguration, Integer>("configCustomerID"));
-        dboard_col5.setCellValueFactory(new PropertyValueFactory<BicycleConfiguration, String>("configState"));
+        dboard_col1.setCellValueFactory(new PropertyValueFactory<DashboardRecord, Integer>("configID"));
+        dboard_col2.setCellValueFactory(new PropertyValueFactory<DashboardRecord, String>("configDate"));
+        dboard_col3.setCellValueFactory(new PropertyValueFactory<DashboardRecord, String>("configCustomer"));
+        dboard_col4.setCellValueFactory(new PropertyValueFactory<DashboardRecord, Integer>("configCustomerID"));
+        dboard_col5.setCellValueFactory(new PropertyValueFactory<DashboardRecord, String>("configState"));
         dboard_table.getColumns().forEach(e -> e.setReorderable(false)); /* AR: prevent column reorder */
-        dboard_table.setItems(setTableData());
+        dboard_table.setPlaceholder(new Label("Bitte starten Sie eine neue Konfiguration."));
+        //dboard_table.setItems(setTableData());
     }
-
-    private ObservableList<BicycleConfiguration> setTableData() {
-        ObservableList<BicycleConfiguration> list = FXCollections.observableArrayList();
+/*
+    private ObservableList<DashboardRecord> setTableData() {
+        ObservableList<DashboardRecord> list = FXCollections.observableArrayList();
         // AR: add dummy data
-        list.add(new BicycleConfiguration(12345, "2022-11-21", "Schulz, Tom", 12345, "offen"));
-        list.add(new BicycleConfiguration(56789, "2022-11-21", "Schmidt, Hans", 56789, "offen"));
+        list.add(new DashboardRecord(12345, "2022-11-21", "Schulz, Tom", 12345, "offen"));
+        list.add(new DashboardRecord(56789, "2022-11-21", "Schmidt, Hans", 56789, "offen"));
 
         return list;
     }
+ */
 
     private void setupDrawersSet() {
         drawersDashboard = new HashSet<JFXDrawer>();
@@ -203,12 +199,12 @@ public class DashboardController {
                 removeButton.setTooltip(new Tooltip("Konfiguration löschen"));
 
                 detailButton.setOnAction(event -> {
-                    BicycleConfiguration bc = getTableView().getItems().get(getIndex());
+                    DashboardRecord bc = getTableView().getItems().get(getIndex());
                     System.out.println("row-ID detailButton: " + bc.getConfigID());
                 });
 
                 removeButton.setOnAction(event -> {
-                    BicycleConfiguration bc = getTableView().getItems().get(getIndex());
+                    DashboardRecord bc = getTableView().getItems().get(getIndex());
                     System.out.println("row-ID removeButton: " + bc.getConfigID());
                 });
 
