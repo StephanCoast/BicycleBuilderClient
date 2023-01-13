@@ -72,6 +72,16 @@ public class Main extends Application {
         ft.play();
     }
 
+    public static Configuration findConfigurationById(int configId) {
+
+        Configuration localConfigObject = null;
+        for (Configuration cfg : CONFIGURATIONS) {
+            if (cfg.id == configId)
+                localConfigObject = cfg;
+        }
+        return localConfigObject;
+    }
+
     public static void main(String[] args) {
         launch();
     }
