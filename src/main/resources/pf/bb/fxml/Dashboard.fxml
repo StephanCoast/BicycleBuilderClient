@@ -81,12 +81,12 @@
             <children>
                <TableView fx:id="dboard_table" prefHeight="200.0" prefWidth="200.0" styleClass="table-main">
                   <columns>
-                     <TableColumn fx:id="dboard_col1" editable="false" maxWidth="200.0" minWidth="100.0" prefWidth="100.0" resizable="false" styleClass="table-col, table-col-id" text="ID" />
-                     <TableColumn fx:id="dboard_col2" editable="false" maxWidth="200.0" minWidth="100.0" prefWidth="100.0" resizable="false" styleClass="table-col, table-col-date" text="Datum" />
+                     <TableColumn fx:id="dboard_col1" editable="false" maxWidth="100.0" minWidth="100.0" prefWidth="100.0" resizable="false" styleClass="table-col, table-col-id" text="ID" />
+                     <TableColumn fx:id="dboard_col2" editable="false" maxWidth="300.0" minWidth="200.0" prefWidth="200.0" resizable="false" styleClass="table-col, table-col-date" text="Datum" />
                      <TableColumn fx:id="dboard_col3" editable="false" maxWidth="400.0" minWidth="200.0" prefWidth="200.0" styleClass="table-col-customer" text="Kunde" />
                      <TableColumn fx:id="dboard_col4" editable="false" maxWidth="200.0" minWidth="100.0" prefWidth="100.0" resizable="false" styleClass="table-col, table-col-cust-id" text="Kunden-ID" />
-                     <TableColumn fx:id="dboard_col5" editable="false" maxWidth="200.0" minWidth="100.0" prefWidth="100.0" resizable="false" styleClass="table-col" text="Status" />
-                     <TableColumn fx:id="dboard_col6" editable="false" maxWidth="150.0" minWidth="75.0" prefWidth="75.0" resizable="false" sortable="false" styleClass="table-col" text="Aktion" />
+                     <TableColumn fx:id="dboard_col5" editable="false" maxWidth="200.0" minWidth="150.0" prefWidth="150.0" resizable="false" styleClass="table-col" text="Status" />
+                     <TableColumn fx:id="dboard_col6" editable="false" maxWidth="150.0" minWidth="100.0" prefWidth="100.0" resizable="false" sortable="false" styleClass="table-col" text="Aktion" />
                   </columns>
                </TableView>
             </children>
