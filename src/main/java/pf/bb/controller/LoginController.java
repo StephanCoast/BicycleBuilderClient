@@ -140,16 +140,16 @@ public class LoginController {
         int off = 1; // Local list index starts at 0, Db entity Ids with 1
         // Example data
         Configuration config1 = new Configuration(activeUser);
-        config1.articles.add(Main.ARTICLES.get(2 - off));
-        config1.articles.add(Main.ARTICLES.get(31 - off));
-        config1.articles.add(Main.ARTICLES.get(38 - off));
-        config1.articles.add(Main.ARTICLES.get(43 - off));
-        config1.articles.add(Main.ARTICLES.get(48 - off));
-        config1.articles.add(Main.ARTICLES.get(52 - off));
-        config1.articles.add(Main.ARTICLES.get(58 - off));
-        config1.articles.add(Main.ARTICLES.get(61 - off));
-        config1.articles.add(Main.ARTICLES.get(64 - off));
-        config1.articles.add(Main.ARTICLES.get(67 - off));
+        config1.articles.add(Main.ARTICLES.get(2 - off)); // RAHMEN
+        config1.articles.add(Main.ARTICLES.get(31 - off)); // LENKER
+        config1.articles.add(Main.ARTICLES.get(38 - off)); // GRIFF
+        config1.articles.add(Main.ARTICLES.get(43 - off)); // LAUFRAD
+        config1.articles.add(Main.ARTICLES.get(68 - off)); // REIFEN
+        config1.articles.add(Main.ARTICLES.get(72 - off)); // SATTEL
+        config1.articles.add(Main.ARTICLES.get(79 - off)); // BREMSE
+        config1.articles.add(Main.ARTICLES.get(82 - off)); // KLINGEL
+        config1.articles.add(Main.ARTICLES.get(85 - off)); // STÄNDER
+        config1.articles.add(Main.ARTICLES.get(89 - off)); // LICHT
 
         // Test POST
         PostConfigurationTask configurationsTask1 = new PostConfigurationTask(activeUser, config1);

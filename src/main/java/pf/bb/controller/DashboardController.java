@@ -187,6 +187,12 @@ public class DashboardController {
                 detailButton.setOnAction(event -> {
                     Configuration config = getTableView().getItems().get(getIndex());
                     System.out.println("row-ID detailButton: " + config.id);
+                    Main.currentConfig = config;
+                    try {
+                        vm.forceView(event, "Builder.fxml", "Bicycle Builder - Konfigurator", false);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
                 });
 
                 removeButton.setOnAction(event -> {
