@@ -95,6 +95,18 @@ public class Configuration extends EntityWithID {
     }
 
 
+    public Article getArticleByType(String typeName) {
+        Article article = null;
+        for (Article a: this.articles ){
+            if (Objects.equals(a.type, typeName)) {
+                article = a;
+                break;
+            }
+        }
+        return article;
+    };
+
+
     public void createAndOpenTempPdfBill (){
 
         if(!(this.order == null)) {
