@@ -28,17 +28,34 @@ import java.util.Objects;
 
 public class Configuration extends EntityWithID {
 
+    public static String[] stats = {"ENTWURF", "ABGESCHLOSSEN", "EINKAUF", "STORNO"};
+
+    public static String getUrl() {
+        return Main.API_HOST + "/configurations";
+    }
+
     //@Expose fields are serialized to JSON via Gson -> fields must be public for Gson
+    //Getter necessary for TableView<Configuration> (dboard_table) column method .setCellValueFactory
     @Expose
     public String writeAccess;
 
     @Expose
     public String timestampCreated;
+
+    public String getTimestampLastTouched() {
+        return timestampLastTouched;
+    }
+
     @Expose
     public String timestampLastTouched;
 
     @Expose
     public User user;
+
+    public String getStatus() {
+        return status;
+    }
+
     @Expose
     public String status;
 
@@ -53,11 +70,17 @@ public class Configuration extends EntityWithID {
     @Expose
     public OrderClass order;
 
-    public static String[] stats = {"ENTWURF", "ABGESCHLOSSEN", "EINKAUF", "STORNO"};
-
-    public static String getUrl() {
-        return Main.API_HOST + "/configurations";
+    // Transient Properties are not serialized - necessary for FXML Tableview
+    private transient String customerName;
+    public String getCustomerName() {
+        return this.order == null ? "" : this.order.customer.lastname + ", " + this.order.customer.forename;
     }
+
+    private transient String customerId;
+    public String getCustomerId() {
+        return this.order == null ? "" : String.valueOf(this.order.customer.id);
+    }
+
 
     public Configuration(User user) {
 

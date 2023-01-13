@@ -42,16 +42,6 @@ public class LoginController {
     }
 
     public void authenticate(ActionEvent event){
-        // uncomment to bypass Server-Login, for developing only
-        //vm.forceView(event, "Dashboard.fxml", "Bicycle Builder - Dashboard");
-
-        // Stephan loginTask
-        stephanLogin(event);
-    }
-
-
-    //
-    private void stephanLogin(ActionEvent event) {
 
         PostLoginTask loginTask = new PostLoginTask(username.getText(), password.getText());
 
@@ -69,21 +59,20 @@ public class LoginController {
             } else {
 
                 GetUserDetailsTask userDetailsTask = new GetUserDetailsTask(LoginController.activeUser);
-                    userDetailsTask.setOnSucceeded((WorkerStateEvent e5) -> {
-                        activeUser.id = userDetailsTask.getValue().id;
+                userDetailsTask.setOnSucceeded((WorkerStateEvent e5) -> {
+                    activeUser.id = userDetailsTask.getValue().id;
 
+                    // Todo Remove before production - TEST Configuration Api
+                    //testConfigurationApi();
 
-                        // Todo Remove before production - TEST Configuration Api
-                        //testConfigurationApi();
+                    try {
+                        // DASHBOARD VIEW LADEN NACH ERFOLGREICHER AUTHENTIFIZIERUNG
+                        vm.forceView(event, "Dashboard.fxml", "Bicycle Builder - Dashboard", true);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
 
-
-                        try {
-                            vm.forceView(event, "Dashboard.fxml", "Bicycle Builder - Dashboard", true);
-                        } catch (IOException e) {
-                            throw new RuntimeException(e);
-                        }
-
-                    });
+                });
                 new Thread(userDetailsTask).start();
             }
         });

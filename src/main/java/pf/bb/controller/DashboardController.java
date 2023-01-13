@@ -8,8 +8,6 @@ import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXDrawer;
 import javafx.application.Platform;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -18,7 +16,6 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import pf.bb.Main;
-import pf.bb.model.DashboardRecord;
 import pf.bb.model.Configuration;
 import pf.bb.task.GetConfigurationsTask;
 
@@ -38,14 +35,24 @@ public class DashboardController {
     public JFXDrawer drawerAdmin, drawerProfile;
     private HashSet<JFXDrawer> drawersDashboard;
     public BorderPane bpAdmin, bpProfile;
-    @FXML private TableView<DashboardRecord> dboard_table;
-    @FXML private TableColumn<DashboardRecord, Integer> dboard_col1;
-    @FXML private TableColumn<DashboardRecord, String> dboard_col2;
-    @FXML private TableColumn<DashboardRecord, String> dboard_col3;
-    @FXML private TableColumn<DashboardRecord, Integer> dboard_col4;
-    @FXML private TableColumn<DashboardRecord, String> dboard_col5;
-    @FXML private TableColumn<DashboardRecord, Void> dboard_col6;
-    private ObservableList<DashboardRecord> list = FXCollections.observableArrayList();
+
+    @FXML private TableView<Configuration> dboard_table;
+
+    @FXML private TableColumn<Configuration, Integer> dboard_col1;
+    @FXML private TableColumn<Configuration, String> dboard_col2;
+    @FXML private TableColumn<Configuration, String> dboard_col3;
+    @FXML private TableColumn<Configuration, Integer> dboard_col4;
+    @FXML private TableColumn<Configuration, String> dboard_col5;
+    @FXML private TableColumn<Configuration, Void> dboard_col6;
+
+//    @FXML private TableView<DashboardRecord> dboard_table;
+//    @FXML private TableColumn<DashboardRecord, Integer> dboard_col1;
+//    @FXML private TableColumn<DashboardRecord, String> dboard_col2;
+//    @FXML private TableColumn<DashboardRecord, String> dboard_col3;
+//    @FXML private TableColumn<DashboardRecord, Integer> dboard_col4;
+//    @FXML private TableColumn<DashboardRecord, String> dboard_col5;
+//    @FXML private TableColumn<DashboardRecord, Void> dboard_col6;
+//    private ObservableList<DashboardRecord> list = FXCollections.observableArrayList();
     ViewManager vm = ViewManager.getInstance();
     ValidatorManager validatorManager = ValidatorManager.getInstance();
 
@@ -118,27 +125,47 @@ public class DashboardController {
             System.out.println("DashboardController: configurations loaded.");
             Main.CONFIGURATIONS.clear();
             Main.CONFIGURATIONS.addAll(configurationsTask.getValue());
-            list.clear();
-            // todo: AR: get Customer + ID
-            for (Configuration config : Main.CONFIGURATIONS) {
-                list.add(new DashboardRecord(config.id, config.timestampCreated, "Mustermann, Max", 12345, config.status));
-            }
-            dboard_table.setItems(list);
+//            list.clear();
+//            // todo: AR: get Customer + ID
+//            for (Configuration config : Main.CONFIGURATIONS) {
+//                list.add(new DashboardRecord(config.id, config.timestampCreated, "Mustermann, Max", 12345, config.status));
+//            }
+            dboard_table.setItems(Main.CONFIGURATIONS);
         });
         configurationsTask.setOnFailed((WorkerStateEvent e21) -> System.out.println("DashboardController: loading configuration failed."));
         new Thread(configurationsTask).start();
     }
 
+
     private void setupTableView() {
-        dboard_col1.setCellValueFactory(new PropertyValueFactory<DashboardRecord, Integer>("configID"));
-        dboard_col2.setCellValueFactory(new PropertyValueFactory<DashboardRecord, String>("configDate"));
-        dboard_col3.setCellValueFactory(new PropertyValueFactory<DashboardRecord, String>("configCustomer"));
-        dboard_col4.setCellValueFactory(new PropertyValueFactory<DashboardRecord, Integer>("configCustomerID"));
-        dboard_col5.setCellValueFactory(new PropertyValueFactory<DashboardRecord, String>("configState"));
-        dboard_table.getColumns().forEach(e -> e.setReorderable(false)); /* AR: prevent column reorder */
-        dboard_table.setPlaceholder(new Label("Bitte starten Sie eine neue Konfiguration."));
+
+        dboard_col1.setCellValueFactory(new PropertyValueFactory<>("id"));
+        dboard_col2.setCellValueFactory(new PropertyValueFactory<>("timestampLastTouched"));
+        dboard_col3.setCellValueFactory(new PropertyValueFactory<>("customerName"));
+        dboard_col4.setCellValueFactory(new PropertyValueFactory<>("customerId"));
+        dboard_col5.setCellValueFactory(new PropertyValueFactory<>("status"));
+
+//        dboard_col1.setCellValueFactory(new PropertyValueFactory<DashboardRecord, Integer>("configID"));
+//        dboard_col2.setCellValueFactory(new PropertyValueFactory<DashboardRecord, String>("configDate"));
+//        dboard_col3.setCellValueFactory(new PropertyValueFactory<DashboardRecord, String>("configCustomer"));
+//        dboard_col4.setCellValueFactory(new PropertyValueFactory<DashboardRecord, Integer>("configCustomerID"));
+//        dboard_col5.setCellValueFactory(new PropertyValueFactory<DashboardRecord, String>("configState"));
+//        dboard_table.getColumns().forEach(e -> e.setReorderable(false)); /* AR: prevent column reorder */
+//        dboard_table.setPlaceholder(new Label("Bitte starten Sie eine neue Konfiguration."));
         //dboard_table.setItems(setTableData());
     }
+
+//    private void setupTableView() {
+//        dboard_col1.setCellValueFactory(new PropertyValueFactory<DashboardRecord, Integer>("configID"));
+//        dboard_col2.setCellValueFactory(new PropertyValueFactory<DashboardRecord, String>("configDate"));
+//        dboard_col3.setCellValueFactory(new PropertyValueFactory<DashboardRecord, String>("configCustomer"));
+//        dboard_col4.setCellValueFactory(new PropertyValueFactory<DashboardRecord, Integer>("configCustomerID"));
+//        dboard_col5.setCellValueFactory(new PropertyValueFactory<DashboardRecord, String>("configState"));
+//        dboard_table.getColumns().forEach(e -> e.setReorderable(false)); /* AR: prevent column reorder */
+//        dboard_table.setPlaceholder(new Label("Bitte starten Sie eine neue Konfiguration."));
+//        //dboard_table.setItems(setTableData());
+//    }
+
 /*
     private ObservableList<DashboardRecord> setTableData() {
         ObservableList<DashboardRecord> list = FXCollections.observableArrayList();
@@ -151,7 +178,7 @@ public class DashboardController {
  */
 
     private void setupDrawersSet() {
-        drawersDashboard = new HashSet<JFXDrawer>();
+        drawersDashboard = new HashSet<>();
         drawersDashboard.add(drawerAdmin);
         drawersDashboard.add(drawerProfile);
     }
@@ -199,13 +226,17 @@ public class DashboardController {
                 removeButton.setTooltip(new Tooltip("Konfiguration löschen"));
 
                 detailButton.setOnAction(event -> {
-                    DashboardRecord bc = getTableView().getItems().get(getIndex());
-                    System.out.println("row-ID detailButton: " + bc.getConfigID());
+//                    DashboardRecord bc = getTableView().getItems().get(getIndex());
+//                    System.out.println("row-ID detailButton: " + bc.getConfigID());
+                    Configuration config = getTableView().getItems().get(getIndex());
+                    System.out.println("row-ID detailButton: " + config.id);
                 });
 
                 removeButton.setOnAction(event -> {
-                    DashboardRecord bc = getTableView().getItems().get(getIndex());
-                    System.out.println("row-ID removeButton: " + bc.getConfigID());
+//                    DashboardRecord bc = getTableView().getItems().get(getIndex());
+//                    System.out.println("row-ID removeButton: " + bc.getConfigID());
+                    Configuration config = getTableView().getItems().get(getIndex());
+                    System.out.println("row-ID removeButton: " + config.id);
                 });
 
                 setGraphic(empty ? null : hBox);

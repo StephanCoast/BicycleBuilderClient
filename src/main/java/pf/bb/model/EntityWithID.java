@@ -4,6 +4,10 @@ import com.google.gson.annotations.Expose;
 
 public abstract class EntityWithID {
 
+    public int getId() {
+        return id;
+    }
+
     @Expose
     public int id;
 
