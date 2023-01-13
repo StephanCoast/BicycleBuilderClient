@@ -17,6 +17,9 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import pf.bb.Main;
 import pf.bb.model.Configuration;
+import pf.bb.task.DeleteBillTask;
+import pf.bb.task.DeleteConfigurationTask;
+import pf.bb.task.DeleteOrderTask;
 import pf.bb.task.GetConfigurationsTask;
 
 import java.io.IOException;
@@ -45,14 +48,6 @@ public class DashboardController {
     @FXML private TableColumn<Configuration, String> dboard_col5;
     @FXML private TableColumn<Configuration, Void> dboard_col6;
 
-//    @FXML private TableView<DashboardRecord> dboard_table;
-//    @FXML private TableColumn<DashboardRecord, Integer> dboard_col1;
-//    @FXML private TableColumn<DashboardRecord, String> dboard_col2;
-//    @FXML private TableColumn<DashboardRecord, String> dboard_col3;
-//    @FXML private TableColumn<DashboardRecord, Integer> dboard_col4;
-//    @FXML private TableColumn<DashboardRecord, String> dboard_col5;
-//    @FXML private TableColumn<DashboardRecord, Void> dboard_col6;
-//    private ObservableList<DashboardRecord> list = FXCollections.observableArrayList();
     ViewManager vm = ViewManager.getInstance();
     ValidatorManager validatorManager = ValidatorManager.getInstance();
 
@@ -125,11 +120,6 @@ public class DashboardController {
             System.out.println("DashboardController: configurations loaded.");
             Main.CONFIGURATIONS.clear();
             Main.CONFIGURATIONS.addAll(configurationsTask.getValue());
-//            list.clear();
-//            // todo: AR: get Customer + ID
-//            for (Configuration config : Main.CONFIGURATIONS) {
-//                list.add(new DashboardRecord(config.id, config.timestampCreated, "Mustermann, Max", 12345, config.status));
-//            }
             dboard_table.setItems(Main.CONFIGURATIONS);
         });
         configurationsTask.setOnFailed((WorkerStateEvent e21) -> System.out.println("DashboardController: loading configuration failed."));
@@ -144,38 +134,7 @@ public class DashboardController {
         dboard_col3.setCellValueFactory(new PropertyValueFactory<>("customerName"));
         dboard_col4.setCellValueFactory(new PropertyValueFactory<>("customerId"));
         dboard_col5.setCellValueFactory(new PropertyValueFactory<>("status"));
-
-//        dboard_col1.setCellValueFactory(new PropertyValueFactory<DashboardRecord, Integer>("configID"));
-//        dboard_col2.setCellValueFactory(new PropertyValueFactory<DashboardRecord, String>("configDate"));
-//        dboard_col3.setCellValueFactory(new PropertyValueFactory<DashboardRecord, String>("configCustomer"));
-//        dboard_col4.setCellValueFactory(new PropertyValueFactory<DashboardRecord, Integer>("configCustomerID"));
-//        dboard_col5.setCellValueFactory(new PropertyValueFactory<DashboardRecord, String>("configState"));
-//        dboard_table.getColumns().forEach(e -> e.setReorderable(false)); /* AR: prevent column reorder */
-//        dboard_table.setPlaceholder(new Label("Bitte starten Sie eine neue Konfiguration."));
-        //dboard_table.setItems(setTableData());
     }
-
-//    private void setupTableView() {
-//        dboard_col1.setCellValueFactory(new PropertyValueFactory<DashboardRecord, Integer>("configID"));
-//        dboard_col2.setCellValueFactory(new PropertyValueFactory<DashboardRecord, String>("configDate"));
-//        dboard_col3.setCellValueFactory(new PropertyValueFactory<DashboardRecord, String>("configCustomer"));
-//        dboard_col4.setCellValueFactory(new PropertyValueFactory<DashboardRecord, Integer>("configCustomerID"));
-//        dboard_col5.setCellValueFactory(new PropertyValueFactory<DashboardRecord, String>("configState"));
-//        dboard_table.getColumns().forEach(e -> e.setReorderable(false)); /* AR: prevent column reorder */
-//        dboard_table.setPlaceholder(new Label("Bitte starten Sie eine neue Konfiguration."));
-//        //dboard_table.setItems(setTableData());
-//    }
-
-/*
-    private ObservableList<DashboardRecord> setTableData() {
-        ObservableList<DashboardRecord> list = FXCollections.observableArrayList();
-        // AR: add dummy data
-        list.add(new DashboardRecord(12345, "2022-11-21", "Schulz, Tom", 12345, "offen"));
-        list.add(new DashboardRecord(56789, "2022-11-21", "Schmidt, Hans", 56789, "offen"));
-
-        return list;
-    }
- */
 
     private void setupDrawersSet() {
         drawersDashboard = new HashSet<>();
@@ -226,22 +185,58 @@ public class DashboardController {
                 removeButton.setTooltip(new Tooltip("Konfiguration löschen"));
 
                 detailButton.setOnAction(event -> {
-//                    DashboardRecord bc = getTableView().getItems().get(getIndex());
-//                    System.out.println("row-ID detailButton: " + bc.getConfigID());
                     Configuration config = getTableView().getItems().get(getIndex());
                     System.out.println("row-ID detailButton: " + config.id);
                 });
 
                 removeButton.setOnAction(event -> {
-//                    DashboardRecord bc = getTableView().getItems().get(getIndex());
-//                    System.out.println("row-ID removeButton: " + bc.getConfigID());
                     Configuration config = getTableView().getItems().get(getIndex());
                     System.out.println("row-ID removeButton: " + config.id);
-                });
 
+                    // DELETE A CONFIGURATION REQUIRES: DELETE BILL -> DELETE ORDER -> DELETE CONFIGURATION  !! FOREIGN KEY Constraints
+                    // ASSUMPTION HERE: Bill is automatically created with order
+                    if (config.order != null) {
+                        // DELETE BILL FROM DB
+                        DeleteBillTask billDeleteTask1 = new DeleteBillTask(activeUser, config.order.bill.id);
+                        billDeleteTask1.setOnSucceeded((WorkerStateEvent billDeleted) -> {
+                            System.out.println("bill id=" + config.order.bill.id + " deleted=" +  billDeleteTask1.getValue());
+
+                            // DELETE ORDER FROM DB
+                            DeleteOrderTask orderDeleteTask1 = new DeleteOrderTask(activeUser, config.order.id);
+                            orderDeleteTask1.setOnSucceeded((WorkerStateEvent orderDeleted) -> {
+                                System.out.println("order id=" + config.order.id + " deleted=" + orderDeleteTask1.getValue());
+                                deleteConfigFromDb(config.id);
+                            });
+                            //Tasks in eigenem Thread ausführen
+                            new Thread(orderDeleteTask1).start();
+                        });
+                        //Tasks in eigenem Thread ausführen
+                        new Thread(billDeleteTask1).start();
+                    } else {
+                        deleteConfigFromDb(config.id);
+                    }
+                });
                 setGraphic(empty ? null : hBox);
             }
         });
+    }
+
+    private void deleteConfigFromDb(int configId) {
+        // DELETE CONFIGURATION FROM DB
+        DeleteConfigurationTask configDeleteTask1 = new DeleteConfigurationTask(activeUser, configId);
+        //Erst Task definieren incl. WorkerStateEvent als Flag, um zu wissen, wann fertig
+        configDeleteTask1.setOnSucceeded((WorkerStateEvent configDeleted) -> {
+            System.out.println("configuration id=" + configId + " deleted=" + configDeleteTask1.getValue());
+
+            // DELETE config FROM LOCAL Main.CONFIGURATIONS for sync
+            Configuration localConfObject = Main.findConfigurationById(configId);
+            if (localConfObject != null) {
+                Main.CONFIGURATIONS.remove(localConfObject);
+            }
+        });
+        //Tasks in eigenem Thread ausführen
+        new Thread(configDeleteTask1).start();
+
     }
 
     private void setupValidators() {

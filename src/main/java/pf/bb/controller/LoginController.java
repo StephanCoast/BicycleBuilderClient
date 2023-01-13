@@ -256,7 +256,7 @@ public class LoginController {
                                             //finalConfig.createAndOpenTempPdfBill();
 
 
-                                            if (Main.CONFIGURATIONS.size() > 3) {
+                                            if (Main.CONFIGURATIONS.size() > 4) {
 
                                                 // DELETE A CONFIGURATION REQUIRES: DELETE BILL -> DELETE ORDER -> DELETE CONFIGURATION
                                                 // Test DELETE BILL
