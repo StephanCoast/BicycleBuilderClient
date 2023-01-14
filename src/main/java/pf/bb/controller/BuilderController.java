@@ -23,6 +23,9 @@ import pf.bb.Main;
 import pf.bb.model.Article;
 import pf.bb.model.Configuration;
 import pf.bb.task.PostConfigurationTask;
+import pf.bb.task.PutConfigurationTask;
+import pf.bb.task.PutConfigurationWriteAccessTask;
+
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Objects;
@@ -152,6 +155,7 @@ public class BuilderController {
         configNew.articles.add(Main.ARTICLES.get(finalArticleIdArray.get(9) - decrement)); // Licht
         System.out.println("BuilderController: Article-ID config object = " + configNew.articles);
 
+
         if (Main.currentConfig == null) {
             // NEW CONFIGURATION
             PostConfigurationTask configNewPostTask1 = new PostConfigurationTask(activeUser, configNew);
@@ -174,6 +178,32 @@ public class BuilderController {
             Main.currentConfig.articles = configNew.articles;
 
             // TODO PUT CONFIGURATION TASK
+
+            // Test PUT - Update Configuration again
+            PutConfigurationWriteAccessTask writeAccessTask1 = new PutConfigurationWriteAccessTask(activeUser, Main.currentConfig.id);
+
+            writeAccessTask1.setOnRunning((runningEvent) -> System.out.println("trying to get writeAccess for configuration..."));
+            writeAccessTask1.setOnSucceeded((WorkerStateEvent writeAccess) -> {
+                System.out.println("writeAccess for configuration: " + writeAccessTask1.getValue());
+
+                // Update Configuration
+                PutConfigurationTask configurationPutTask1 = new PutConfigurationTask(activeUser, Main.currentConfig, Main.currentConfig.id);
+                //Erst Task definieren incl. WorkerStateEvent als Flag, um zu wissen, wann fertig
+                configurationPutTask1.setOnRunning((successEvent) -> System.out.println("trying to update configuration..."));
+                configurationPutTask1.setOnSucceeded((WorkerStateEvent configTask4) -> {
+                    System.out.println("configuration updated id: " + configurationPutTask1.getValue().id);
+                    try {
+                        vm.forceView(event, "Dashboard.fxml", "Bicycle Builder - Dashboard", false);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                });
+                //Tasks in eigenem Thread ausführen
+                new Thread(configurationPutTask1).start();
+            });
+            //Tasks in eigenem Thread ausführen
+            new Thread(writeAccessTask1).start();
+
         }
 
 
