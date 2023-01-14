@@ -93,6 +93,7 @@ public class BuilderController {
         initFinalPriceArray();
         initFirstSVGSet();
         renderSVGtextarea();
+        initTextFieldListeners();
     }
 
     public void logout(ActionEvent event) throws IOException {
@@ -1136,4 +1137,48 @@ public class BuilderController {
         });
 
     }
+
+    private void initTextFieldListeners() {
+        setTextFieldRules(tfCustomerID, "[\\d+]");
+        setTextFieldRules(tfCustomerFirstName, "[a-zA-Z-'`´]");
+        setTextFieldRules(tfCustomerLastName, "[a-zA-Z-'`´]");
+        setTextFieldRules(tfCustomerMail, "[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$");
+        setTextFieldRules(tfCustomerStreet, "[a-zA-Z-'`´]");
+        setTextFieldRules(tfCustomerNr, "[a-z0-9]");
+        setTextFieldRules(tfCustomerZipcode, "[\\d{0,5}]");
+        setTextFieldRules(tfCustomerCity, "[a-zA-Z-'`´]");
+
+        int maxLengthZipCode = 5;
+        int maxLengthCustomerID = 10;
+
+        tfCustomerID.textProperty().addListener((ov, oldValue, newValue) -> {
+            if (tfCustomerID.getText().length() > maxLengthCustomerID) {
+                String str = tfCustomerID.getText().substring(0, maxLengthCustomerID);
+                tfCustomerID.setText(str);
+            }
+        });
+
+        tfCustomerNr.textProperty().addListener((ov, oldValue, newValue) -> {
+            if (tfCustomerNr.getText().length() > maxLengthZipCode) {
+                String str = tfCustomerNr.getText().substring(0, maxLengthZipCode);
+                tfCustomerNr.setText(str);
+            }
+        });
+
+        tfCustomerZipcode.textProperty().addListener((ov, oldValue, newValue) -> {
+            if (tfCustomerZipcode.getText().length() > maxLengthZipCode) {
+                String str = tfCustomerZipcode.getText().substring(0, maxLengthZipCode);
+                tfCustomerZipcode.setText(str);
+            }
+        });
+    }
+
+    private void setTextFieldRules(JFXTextField tf, String pattern) {
+        tf.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.matches(pattern)) {
+                tf.setText(newValue.replaceAll("[^" + pattern + "]", ""));
+            }
+        });
+    }
+
 }
