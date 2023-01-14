@@ -1,12 +1,9 @@
 package pf.bb.controller;
 
-import com.jfoenix.controls.JFXPasswordField;
-import com.jfoenix.controls.JFXTextField;
+import com.jfoenix.controls.*;
 import com.jfoenix.validation.RequiredFieldValidator;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
-import com.jfoenix.controls.JFXButton;
-import com.jfoenix.controls.JFXDrawer;
 import javafx.application.Platform;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.event.ActionEvent;
@@ -16,11 +13,13 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import pf.bb.Main;
+import pf.bb.model.Article;
 import pf.bb.model.Configuration;
 import pf.bb.model.User;
 import pf.bb.task.*;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashSet;
 
 import static pf.bb.controller.LoginController.activeUser;
@@ -271,29 +270,61 @@ public class DashboardController {
 
                 removeButton.setOnAction(event -> {
                     Configuration config = getTableView().getItems().get(getIndex());
-                    System.out.println("row-ID removeButton: " + config.id);
 
-                    // DELETE A CONFIGURATION REQUIRES: DELETE BILL -> DELETE ORDER -> DELETE CONFIGURATION  !! FOREIGN KEY Constraints
-                    // ASSUMPTION HERE: Bill is automatically created with order
-                    if (config.order != null) {
-                        // DELETE BILL FROM DB
-                        DeleteBillTask billDeleteTask1 = new DeleteBillTask(activeUser, config.order.bill.id);
-                        billDeleteTask1.setOnSucceeded((WorkerStateEvent billDeleted) -> {
-                            System.out.println("bill id=" + config.order.bill.id + " deleted=" +  billDeleteTask1.getValue());
+                    String newline = "\n";
+                    String configID = String.valueOf(config.id);
+                    String configDate = config.timestampCreated;
+                    String configCustomerName = config.getCustomerName();
+                    String configCustomerId = config.getCustomerId();
+                    String configState = config.status;
+                    ArrayList<String> configList = new ArrayList<>();
+                    ArrayList<Float> priceList = new ArrayList<>();
+                    float finalPrice = 0.0f;
 
-                            // DELETE ORDER FROM DB
-                            DeleteOrderTask orderDeleteTask1 = new DeleteOrderTask(activeUser, config.order.id);
-                            orderDeleteTask1.setOnSucceeded((WorkerStateEvent orderDeleted) -> {
-                                System.out.println("order id=" + config.order.id + " deleted=" + orderDeleteTask1.getValue());
-                                deleteConfigFromDb(config.id);
+                    for (Article a : config.articles) {
+                        configList.add(a.name);
+                        priceList.add(a.price);
+                    }
+
+                    for (float f : priceList) {
+                        finalPrice += f;
+                    }
+
+                    Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "", ButtonType.YES, ButtonType.NO);
+                    alert.setTitle("Bicycle Builder - Konfiguration");
+                    alert.setHeaderText("Möchten Sie die ausgewählte Konfiguration entfernen?");
+                    alert.setContentText("Konfigurations-ID: " + configID + newline
+                            + "Erstellungsdatum: " + configDate + newline
+                            + "Kundenname: " + configCustomerName + newline
+                            + "Kunden-ID: " + configCustomerId + newline
+                            + "Status: " + configState + newline
+                            + "Gesamtpreis: "  + strPriceBeautify(finalPrice) + newline
+                            + "Artikelliste: " + configList.toString().replace("[", "").replace("]", "").trim() + newline + newline);
+                    alert.showAndWait();
+
+                    if (alert.getResult() == ButtonType.YES) {
+                        // DELETE A CONFIGURATION REQUIRES: DELETE BILL -> DELETE ORDER -> DELETE CONFIGURATION  !! FOREIGN KEY Constraints
+                        // ASSUMPTION HERE: Bill is automatically created with order
+                        if (config.order != null) {
+                            // DELETE BILL FROM DB
+                            DeleteBillTask billDeleteTask1 = new DeleteBillTask(activeUser, config.order.bill.id);
+                            billDeleteTask1.setOnSucceeded((WorkerStateEvent billDeleted) -> {
+                                System.out.println("bill id=" + config.order.bill.id + " deleted=" +  billDeleteTask1.getValue());
+
+                                // DELETE ORDER FROM DB
+                                DeleteOrderTask orderDeleteTask1 = new DeleteOrderTask(activeUser, config.order.id);
+                                orderDeleteTask1.setOnSucceeded((WorkerStateEvent orderDeleted) -> {
+                                    System.out.println("order id=" + config.order.id + " deleted=" + orderDeleteTask1.getValue());
+                                    deleteConfigFromDb(config.id);
+                                });
+                                //Tasks in eigenem Thread ausführen
+                                new Thread(orderDeleteTask1).start();
                             });
                             //Tasks in eigenem Thread ausführen
-                            new Thread(orderDeleteTask1).start();
-                        });
-                        //Tasks in eigenem Thread ausführen
-                        new Thread(billDeleteTask1).start();
-                    } else {
-                        deleteConfigFromDb(config.id);
+                            new Thread(billDeleteTask1).start();
+                        } else {
+                            deleteConfigFromDb(config.id);
+                        }
                     }
                 });
                 setGraphic(empty ? null : hBox);
@@ -368,6 +399,10 @@ public class DashboardController {
         alert.setHeaderText(headerText);
         alert.setContentText(contentText);
         alert.showAndWait();
+    }
+
+    private String strPriceBeautify(float value) {
+        return String.valueOf(String.format("%.02f", value));
     }
 }
 

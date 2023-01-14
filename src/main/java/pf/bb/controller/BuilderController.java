@@ -37,7 +37,7 @@ public class BuilderController {
     public RequiredFieldValidator validatorCustomerStreet, validatorCustomerNr, validatorCustomerZipcode, validatorCustomerCity;
     public JFXTextField tfCustomerID, tfCustomerFirstName, tfCustomerLastName, tfCustomerMail, tfCustomerStreet, tfCustomerNr, tfCustomerZipcode, tfCustomerCity;
     public AnchorPane anchorContainer;
-    public JFXButton btnHeaderHome, btnSaveDraft, btnAddCustomerData, btnSidebarHome;
+    public JFXButton btnHeaderHome, btnSaveDraft, btnAddCustomerData, btnSidebarHome, btnCustomerFinish;
     public JFXTextArea svgTextarea;
     public StackPane spaneSVG;
     private String svgInfoFrameModel, svgInfoFrameColor, svgInfoFrameSize, svgInfoFrameProducerName, svgInfoFrameDesc, svgInfoFrameColorHex;
