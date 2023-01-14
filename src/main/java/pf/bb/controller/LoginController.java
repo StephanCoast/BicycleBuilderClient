@@ -61,6 +61,7 @@ public class LoginController {
                 GetUserDetailsTask userDetailsTask = new GetUserDetailsTask(LoginController.activeUser);
                 userDetailsTask.setOnSucceeded((WorkerStateEvent e5) -> {
                     activeUser.id = userDetailsTask.getValue().id;
+                    activeUser.role = userDetailsTask.getValue().role;
 
                     // Todo Remove before production - TEST Configuration Api
                     //testConfigurationApi();
