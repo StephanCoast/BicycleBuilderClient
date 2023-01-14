@@ -130,6 +130,8 @@ public class DashboardController {
             btnNewConfig.setDisable(false);
             closeAllDrawers();
             setDefaultFocus();
+
+            createInfoAlert("Bicycle Builder - Info", "Der neue Benutzer wurde gespeichert.", null);
         }
     }
 
@@ -158,6 +160,8 @@ public class DashboardController {
             btnNewConfig.setDisable(false);
             closeAllDrawers();
             setDefaultFocus();
+
+            createInfoAlert("Bicycle Builder - Info", "Das Nutzerprofil wurde aktualisiert.", null);
         }
     }
 
@@ -395,6 +399,14 @@ public class DashboardController {
 
     private void createWarningAlert(String title, String headerText, String contentText) {
         Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle(title);
+        alert.setHeaderText(headerText);
+        alert.setContentText(contentText);
+        alert.showAndWait();
+    }
+
+    private void createInfoAlert(String title, String headerText, String contentText) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle(title);
         alert.setHeaderText(headerText);
         alert.setContentText(contentText);
