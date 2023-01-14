@@ -110,6 +110,7 @@ public class DashboardController {
     }
 
     // AR: hier speichert der Admin einen neuen User
+    // todo: speichern des neuen Users
     public void onBottomBarSaveAdmin(ActionEvent event) {
         if (textFieldIsEmpty(tfAdminUserName) || textFieldIsEmpty(tfAdminFirstName) || textFieldIsEmpty(tfAdminLastName) || textFieldIsEmpty(tfAdminMail) || pwFieldIsEmpty(pfAdminPW)) {
             createWarningAlert("Bicycle Builder - Info", "Bitte füllen Sie alle Felder aus.", null);
@@ -252,11 +253,20 @@ public class DashboardController {
                     Configuration config = getTableView().getItems().get(getIndex());
                     System.out.println("row-ID detailButton: " + config.id);
                     Main.currentConfig = config;
-                    try {
-                        vm.forceView(event, "Builder.fxml", "Bicycle Builder - Konfigurator", false);
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
-                    }
+                    // Get write access for Configuration in case another user is editing it atm
+                    PutConfigurationWriteAccessTask writeAccessTask1 = new PutConfigurationWriteAccessTask(activeUser, Main.currentConfig.id);
+                    writeAccessTask1.setOnRunning((runningEvent) -> System.out.println("trying to get writeAccess for configuration..."));
+                    writeAccessTask1.setOnSucceeded((WorkerStateEvent writeAccess) -> {
+                        System.out.println("writeAccess for configuration: " + writeAccessTask1.getValue());
+                        try {
+                            vm.forceView(event, "Builder.fxml", "Bicycle Builder - Konfigurator", false);
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+                    });
+                    writeAccessTask1.setOnFailed((writeAccessFailed) -> System.out.println("Couldn't get writeAccess for configuration, another user is editing it..."));
+                    //Tasks in eigenem Thread ausführen
+                    new Thread(writeAccessTask1).start();
                 });
 
                 removeButton.setOnAction(event -> {
