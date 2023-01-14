@@ -34,7 +34,7 @@ public class DashboardController {
     public JFXTextField tfAdminUserID, tfAdminFirstName, tfAdminLastName, tfAdminUserName, tfAdminMail;
     public JFXTextField tfProfileUserID, tfProfileFirstName, tfProfileLastName, tfProfileUserName, tfProfileMail;
     public JFXPasswordField pfAdminPW;
-    public JFXButton btnNewConfig;
+    public JFXButton btnNewConfig, btnCreateUser;
     public JFXDrawer drawerAdmin, drawerProfile;
     private HashSet<JFXDrawer> drawersDashboard;
     public BorderPane bpAdmin, bpProfile;
@@ -64,6 +64,7 @@ public class DashboardController {
         setupTableView();
         addActionButtonsToTable();
         loadConfigs();
+        setCreateUserBtn();
     }
 
     public void openDashboard(ActionEvent event) throws IOException {
@@ -258,6 +259,16 @@ public class DashboardController {
         validatorManager.initTextValidators(tfProfileLastName, validatorProfileLastName);
         validatorManager.initTextValidators(tfProfileUserName, validatorProfileUserName);
         validatorManager.initTextValidators(tfProfileMail, validatorProfileMail);
+    }
+
+    private void setCreateUserBtn() {
+        switch (activeUser.role) {
+            case "ADMIN":
+                btnCreateUser.setDisable(false);
+                break;
+            default:
+                btnCreateUser.setDisable(true);
+        }
     }
 }
 

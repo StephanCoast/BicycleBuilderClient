@@ -39,15 +39,7 @@
             <right>
                <StackPane prefWidth="270.0" BorderPane.alignment="CENTER">
                   <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="50.0">
-                     <JFXButton ellipsisString="" onAction="#openDashboard" prefHeight="28.0" prefWidth="28.0" styleClass="header-icon-home">
-                        <graphic>
-                           <FontAwesomeIconView glyphName="HOME" size="28" styleClass="header-icon-home" />
-                        </graphic>
-                        <cursor>
-                           <Cursor fx:constant="HAND" />
-                        </cursor>
-                     </JFXButton>
-                     <JFXButton ellipsisString="" onAction="#openAdmin" prefHeight="28.0" prefWidth="28.0" styleClass="header-icon-admin">
+                     <JFXButton fx:id="btnCreateUser" ellipsisString="" onAction="#openAdmin" prefHeight="28.0" prefWidth="28.0" styleClass="header-icon-admin">
                         <graphic>
                            <FontAwesomeIconView glyphName="USER_PLUS" size="28" styleClass="header-icon-admin" />
                         </graphic>
@@ -330,4 +322,3 @@
       </bottom>
    </BorderPane>
 </AnchorPane>
-
