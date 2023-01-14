@@ -62,6 +62,10 @@ public class LoginController {
                 userDetailsTask.setOnSucceeded((WorkerStateEvent e5) -> {
                     activeUser.id = userDetailsTask.getValue().id;
                     activeUser.role = userDetailsTask.getValue().role;
+                    activeUser.name = userDetailsTask.getValue().name;
+                    activeUser.forename = userDetailsTask.getValue().forename;
+                    activeUser.lastname = userDetailsTask.getValue().lastname;
+                    activeUser.email = userDetailsTask.getValue().email;
 
                     // Todo Remove before production - TEST Configuration Api
                     //testConfigurationApi();
@@ -80,8 +84,6 @@ public class LoginController {
         new Thread(loginTask).start();
     }
 
-
-    // todo: eventuell für fehlerhaften Login ebenfalls eine Alert-Box
     public void close() throws IOException {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "", ButtonType.YES, ButtonType.NO);
         alert.setTitle("Bicycle Builder");
