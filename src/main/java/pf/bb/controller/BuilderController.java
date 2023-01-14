@@ -7,10 +7,7 @@ import javafx.animation.ScaleTransition;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableFloatArray;
-import javafx.collections.ObservableIntegerArray;
-import javafx.collections.ObservableList;
+import javafx.collections.*;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -26,9 +23,12 @@ import pf.bb.Main;
 import pf.bb.model.Article;
 import pf.bb.model.Configuration;
 import pf.bb.task.PostConfigurationTask;
+import pf.bb.task.PutConfigurationTask;
+import pf.bb.task.PutConfigurationWriteAccessTask;
 
 import java.io.IOException;
 import java.util.HashSet;
+import java.util.Objects;
 
 import static pf.bb.controller.LoginController.activeUser;
 
@@ -88,6 +88,7 @@ public class BuilderController {
         onToggleDeselectSubCat(cat4TogglegroupColor);
         setupValidators();
         initSubcatsItems();
+        //initSubcatsColors(); -> // TODO
         initSubcatsListeners();
         initSubcatsInitialValues();
         initFinalPriceArray();
@@ -123,6 +124,7 @@ public class BuilderController {
     }
 
     private void saveNewConfiguration(ActionEvent event) throws IOException {
+
         finalArticleIdArray = FXCollections.observableIntegerArray();
         finalArticleIdArray.addAll(
             getArticleIDByNameSizeAndColor(cat1SelectName.getValue(), svgInfoFrameSize, svgInfoFrameColorHex), // 0=Rahmen
@@ -151,21 +153,60 @@ public class BuilderController {
         configNew.articles.add(Main.ARTICLES.get(finalArticleIdArray.get(7) - decrement)); // Klingel
         configNew.articles.add(Main.ARTICLES.get(finalArticleIdArray.get(8) - decrement)); // Ständer
         configNew.articles.add(Main.ARTICLES.get(finalArticleIdArray.get(9) - decrement)); // Licht
-
         System.out.println("BuilderController: Article-ID config object = " + configNew.articles);
 
-        PostConfigurationTask configNewPostTask1 = new PostConfigurationTask(activeUser, configNew);
-        configNewPostTask1.setOnRunning((successEvent) -> System.out.println("BuilderController: trying to save configuration..."));
-        configNewPostTask1.setOnSucceeded((WorkerStateEvent e1) -> {
-            System.out.println("BuilderController: configurations saved. id=" + configNewPostTask1.getValue());
-            Configuration createdConfiguration = configNewPostTask1.getValue();
-            System.out.println("BuilderController: Created Configuration = " + createdConfiguration.toString());
-        });
 
-        configNewPostTask1.setOnFailed((WorkerStateEvent e11) -> System.out.println("BuilderController: saving failed" + configNewPostTask1.getException()));
-        new Thread(configNewPostTask1).start();
+        if (Main.currentConfig == null) {
+            // NEW CONFIGURATION
+            PostConfigurationTask configNewPostTask1 = new PostConfigurationTask(activeUser, configNew);
+            configNewPostTask1.setOnRunning((successEvent) -> System.out.println("BuilderController: trying to save configuration..."));
+            configNewPostTask1.setOnSucceeded((WorkerStateEvent e1) -> {
+                System.out.println("BuilderController: configurations saved. id=" + configNewPostTask1.getValue());
+                Configuration createdConfiguration = configNewPostTask1.getValue();
+                System.out.println("BuilderController: Created Configuration = " + createdConfiguration.toString());
+                try {
+                    vm.forceView(event, "Dashboard.fxml", "Bicycle Builder - Dashboard", false);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            });
+            configNewPostTask1.setOnFailed((WorkerStateEvent configCreationFailed) -> {
+                System.out.println("BuilderController: saving failed" + configNewPostTask1.getException());
+            });
+            new Thread(configNewPostTask1).start();
+        } else {
+            Main.currentConfig.articles = configNew.articles;
 
-        vm.forceView(event, "Dashboard.fxml", "Bicycle Builder - Dashboard", false);
+            // TODO PUT CONFIGURATION TASK
+
+            // Test PUT - Update Configuration again
+            PutConfigurationWriteAccessTask writeAccessTask1 = new PutConfigurationWriteAccessTask(activeUser, Main.currentConfig.id);
+
+            writeAccessTask1.setOnRunning((runningEvent) -> System.out.println("trying to get writeAccess for configuration..."));
+            writeAccessTask1.setOnSucceeded((WorkerStateEvent writeAccess) -> {
+                System.out.println("writeAccess for configuration: " + writeAccessTask1.getValue());
+
+                // Update Configuration
+                PutConfigurationTask configurationPutTask1 = new PutConfigurationTask(activeUser, Main.currentConfig, Main.currentConfig.id);
+                //Erst Task definieren incl. WorkerStateEvent als Flag, um zu wissen, wann fertig
+                configurationPutTask1.setOnRunning((successEvent) -> System.out.println("trying to update configuration..."));
+                configurationPutTask1.setOnSucceeded((WorkerStateEvent configTask4) -> {
+                    System.out.println("configuration updated id: " + configurationPutTask1.getValue().id);
+                    try {
+                        vm.forceView(event, "Dashboard.fxml", "Bicycle Builder - Dashboard", false);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                });
+                //Tasks in eigenem Thread ausführen
+                new Thread(configurationPutTask1).start();
+            });
+            //Tasks in eigenem Thread ausführen
+            new Thread(writeAccessTask1).start();
+
+        }
+
+
     }
 
     public void openSidebarCat1(ActionEvent event) throws IOException {
@@ -456,23 +497,59 @@ public class BuilderController {
             setSubcatSelectboxDefault(cat6SelectStand, 0);
             setSubcatSelectboxDefault(cat6SelectLight, 0);
         } else {
-            // SET CURRENT CONFIG VALUES
-            // !! There must be one article of every type in the configuration! Make sure before save in the database!
-            cat1SelectName.getSelectionModel().select(Main.currentConfig.getArticleByType("Rahmen").name); // There must be only one RAHMEN in every config!
-            setSubcatToggleDefault(cat1TogglegroupColor,0);
-            setSubcatToggleDefault(cat1TogglegroupSize,0);
+            // SET CURRENT CONFIG VALUES - QUICK'n'Dirty statische Variante für 3 feste Toggles, besser Toggles dynamisch laden und Farbe aus DB zuweisen!
+            // !! There must be one article of every type in the configuration! Make sure client side before save in the database!
+            cat1SelectName.getSelectionModel().select(Main.currentConfig.getArticleByType("Rahmen").name);// There must be only one RAHMEN in every config!
+            // FARBE
+            if (Objects.equals(Main.currentConfig.getArticleByType("Rahmen").hexColor, "#000000"))
+                cat1TogglegroupColor.getToggles().get(0).setSelected(true);
+            else if (Objects.equals(Main.currentConfig.getArticleByType("Rahmen").hexColor, "#FFFFFF"))
+                cat1TogglegroupColor.getToggles().get(1).setSelected(true);
+            else
+                cat1TogglegroupColor.getToggles().get(2).setSelected(true);
+            // CHARACTERISTIC
+            if (Objects.equals(Main.currentConfig.getArticleByType("Rahmen").characteristic, "S"))
+                cat1TogglegroupSize.getToggles().get(0).setSelected(true);
+            else if (Objects.equals(Main.currentConfig.getArticleByType("Rahmen").characteristic, "M"))
+                cat1TogglegroupSize.getToggles().get(1).setSelected(true);
+            else
+                cat1TogglegroupSize.getToggles().get(2).setSelected(true);
 
             cat2SelectModel.getSelectionModel().select(Main.currentConfig.getArticleByType("Lenker").name);
             cat2SelectGrip.getSelectionModel().select(Main.currentConfig.getArticleByType("Griff").name);
-            setSubcatToggleDefault(cat2TogglegroupColor,0);
+            // COLOR
+            if (Objects.equals(Main.currentConfig.getArticleByType("Lenker").hexColor, "#000000"))
+                cat2TogglegroupColor.getToggles().get(0).setSelected(true);
+            else if (Objects.equals(Main.currentConfig.getArticleByType("Lenker").hexColor, "#FFFFFF"))
+                cat2TogglegroupColor.getToggles().get(1).setSelected(true);
+            else
+                cat2TogglegroupColor.getToggles().get(2).setSelected(true);
 
             cat3SelectModel.getSelectionModel().select(Main.currentConfig.getArticleByType("Laufrad").name);
             cat3SelectTyre.getSelectionModel().select(Main.currentConfig.getArticleByType("Reifen").name);
-            setSubcatToggleDefault(cat3TogglegroupColor,0);
-            setSubcatToggleDefault(cat3TogglegroupSize,0);
+            // FARBE
+            if (Objects.equals(Main.currentConfig.getArticleByType("Laufrad").hexColor, "#000000"))
+                cat3TogglegroupColor.getToggles().get(0).setSelected(true);
+            else if (Objects.equals(Main.currentConfig.getArticleByType("Laufrad").hexColor, "#FFFFFF"))
+                cat3TogglegroupColor.getToggles().get(1).setSelected(true);
+            else
+                cat3TogglegroupColor.getToggles().get(2).setSelected(true);
+            // CHARACTERISTIC
+            if (Objects.equals(Main.currentConfig.getArticleByType("Laufrad").characteristic, "S"))
+                cat3TogglegroupSize.getToggles().get(0).setSelected(true);
+            else if (Objects.equals(Main.currentConfig.getArticleByType("Laufrad").characteristic, "M"))
+                cat3TogglegroupSize.getToggles().get(1).setSelected(true);
+            else
+                cat3TogglegroupSize.getToggles().get(2).setSelected(true);
 
             cat4SelectModel.getSelectionModel().select(Main.currentConfig.getArticleByType("Sattel").name);
-            setSubcatToggleDefault(cat4TogglegroupColor,0);
+            // FARBE
+            if (Objects.equals(Main.currentConfig.getArticleByType("Sattel").hexColor, "#000000"))
+                cat4TogglegroupColor.getToggles().get(0).setSelected(true);
+            else if (Objects.equals(Main.currentConfig.getArticleByType("Sattel").hexColor, "#4b2c20"))
+                cat4TogglegroupColor.getToggles().get(1).setSelected(true);
+            else
+                cat4TogglegroupColor.getToggles().get(2).setSelected(true);
 
             cat5SelectModel.getSelectionModel().select(Main.currentConfig.getArticleByType("Bremse").name);
 
@@ -484,24 +561,6 @@ public class BuilderController {
         }
 
 
-
-        cat1FramePrice = getPriceByArticleNameAndSize(cat1SelectName.getValue(), svgInfoFrameSize);
-        cat2HandlebarPrice = getPriceByArticleName(cat2SelectModel.getValue());
-        cat2GripPrice = getPriceByArticleName(cat2SelectGrip.getValue());
-        cat3WheelPrice = getPriceByArticleNameAndSize(cat3SelectModel.getValue(), svgInfoWheelsSize);
-        cat3TyrePrice = getPriceByArticleName(cat3SelectTyre.getValue());
-        cat4SaddlePrice = getPriceByArticleName(cat4SelectModel.getValue());
-        cat5BrakePrice = getPriceByArticleName(cat5SelectModel.getValue());
-        cat6BellPrice = getPriceByArticleName(cat6SelectBell.getValue());
-        cat6StandPrice = getPriceByArticleName(cat6SelectStand.getValue());
-        cat6LightPrice = getPriceByArticleName(cat6SelectLight.getValue());
-
-        cat1LabelPrice.setText(strPriceBeautify(cat1FramePrice));
-        cat2LabelPrice.setText(strPriceBeautify(Float.sum(cat2HandlebarPrice, cat2GripPrice)));
-        cat3LabelPrice.setText(strPriceBeautify(Float.sum(cat3WheelPrice, cat3TyrePrice)));
-        cat4LabelPrice.setText(strPriceBeautify(cat4SaddlePrice));
-        cat5LabelPrice.setText(strPriceBeautify(cat5BrakePrice));
-        cat6LabelPrice.setText(strPriceBeautify(Float.sum(Float.sum(cat6BellPrice, cat6StandPrice), cat6LightPrice)));
     }
 
     private void initFinalPriceArray() {
@@ -584,6 +643,25 @@ public class BuilderController {
         cat6SelectStand.setItems(getArticleNamesByType("Ständer"));
         cat6SelectLight.setItems(getArticleNamesByType("Licht"));
     }
+
+ //   TODO remove before production
+//    public void initSubcatsColor() {
+//
+//        getArticleColorsByName()
+//        cat1TogglegroupColor.getToggles().clear();
+////         for color in cat1.colors
+////         toggle = new JFXToggleNode()
+////         toggle.unselectedColor = Color.web("#0000FF",1.0))
+////         cat1TogglegroupColor.add(toggle)
+//
+//
+//        for (Toggle toggle : cat1TogglegroupColor.getToggles()) {
+//            JFXToggleNode jfxToggleNode = (JFXToggleNode) toggle;
+//            jfxToggleNode.setUnSelectedColor(Color.web("#0000FF",1.0));
+//            System.out.println(jfxToggleNode.getUnSelectedColor());
+//        }
+//    }
+
 
     // AR: get model names with the given type, remove duplicates
     private ObservableList<String> getArticleNamesByType(String typeString) {
