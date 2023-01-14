@@ -8,8 +8,6 @@ import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXDrawer;
 import javafx.application.Platform;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -19,10 +17,8 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import pf.bb.Main;
 import pf.bb.model.Configuration;
-import pf.bb.task.DeleteBillTask;
-import pf.bb.task.DeleteConfigurationTask;
-import pf.bb.task.DeleteOrderTask;
-import pf.bb.task.GetConfigurationsTask;
+import pf.bb.model.User;
+import pf.bb.task.*;
 
 import java.io.IOException;
 import java.util.HashSet;
@@ -31,10 +27,10 @@ import static pf.bb.controller.LoginController.activeUser;
 
 public class DashboardController {
 
-    public RequiredFieldValidator validatorAdminUserID, validatorAdminFirstName, validatorAdminLastName, validatorAdminUserName, validatorAdminMail, validatorAdminPW;
-    public RequiredFieldValidator validatorProfileUserID, validatorProfileFirstName, validatorProfileLastName, validatorProfileUserName, validatorProfileMail;
-    public JFXTextField tfAdminUserID, tfAdminFirstName, tfAdminLastName, tfAdminUserName, tfAdminMail;
-    public JFXTextField tfProfileUserID, tfProfileFirstName, tfProfileLastName, tfProfileUserName, tfProfileMail;
+    public RequiredFieldValidator validatorAdminFirstName, validatorAdminLastName, validatorAdminUserName, validatorAdminMail, validatorAdminPW;
+    public RequiredFieldValidator validatorProfileFirstName, validatorProfileLastName, validatorProfileUserName, validatorProfileMail;
+    public JFXTextField tfAdminFirstName, tfAdminLastName, tfAdminUserName, tfAdminMail;
+    public JFXTextField tfProfileFirstName, tfProfileLastName, tfProfileUserName, tfProfileMail;
     public JFXPasswordField pfAdminPW;
     public JFXButton btnNewConfig, btnCreateUser;
     public JFXDrawer drawerAdmin, drawerProfile;
@@ -74,12 +70,28 @@ public class DashboardController {
         btnNewConfig.setDisable(true);
         closeAllDrawers();
         vm.forceDrawerView(drawerAdmin, bpAdmin);
+
+        tfAdminUserName.clear();
+        tfAdminFirstName.clear();
+        tfAdminLastName.clear();
+        tfAdminMail.clear();
+        pfAdminPW.clear();
     }
 
     public void openProfile(ActionEvent event) throws IOException {
         btnNewConfig.setDisable(true);
         closeAllDrawers();
         vm.forceDrawerView(drawerProfile, bpProfile);
+
+        tfProfileFirstName.clear();
+        tfProfileLastName.clear();
+        tfProfileUserName.clear();
+        tfProfileMail.clear();
+
+        tfProfileFirstName.setText(activeUser.forename);
+        tfProfileLastName.setText(activeUser.lastname);
+        tfProfileUserName.setText(activeUser.name);
+        tfProfileMail.setText(activeUser.email);
     }
 
     public void logout(ActionEvent event) throws IOException {
@@ -98,19 +110,71 @@ public class DashboardController {
     }
 
     // AR: hier speichert der Admin einen neuen User
-    // todo: speichern des neuen Users
     public void onBottomBarSaveAdmin(ActionEvent event) {
-        btnNewConfig.setDisable(false);
-        closeAllDrawers();
-        setDefaultFocus();
+        if (textFieldIsEmpty(tfAdminUserName) || textFieldIsEmpty(tfAdminFirstName) || textFieldIsEmpty(tfAdminLastName) || textFieldIsEmpty(tfAdminMail) || pwFieldIsEmpty(pfAdminPW)) {
+            createWarningAlert("Bicycle Builder - Info", "Bitte füllen Sie alle Felder aus.", null);
+        } else {
+            User newUser = new User(tfAdminUserName.getText(), pfAdminPW.getText(), tfAdminMail.getText(), tfAdminFirstName.getText(), tfAdminLastName.getText(), "CONSULTANT");
+            PostUserTask userTaskNewUser = new PostUserTask(activeUser, newUser);
+            userTaskNewUser.setOnSucceeded((WorkerStateEvent userCreated) -> {
+                if(userTaskNewUser.getValue() != null) {
+                    System.out.println("DashboardController: user id=" + userTaskNewUser.getValue().id + " created");
+                }
+                else {
+                    System.out.println("DashboardController: user creation failed for: " + newUser.id + " result: " + userTaskNewUser.getMessage());
+                }
+            });
+            userTaskNewUser.setOnFailed((WorkerStateEvent userCreatedFailed) -> System.out.println("DashboardController: user creation failed for: " + newUser.id + " result: " + userTaskNewUser.getMessage()));
+            new Thread(userTaskNewUser).start();
+
+            btnNewConfig.setDisable(false);
+            closeAllDrawers();
+            setDefaultFocus();
+        }
     }
 
     // AR: hier speichert der User neue Daten für sein Profil
-    // todo: speichern des neuen Profils
     public void onBottomBarSaveProfile(ActionEvent event) {
-        btnNewConfig.setDisable(false);
-        closeAllDrawers();
-        setDefaultFocus();
+        if (textFieldIsEmpty(tfProfileUserName) || textFieldIsEmpty(tfProfileFirstName) || textFieldIsEmpty(tfProfileLastName) || textFieldIsEmpty(tfProfileMail)) {
+            createWarningAlert("Bicycle Builder - Info", "Bitte füllen Sie alle Felder aus.", null);
+        } else {
+            User updatedUser = activeUser;
+            updatedUser.id = activeUser.id;
+            updatedUser.forename = tfProfileFirstName.getText();
+            updatedUser.lastname = tfProfileLastName.getText();
+            updatedUser.name = tfProfileUserName.getText();
+            updatedUser.email = tfProfileMail.getText();
+
+            PutUserTask userTaskUpdatedUser = new PutUserTask(activeUser, updatedUser, activeUser.id);
+            userTaskUpdatedUser.setOnSucceeded((WorkerStateEvent userUpdated) -> {
+                if (userTaskUpdatedUser.getValue() != null)
+                    System.out.println("DashboardController: user id=" + userTaskUpdatedUser.getValue().id + " updated");
+                else
+                    System.out.println("DashboardController: user update failed for: " + updatedUser.id + " result: " + userTaskUpdatedUser.getMessage());
+            });
+            userTaskUpdatedUser.setOnFailed((WorkerStateEvent userUpdatedFailed) -> System.out.println("DashboardController: user update failed for: " + updatedUser.id + " result: " + userTaskUpdatedUser.getMessage()));
+            new Thread(userTaskUpdatedUser).start();
+
+            btnNewConfig.setDisable(false);
+            closeAllDrawers();
+            setDefaultFocus();
+        }
+    }
+
+    private boolean textFieldIsEmpty(JFXTextField tf) {
+        if (tf.getText().isEmpty()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    private boolean pwFieldIsEmpty(JFXPasswordField pf) {
+        if (pf.getText().isEmpty()) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     private void loadConfigs() {
@@ -246,14 +310,12 @@ public class DashboardController {
     }
 
     private void setupValidators() {
-        validatorManager.initTextValidators(tfAdminUserID, validatorAdminUserID);
         validatorManager.initTextValidators(tfAdminFirstName, validatorAdminFirstName);
         validatorManager.initTextValidators(tfAdminLastName, validatorAdminLastName);
         validatorManager.initTextValidators(tfAdminUserName, validatorAdminUserName);
         validatorManager.initTextValidators(tfAdminMail, validatorAdminMail);
         validatorManager.initPasswordValidators(pfAdminPW, validatorAdminPW);
 
-        validatorManager.initTextValidators(tfProfileUserID, validatorProfileUserID);
         validatorManager.initTextValidators(tfProfileFirstName, validatorProfileFirstName);
         validatorManager.initTextValidators(tfProfileLastName, validatorProfileLastName);
         validatorManager.initTextValidators(tfProfileUserName, validatorProfileUserName);
@@ -271,33 +333,15 @@ public class DashboardController {
     }
 
     private void initTextFieldListeners() {
-        setTextFieldRules(tfAdminUserID, "[\\d+]");
         setTextFieldRules(tfAdminUserName, "[a-zA-Z0-9]");
         setTextFieldRules(tfAdminMail, "[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$");
         setTextFieldRules(tfAdminFirstName, "[a-zA-Z-'`´]");
         setTextFieldRules(tfAdminLastName, "[a-zA-Z-'`´]");
 
-        setTextFieldRules(tfProfileUserID, "[\\d+]");
         setTextFieldRules(tfProfileUserName, "[a-zA-Z0-9]");
         setTextFieldRules(tfProfileMail, "[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$");
         setTextFieldRules(tfProfileFirstName, "[a-zA-Z-'`´]");
         setTextFieldRules(tfProfileLastName, "[a-zA-Z-'`´]");
-
-        int maxLengthID = 10;
-
-        tfAdminUserID.textProperty().addListener((ov, oldValue, newValue) -> {
-            if (tfAdminUserID.getText().length() > maxLengthID) {
-                String str = tfAdminUserID.getText().substring(0, maxLengthID);
-                tfAdminUserID.setText(str);
-            }
-        });
-
-        tfProfileUserID.textProperty().addListener((ov, oldValue, newValue) -> {
-            if (tfProfileUserID.getText().length() > maxLengthID) {
-                String str = tfProfileUserID.getText().substring(0, maxLengthID);
-                tfProfileUserID.setText(str);
-            }
-        });
     }
 
     private void setTextFieldRules(JFXTextField tf, String pattern) {
@@ -306,6 +350,14 @@ public class DashboardController {
                 tf.setText(newValue.replaceAll("[^" + pattern + "]", ""));
             }
         });
+    }
+
+    private void createWarningAlert(String title, String headerText, String contentText) {
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle(title);
+        alert.setHeaderText(headerText);
+        alert.setContentText(contentText);
+        alert.showAndWait();
     }
 }
 
