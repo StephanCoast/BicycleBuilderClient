@@ -1058,7 +1058,7 @@
                                              <HBox.margin>
                                                 <Insets />
                                              </HBox.margin></JFXListCell>
-                                          <TextField editable="false" styleClass="catSidebarFinalCellRight" prefWidth="275.0" text="123456">
+                                          <TextField editable="false" prefWidth="275.0" styleClass="catSidebarFinalCellRight" text="123456">
                                              <HBox.margin>
                                                 <Insets />
                                              </HBox.margin>
@@ -1074,7 +1074,7 @@
                                              <HBox.margin>
                                                 <Insets />
                                              </HBox.margin></JFXListCell>
-                                          <TextField editable="false" styleClass="catSidebarFinalCellRight" prefWidth="275.0" text="123456" />
+                                          <TextField editable="false" prefWidth="275.0" styleClass="catSidebarFinalCellRight" text="123456" />
                                        </children>
                                        <VBox.margin>
                                           <Insets left="10.0" right="10.0" />
@@ -1086,7 +1086,7 @@
                                              <HBox.margin>
                                                 <Insets />
                                              </HBox.margin></JFXListCell>
-                                          <TextField editable="false" styleClass="catSidebarFinalCellRight" prefWidth="275.0" text="Max" />
+                                          <TextField editable="false" prefWidth="275.0" styleClass="catSidebarFinalCellRight" text="Max" />
                                        </children>
                                        <VBox.margin>
                                           <Insets left="10.0" right="10.0" />
@@ -1098,7 +1098,7 @@
                                              <HBox.margin>
                                                 <Insets />
                                              </HBox.margin></JFXListCell>
-                                          <TextField editable="false" styleClass="catSidebarFinalCellRight" prefWidth="275.0" text="Mustermann" />
+                                          <TextField editable="false" prefWidth="275.0" styleClass="catSidebarFinalCellRight" text="Mustermann" />
                                        </children>
                                        <VBox.margin>
                                           <Insets left="10.0" right="10.0" />
@@ -1110,7 +1110,7 @@
                                              <HBox.margin>
                                                 <Insets />
                                              </HBox.margin></JFXListCell>
-                                          <TextField editable="false" styleClass="catSidebarFinalCellRight" prefWidth="275.0" text="Musterstr." />
+                                          <TextField editable="false" prefWidth="275.0" styleClass="catSidebarFinalCellRight" text="Musterstr." />
                                        </children>
                                        <VBox.margin>
                                           <Insets left="10.0" right="10.0" />
@@ -1122,7 +1122,7 @@
                                              <HBox.margin>
                                                 <Insets />
                                              </HBox.margin></JFXListCell>
-                                          <TextField editable="false" styleClass="catSidebarFinalCellRight" prefWidth="275.0" text="11" />
+                                          <TextField editable="false" prefWidth="275.0" styleClass="catSidebarFinalCellRight" text="11" />
                                        </children>
                                        <VBox.margin>
                                           <Insets left="10.0" right="10.0" />
@@ -1134,7 +1134,7 @@
                                              <HBox.margin>
                                                 <Insets />
                                              </HBox.margin></JFXListCell>
-                                          <TextField editable="false" styleClass="catSidebarFinalCellRight" prefWidth="275.0" text="12345" />
+                                          <TextField editable="false" prefWidth="275.0" styleClass="catSidebarFinalCellRight" text="12345" />
                                        </children>
                                        <VBox.margin>
                                           <Insets left="10.0" right="10.0" />
@@ -1146,7 +1146,7 @@
                                              <HBox.margin>
                                                 <Insets />
                                              </HBox.margin></JFXListCell>
-                                          <TextField editable="false" styleClass="catSidebarFinalCellRight" prefWidth="275.0" text="Musterstadt" />
+                                          <TextField editable="false" prefWidth="275.0" styleClass="catSidebarFinalCellRight" text="Musterstadt" />
                                        </children>
                                        <VBox.margin>
                                           <Insets left="10.0" right="10.0" />
@@ -1158,7 +1158,7 @@
                                              <HBox.margin>
                                                 <Insets />
                                              </HBox.margin></JFXListCell>
-                                          <TextField editable="false" styleClass="catSidebarFinalCellRight" prefWidth="275.0" text="mustermann@osmi.de" />
+                                          <TextField editable="false" prefWidth="275.0" styleClass="catSidebarFinalCellRight" text="mustermann@osmi.de" />
                                        </children>
                                        <VBox.margin>
                                           <Insets left="10.0" right="10.0" />
@@ -1263,7 +1263,7 @@
                                                 <right>
                                                    <StackPane alignment="BOTTOM_CENTER" minWidth="-Infinity" prefWidth="225.0" BorderPane.alignment="CENTER">
                                                       <children>
-                                                         <JFXButton buttonType="RAISED" ellipsisString="" onAction="#onBottomBarFinish" prefHeight="40.0" prefWidth="150.0" styleClass="btn-sidebar-save, btn-standard-comp" text="ABSCHLIESSEN" />
+                                                         <JFXButton fx:id="btnCustomerFinish" buttonType="RAISED" ellipsisString="" onAction="#onBottomBarFinish" prefHeight="40.0" prefWidth="150.0" styleClass="btn-sidebar-save, btn-standard-comp" text="ABSCHLIESSEN" />
                                                       </children>
                                                       <padding>
                                                          <Insets bottom="20.0" />

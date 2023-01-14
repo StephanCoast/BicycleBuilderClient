@@ -102,7 +102,7 @@
             <center>
                <StackPane prefHeight="150.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                   <children>
-                     <JFXDrawer fx:id="drawerAdmin" defaultDrawerSize="225.0" direction="BOTTOM" prefHeight="125.0" prefWidth="900.0">
+                     <JFXDrawer fx:id="drawerAdmin" defaultDrawerSize="225.0" direction="BOTTOM" prefHeight="125.0" prefWidth="900.0" visible="false">
                         <children>
                            <BorderPane fx:id="bpAdmin" prefHeight="225.0" styleClass="bpAdmin">
                               <center>
@@ -194,7 +194,7 @@
                                                 <right>
                                                    <StackPane alignment="BOTTOM_CENTER" prefWidth="225.0" BorderPane.alignment="CENTER">
                                                       <children>
-                                                         <JFXButton buttonType="RAISED" ellipsisString="" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#onBottomBarSaveAdmin" prefHeight="40.0" prefWidth="120.0" styleClass="btn-builder, btn-standard-comp" text="SPEICHERN" />
+                                                         <JFXButton fx:id="btnCreateUserSave" buttonType="RAISED" ellipsisString="" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#onBottomBarSaveAdmin" prefHeight="40.0" prefWidth="120.0" styleClass="btn-builder, btn-standard-comp" text="SPEICHERN" />
                                                       </children>
                                                       <BorderPane.margin>
                                                          <Insets />
@@ -213,7 +213,7 @@
                            </BorderPane>
                         </children>
                      </JFXDrawer>
-                     <JFXDrawer fx:id="drawerProfile" defaultDrawerSize="225.0" direction="BOTTOM" prefHeight="125.0" prefWidth="900.0" visible="false">
+                     <JFXDrawer fx:id="drawerProfile" defaultDrawerSize="225.0" direction="BOTTOM" prefHeight="125.0" prefWidth="900.0">
                         <children>
                            <BorderPane fx:id="bpProfile" prefHeight="200.0" prefWidth="200.0" styleClass="bpProfile">
                               <center>
@@ -299,7 +299,7 @@
                                                 <right>
                                                    <StackPane alignment="BOTTOM_CENTER" prefWidth="225.0" BorderPane.alignment="CENTER">
                                                       <children>
-                                                         <JFXButton buttonType="RAISED" ellipsisString="" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#onBottomBarSaveProfile" prefHeight="40.0" prefWidth="150.0" styleClass="btn-builder, btn-standard-comp" text="SPEICHERN" />
+                                                         <JFXButton fx:id="btnProfileSave" buttonType="RAISED" ellipsisString="" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#onBottomBarSaveProfile" prefHeight="40.0" prefWidth="150.0" styleClass="btn-builder, btn-standard-comp" text="SPEICHERN" />
                                                       </children>
                                                       <padding>
                                                          <Insets bottom="20.0" />

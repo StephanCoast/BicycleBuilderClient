@@ -8,6 +8,8 @@ import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXDrawer;
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -65,10 +67,7 @@ public class DashboardController {
         addActionButtonsToTable();
         loadConfigs();
         setCreateUserBtn();
-    }
-
-    public void openDashboard(ActionEvent event) throws IOException {
-        vm.forceView(event, "Dashboard.fxml", "Bicycle Builder - Dashboard", false);
+        initTextFieldListeners();
     }
 
     public void openAdmin(ActionEvent event) throws IOException {
@@ -269,6 +268,44 @@ public class DashboardController {
             default:
                 btnCreateUser.setDisable(true);
         }
+    }
+
+    private void initTextFieldListeners() {
+        setTextFieldRules(tfAdminUserID, "[\\d+]");
+        setTextFieldRules(tfAdminUserName, "[a-zA-Z0-9]");
+        setTextFieldRules(tfAdminMail, "[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$");
+        setTextFieldRules(tfAdminFirstName, "[a-zA-Z-'`´]");
+        setTextFieldRules(tfAdminLastName, "[a-zA-Z-'`´]");
+
+        setTextFieldRules(tfProfileUserID, "[\\d+]");
+        setTextFieldRules(tfProfileUserName, "[a-zA-Z0-9]");
+        setTextFieldRules(tfProfileMail, "[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$");
+        setTextFieldRules(tfProfileFirstName, "[a-zA-Z-'`´]");
+        setTextFieldRules(tfProfileLastName, "[a-zA-Z-'`´]");
+
+        int maxLengthID = 10;
+
+        tfAdminUserID.textProperty().addListener((ov, oldValue, newValue) -> {
+            if (tfAdminUserID.getText().length() > maxLengthID) {
+                String str = tfAdminUserID.getText().substring(0, maxLengthID);
+                tfAdminUserID.setText(str);
+            }
+        });
+
+        tfProfileUserID.textProperty().addListener((ov, oldValue, newValue) -> {
+            if (tfProfileUserID.getText().length() > maxLengthID) {
+                String str = tfProfileUserID.getText().substring(0, maxLengthID);
+                tfProfileUserID.setText(str);
+            }
+        });
+    }
+
+    private void setTextFieldRules(JFXTextField tf, String pattern) {
+        tf.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.matches(pattern)) {
+                tf.setText(newValue.replaceAll("[^" + pattern + "]", ""));
+            }
+        });
     }
 }
 
