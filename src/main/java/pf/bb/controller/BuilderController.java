@@ -24,6 +24,7 @@ import pf.bb.model.Article;
 import pf.bb.model.Configuration;
 import pf.bb.task.PostConfigurationTask;
 import pf.bb.task.PutConfigurationTask;
+import pf.bb.task.PutConfigurationWriteAccessTask;
 
 import java.io.IOException;
 import java.util.HashSet;
@@ -101,8 +102,21 @@ public class BuilderController {
     }
 
     public void openDashboard(ActionEvent event) throws IOException {
-        Main.currentConfig = null;
-        vm.forceView(event, "Dashboard.fxml", "Bicycle Builder - Dashboard", false);
+        // Give back write access for Configuration before returning to dashboard
+        PutConfigurationWriteAccessTask writeAccessTask1 = new PutConfigurationWriteAccessTask(activeUser, Main.currentConfig.id);
+        writeAccessTask1.setOnRunning((runningEvent) -> System.out.println("trying to give back writeAccess for configuration..."));
+        writeAccessTask1.setOnSucceeded((WorkerStateEvent writeAccess) -> {
+            System.out.println("writeAccess returned for configuration: " + writeAccessTask1.getValue());
+            Main.currentConfig = null;
+            try {
+                vm.forceView(event, "Dashboard.fxml", "Bicycle Builder - Dashboard", false);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
+        writeAccessTask1.setOnFailed((writeAccessFailed) -> System.out.println("Couldn't return writeAccess for configuration"));
+        //Tasks in eigenem Thread ausführen
+        new Thread(writeAccessTask1).start();
     }
 
     public void openCustomerDataView(ActionEvent event) throws IOException {
@@ -164,7 +178,7 @@ public class BuilderController {
                 Configuration createdConfiguration = configNewPostTask1.getValue();
                 System.out.println("BuilderController: Created Configuration = " + createdConfiguration.toString());
                 try {
-                    vm.forceView(event, "Dashboard.fxml", "Bicycle Builder - Dashboard", false);
+                    openDashboard(event);
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
@@ -183,7 +197,7 @@ public class BuilderController {
             configurationPutTask1.setOnSucceeded((WorkerStateEvent configTask4) -> {
                 System.out.println("configuration updated id: " + configurationPutTask1.getValue().id);
                 try {
-                    vm.forceView(event, "Dashboard.fxml", "Bicycle Builder - Dashboard", false);
+                    openDashboard(event);
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
@@ -298,6 +312,7 @@ public class BuilderController {
     // todo: Kundendaten speichern bzw weiterverarbeiten -> Server
     // Stephan
     public void onBottomBarFinish(ActionEvent event) throws IOException {
+
         closeAllBottomDrawers();
         vm.forceDrawerView(drawerBottomCats, bpCats);
         vm.forceDrawerView(drawerFinish, catFinish);
