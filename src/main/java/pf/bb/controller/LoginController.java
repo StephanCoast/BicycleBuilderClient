@@ -110,7 +110,7 @@ public class LoginController {
                 System.out.println("user id=" + userTask1.getValue().id + " created");
 
 
-                // TEST UPDATE OF USER - ONLY USER WITH ADMIN ROLL IS ALLOWED
+                // TEST UPDATE OF USER - ONLY THE USER ITSELF IS ALLOWED
                 User updatedUser = userTask1.getValue();
                 updatedUser.id = userTask1.getValue().id;
                 updatedUser.lastname = "Updated";
