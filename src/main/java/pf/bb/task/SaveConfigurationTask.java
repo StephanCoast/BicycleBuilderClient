@@ -18,10 +18,9 @@ import static pf.bb.controller.LoginController.activeUser;
 public class SaveConfigurationTask extends Task<Configuration> {
 
     private final User user;
-    private BuilderController bc;
+    private final BuilderController bc;
 
-    private String configJSON;
-    private String status;
+    private final String status;
 
     private static final GsonBuilder gsonBuilder = new GsonBuilder();
     private static final Gson gson = gsonBuilder.excludeFieldsWithoutExposeAnnotation().create();
@@ -66,11 +65,12 @@ public class SaveConfigurationTask extends Task<Configuration> {
         System.out.println("BuilderController: Article-ID config object = " + configNew.articles);
 
         try {
+            String configJSON;
             if (Main.currentConfig == null) {
                 configNew.status = this.status;
-                this.configJSON = gson.toJson(configNew);
+                configJSON = gson.toJson(configNew);
 
-                HttpResponse<JsonNode> res = Unirest.post(Configuration.getUrl()).header("Content-Type", "application/json").header("Authorization", user.jsonWebToken).body(this.configJSON).asJson();
+                HttpResponse<JsonNode> res = Unirest.post(Configuration.getUrl()).header("Content-Type", "application/json").header("Authorization", user.jsonWebToken).body(configJSON).asJson();
                 String json = res.getBody().toString();
                 Configuration tempConfig = new Gson().fromJson(json, Configuration.class);
                 // Add db-generated values to Object
@@ -81,18 +81,20 @@ public class SaveConfigurationTask extends Task<Configuration> {
 
             } else {
                 Main.currentConfig.status = this.status;
-                this.configJSON = gson.toJson(Main.currentConfig);
+                configJSON = gson.toJson(Main.currentConfig);
                 String url = Configuration.getUrl() + "/" + Main.currentConfig.id;
                 System.out.println("Sending put request to: " + url);
 
-                HttpResponse<JsonNode> res = Unirest.put(url).header("Content-Type", "application/json").header("Authorization", user.jsonWebToken).body(this.configJSON).asJson();
+                HttpResponse<JsonNode> res = Unirest.put(url).header("Content-Type", "application/json").header("Authorization", user.jsonWebToken).body(configJSON).asJson();
 
                 if(res.getStatus() == 403) { //FORBIDDEN
                     System.out.println("WRITE ACCESS TO CONFIGURATION DENIED, you must get write access via PutConfigurationWriteAccessTask before you can run a PutConfigurationTask!");
                 }
-
+                Configuration tempConfig = Main.currentConfig;
+                // set back to null after edit -> for check if writeAccess needs to be returned
+                Main.currentConfig = null;
                 //System.out.println("Answer to PUT body:" + res.getHeaders() + "\n" + res.getBody());
-                return Main.currentConfig;
+                return tempConfig;
             }
         } catch (UnirestException e) {
             e.printStackTrace();
