@@ -41,6 +41,10 @@ public class BuilderController {
     public JFXButton btnHeaderHome, btnSaveDraft, btnAddCustomerData, btnSidebarHome, btnCustomerFinish;
     public JFXTextArea svgTextarea;
     public StackPane spaneSVG;
+    public JFXToggleNode cat1Color1, cat1Color2, cat1Color3, cat1Size1, cat1Size2, cat1Size3;
+    public JFXToggleNode cat2Color1, cat2Color2, cat2Color3;
+    public JFXToggleNode cat3Color1, cat3Color2, cat3Color3, cat3Size1, cat3Size2, cat3Size3;
+    public JFXToggleNode cat4Color1, cat4Color2, cat4Color3;
     private String svgInfoFrameModel, svgInfoFrameColor, svgInfoFrameSize, svgInfoFrameProducerName, svgInfoFrameDesc, svgInfoFrameColorHex;
     private String svgInfoHandlebarModel, svgInfoHandlebarColor, svgInfoHandlebarGrip, svgInfoHandlebarProducerName, svgInfoHandlebarGripProducerName, svgInfoHandlebarDesc, svgInfoHandlebarColorHex;
     private String svgInfoWheelsModel, svgInfoWheelsColor, svgInfoWheelsSize, svgInfoWheelsTyre, svgInfoWheelsProducerName, svgInfoTyresProducerName, svgInfoWheelDesc, svgInfoWheelsColorHex;
@@ -311,8 +315,7 @@ public class BuilderController {
     }
 
     // AR: "Abschliessen" - hier wird bestimmt was nach Eingabe der Kundendaten passiert
-    // todo: Kundendaten speichern bzw weiterverarbeiten -> Server
-    // Stephan
+    // todo: Kundendaten speichern bzw weiterverarbeiten
     public void onBottomBarFinish(ActionEvent event) throws IOException {
 
         closeAllBottomDrawers();
@@ -475,7 +478,6 @@ public class BuilderController {
     }
 
     private void initSubcatsInitialValues() {
-
         if (Main.currentConfig == null) {
             // SET DEFAULT CONFIG VALUES
             setSubcatSelectboxDefault(cat1SelectName, 0);
@@ -502,14 +504,50 @@ public class BuilderController {
         } else {
             // SET CURRENT CONFIG VALUES - QUICK'n'Dirty statische Variante für 3 feste Toggles, besser Toggles dynamisch laden und Farbe aus DB zuweisen!
             // !! There must be one article of every type in the configuration! Make sure client side before save in the database!
+            // RAHMEN
             cat1SelectName.getSelectionModel().select(Main.currentConfig.getArticleByType("Rahmen").name);// There must be only one RAHMEN in every config!
-            // FARBE
+            // FARBE RAHMEN
+            String frameHexColorString = Main.currentConfig.getArticleByType("Rahmen").hexColor;
+            setSubcatColorToggleOnLoad(frameHexColorString, cat1Color1, cat1Color2, cat1Color3);
+            // SIZE RAHMEN
+            String frameSizeString = Main.currentConfig.getArticleByType("Rahmen").characteristic;
+            setSubcatSizeToggleOnLoad(frameSizeString, cat1Size1, cat1Size2, cat1Size3);
+            // LENKER & GRIFFE
+            cat2SelectModel.getSelectionModel().select(Main.currentConfig.getArticleByType("Lenker").name);
+            cat2SelectGrip.getSelectionModel().select(Main.currentConfig.getArticleByType("Griff").name);
+            // FARBE LENKER
+            String handlebarHexColorString = Main.currentConfig.getArticleByType("Lenker").hexColor;
+            setSubcatColorToggleOnLoad(handlebarHexColorString, cat2Color1, cat2Color2, cat2Color3);
+            // RÄDER & REIFEN
+            cat3SelectModel.getSelectionModel().select(Main.currentConfig.getArticleByType("Laufrad").name);
+            cat3SelectTyre.getSelectionModel().select(Main.currentConfig.getArticleByType("Reifen").name);
+            // FARBE RÄDER
+            String wheelHexColorString = Main.currentConfig.getArticleByType("Laufrad").hexColor;
+            setSubcatColorToggleOnLoad(wheelHexColorString, cat3Color1, cat3Color2, cat3Color3);
+            // SIZE RÄDER
+            String wheelSizeString = Main.currentConfig.getArticleByType("Laufrad").characteristic;
+            setSubcatSizeToggleOnLoad(wheelSizeString, cat3Size1, cat3Size2, cat3Size3);
+            // SATTEL
+            cat4SelectModel.getSelectionModel().select(Main.currentConfig.getArticleByType("Sattel").name);
+            // FARBE SATTEL
+            String saddleHexColorString = Main.currentConfig.getArticleByType("Sattel").hexColor;
+            setSubcatColorToggleOnLoadSaddle(saddleHexColorString, cat4Color1, cat4Color2, cat4Color3);
+            // BREMSEN
+            cat5SelectModel.getSelectionModel().select(Main.currentConfig.getArticleByType("Bremse").name);
+            // ZUBEHÖR
+            cat6SelectBell.getSelectionModel().select(Main.currentConfig.getArticleByType("Klingel").name);
+            cat6SelectStand.getSelectionModel().select(Main.currentConfig.getArticleByType("Ständer").name);
+            cat6SelectLight.getSelectionModel().select(Main.currentConfig.getArticleByType("Licht").name);
+
+            /*
             if (Objects.equals(Main.currentConfig.getArticleByType("Rahmen").hexColor, "#000000"))
                 cat1TogglegroupColor.getToggles().get(0).setSelected(true);
             else if (Objects.equals(Main.currentConfig.getArticleByType("Rahmen").hexColor, "#FFFFFF"))
                 cat1TogglegroupColor.getToggles().get(1).setSelected(true);
             else
                 cat1TogglegroupColor.getToggles().get(2).setSelected(true);
+
+
             // CHARACTERISTIC
             if (Objects.equals(Main.currentConfig.getArticleByType("Rahmen").characteristic, "S"))
                 cat1TogglegroupSize.getToggles().get(0).setSelected(true);
@@ -559,11 +597,50 @@ public class BuilderController {
             cat6SelectBell.getSelectionModel().select(Main.currentConfig.getArticleByType("Klingel").name);
             cat6SelectStand.getSelectionModel().select(Main.currentConfig.getArticleByType("Ständer").name);
             cat6SelectLight.getSelectionModel().select(Main.currentConfig.getArticleByType("Licht").name);
-
-
+            */
         }
+    }
 
+    private void setSubcatColorToggleOnLoad(String conditionColorString, JFXToggleNode tn1, JFXToggleNode tn2, JFXToggleNode tn3) {
+        switch (conditionColorString) {
+            case "#000000":
+                tn1.setSelected(true);
+                break;
+            case "#FFFFFF":
+                tn2.setSelected(true);
+                break;
+            case "#808080":
+                tn3.setSelected(true);
+                break;
+        }
+    }
 
+    private void setSubcatColorToggleOnLoadSaddle(String conditionColorString, JFXToggleNode tn1, JFXToggleNode tn2, JFXToggleNode tn3) {
+        switch (conditionColorString) {
+            case "#000000":
+                tn1.setSelected(true);
+                break;
+            case "#FFFFFF":
+                tn3.setSelected(true);
+                break;
+            case "#4b2c20":
+                tn2.setSelected(true);
+                break;
+        }
+    }
+
+    private void setSubcatSizeToggleOnLoad(String conditionSizeString, JFXToggleNode tn1, JFXToggleNode tn2, JFXToggleNode tn3) {
+        switch (conditionSizeString) {
+            case "S":
+                tn1.setSelected(true);
+                break;
+            case "M":
+                tn2.setSelected(true);
+                break;
+            case "L":
+                tn3.setSelected(true);
+                break;
+        }
     }
 
     private void initFinalPriceArray() {
