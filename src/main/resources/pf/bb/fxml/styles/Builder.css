@@ -224,7 +224,7 @@
 .btn-toggle-cats-radioText:hover{
     -fx-border-color : #304ffe !important;
     -fx-text-fill: #304ffe !important;
-    -fx-border-width : 3 3 3 3 !important;
+    -fx-border-width : 2 2 2 2 !important; /* AR: DO NOT! increase width more than 2, toggle text M disappears on loaded configs(ugly linux bug) */
     -fx-cursor: hand;
 }
 
