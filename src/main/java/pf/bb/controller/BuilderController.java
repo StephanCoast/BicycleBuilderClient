@@ -434,18 +434,19 @@ public class BuilderController {
     }
 
     private void initFirstSVGSet() {
-        svgManager.setFrame(SVGManager.FRAME1);
-        svgManager.setFrameColor(SVGManager.COLOR_BLACK);
-        svgManager.setHandlebar(SVGManager.HANDLEBAR1);
-        svgManager.setHandlebarColor(SVGManager.COLOR_BLACK);
-        svgManager.setTire(SVGManager.TIRE1);
-        svgManager.setTireColor(SVGManager.COLOR_BLACK);
-        svgManager.setSeat(SVGManager.SEAT1);
-        svgManager.setSeatColor(SVGManager.COLOR_BLACK);
-        svgManager.setSVGSet();
+        if (Main.currentConfig == null) {
+            svgManager.setFrame(SVGManager.FRAME1);
+            svgManager.setFrameColor(SVGManager.COLOR_BLACK);
+            svgManager.setHandlebar(SVGManager.HANDLEBAR1);
+            svgManager.setHandlebarColor(SVGManager.COLOR_BLACK);
+            svgManager.setTire(SVGManager.TIRE1);
+            svgManager.setTireColor(SVGManager.COLOR_BLACK);
+            svgManager.setSeat(SVGManager.SEAT1);
+            svgManager.setSeatColor(SVGManager.COLOR_BLACK);
+            svgManager.setSVGSet();
+        }
         spaneSVG.getChildren().clear();
         spaneSVG.getChildren().add(SVGManager.svgGroup);
-
         fadeIn(SVGManager.svgGroup.getChildren().get(0), 1000);
         scaleInX(SVGManager.svgGroup.getChildren().get(1), 1000);
         scaleIn(SVGManager.svgGroup.getChildren().get(2), 1000);
