@@ -49,16 +49,13 @@ public class BuilderController {
     private String svgInfoAttachmentsBell, svgInfoAttachmentsStand, svgInfoAttachmentsLight, svgInfoBellProducerName, svgInfoStandProducerName, svgInfoLightProducerName;
     private float cat1FramePrice, cat2HandlebarPrice, cat2GripPrice, cat3WheelPrice, cat3TyrePrice, cat4SaddlePrice, cat5BrakePrice, cat6BellPrice, cat6StandPrice, cat6LightPrice, catDefaultFinalPrice;
     public Label cat1LabelPrice, cat2LabelPrice, cat3LabelPrice, cat4LabelPrice, cat5LabelPrice, cat6LabelPrice;
+    public Label catLabelDefaultPrice, catLabelFinishPrice;
     public ObservableFloatArray finalPriceArray;
     public ObservableIntegerArray finalArticleIdArray;
-    public Label catLabelDefaultPrice, catLabelFinishPrice;
     private boolean catIsOpen;
+    private int activeConfigId;
     public ToggleGroup catsTogglegroup, cat1TogglegroupColor, cat1TogglegroupSize, cat2TogglegroupColor, cat3TogglegroupColor, cat3TogglegroupSize, cat4TogglegroupColor;
-
     public JFXComboBox<String> cat1SelectName, cat2SelectModel, cat2SelectGrip, cat3SelectModel, cat3SelectTyre, cat4SelectModel, cat5SelectModel, cat6SelectBell, cat6SelectStand, cat6SelectLight;
-
-
-
     public BorderPane cat1, cat2, cat3, cat4, cat5, cat6, catDefault, catFinish, bpCats, bpCustomerData;
     public JFXDrawer drawerDefault, drawerCat1, drawerCat2, drawerCat3, drawerCat4, drawerCat5, drawerCat6, drawerBottomCats, drawerBottomData, drawerFinish;
     private HashSet<JFXDrawer> drawersBuilderSide, drawersBuilderBottom;
@@ -73,6 +70,7 @@ public class BuilderController {
     @FXML
     public void initialize() throws IOException {
         catIsOpen = false;
+        activeConfigId = 0;
         setupSideDrawersSet(drawerDefault, drawerFinish, drawerCat1, drawerCat2, drawerCat3, drawerCat4, drawerCat5, drawerCat6);
         setupBottomDrawersSet(drawerBottomCats, drawerBottomData);
         closeAllSideDrawers();
@@ -103,7 +101,9 @@ public class BuilderController {
 
     public void openDashboard(ActionEvent event) throws IOException {
         // Give back write access for Configuration before returning to dashboard
-        PutConfigurationWriteAccessTask writeAccessTask1 = new PutConfigurationWriteAccessTask(activeUser, Main.currentConfig.id);
+        // AR: Main.currentConfig.id throws null when saving new config
+        //PutConfigurationWriteAccessTask writeAccessTask1 = new PutConfigurationWriteAccessTask(activeUser, Main.currentConfig.id);
+        PutConfigurationWriteAccessTask writeAccessTask1 = new PutConfigurationWriteAccessTask(activeUser, activeConfigId);
         writeAccessTask1.setOnRunning((runningEvent) -> System.out.println("trying to give back writeAccess for configuration..."));
         writeAccessTask1.setOnSucceeded((WorkerStateEvent writeAccess) -> {
             System.out.println("writeAccess returned for configuration: " + writeAccessTask1.getValue());
@@ -178,6 +178,7 @@ public class BuilderController {
                 Configuration createdConfiguration = configNewPostTask1.getValue();
                 System.out.println("BuilderController: Created Configuration = " + createdConfiguration.toString());
                 try {
+                    activeConfigId = createdConfiguration.id;
                     openDashboard(event);
                 } catch (IOException e) {
                     throw new RuntimeException(e);
@@ -197,6 +198,7 @@ public class BuilderController {
             configurationPutTask1.setOnSucceeded((WorkerStateEvent configTask4) -> {
                 System.out.println("configuration updated id: " + configurationPutTask1.getValue().id);
                 try {
+                    activeConfigId = Main.currentConfig.id;
                     openDashboard(event);
                 } catch (IOException e) {
                     throw new RuntimeException(e);
