@@ -20,11 +20,8 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import javafx.util.Duration;
 import pf.bb.Main;
-import pf.bb.model.Article;
-import pf.bb.model.Configuration;
-import pf.bb.task.PostConfigurationTask;
-import pf.bb.task.PutConfigurationTask;
-import pf.bb.task.PutConfigurationWriteAccessTask;
+import pf.bb.model.*;
+import pf.bb.task.*;
 
 import java.io.IOException;
 import java.util.HashSet;
@@ -45,10 +42,32 @@ public class BuilderController {
     public JFXToggleNode cat2Color1, cat2Color2, cat2Color3;
     public JFXToggleNode cat3Color1, cat3Color2, cat3Color3, cat3Size1, cat3Size2, cat3Size3;
     public JFXToggleNode cat4Color1, cat4Color2, cat4Color3;
-    private String svgInfoFrameModel, svgInfoFrameColor, svgInfoFrameSize, svgInfoFrameProducerName, svgInfoFrameDesc, svgInfoFrameColorHex;
-    private String svgInfoHandlebarModel, svgInfoHandlebarColor, svgInfoHandlebarGrip, svgInfoHandlebarProducerName, svgInfoHandlebarGripProducerName, svgInfoHandlebarDesc, svgInfoHandlebarColorHex;
-    private String svgInfoWheelsModel, svgInfoWheelsColor, svgInfoWheelsSize, svgInfoWheelsTyre, svgInfoWheelsProducerName, svgInfoTyresProducerName, svgInfoWheelDesc, svgInfoWheelsColorHex;
-    private String svgInfoSaddleModel, svgInfoSaddleColor, svgInfoSaddleProducerName, svgInfoSaddleDesc, svgInfoSaddleColorHex;
+    private String svgInfoFrameModel;
+    private String svgInfoFrameColor;
+    public String svgInfoFrameSize;
+    private String svgInfoFrameProducerName;
+    private String svgInfoFrameDesc;
+    public String svgInfoFrameColorHex;
+    private String svgInfoHandlebarModel;
+    private String svgInfoHandlebarColor;
+    private String svgInfoHandlebarGrip;
+    private String svgInfoHandlebarProducerName;
+    private String svgInfoHandlebarGripProducerName;
+    private String svgInfoHandlebarDesc;
+    public String svgInfoHandlebarColorHex;
+    private String svgInfoWheelsModel;
+    private String svgInfoWheelsColor;
+    public String svgInfoWheelsSize;
+    private String svgInfoWheelsTyre;
+    private String svgInfoWheelsProducerName;
+    private String svgInfoTyresProducerName;
+    private String svgInfoWheelDesc;
+    public String svgInfoWheelsColorHex;
+    private String svgInfoSaddleModel;
+    private String svgInfoSaddleColor;
+    private String svgInfoSaddleProducerName;
+    private String svgInfoSaddleDesc;
+    public String svgInfoSaddleColorHex;
     private String svgInfoBrakesModel, svgInfoBrakesProducerName, svgInfoBrakesTypeName, svgInfoBrakeDesc;
     private String svgInfoAttachmentsBell, svgInfoAttachmentsStand, svgInfoAttachmentsLight, svgInfoBellProducerName, svgInfoStandProducerName, svgInfoLightProducerName;
     private float cat1FramePrice, cat2HandlebarPrice, cat2GripPrice, cat3WheelPrice, cat3TyrePrice, cat4SaddlePrice, cat5BrakePrice, cat6BellPrice, cat6StandPrice, cat6LightPrice, catDefaultFinalPrice;
@@ -57,7 +76,6 @@ public class BuilderController {
     public ObservableFloatArray finalPriceArray;
     public ObservableIntegerArray finalArticleIdArray;
     private boolean catIsOpen;
-    private int activeConfigId;
     public ToggleGroup catsTogglegroup, cat1TogglegroupColor, cat1TogglegroupSize, cat2TogglegroupColor, cat3TogglegroupColor, cat3TogglegroupSize, cat4TogglegroupColor;
     public JFXComboBox<String> cat1SelectName, cat2SelectModel, cat2SelectGrip, cat3SelectModel, cat3SelectTyre, cat4SelectModel, cat5SelectModel, cat6SelectBell, cat6SelectStand, cat6SelectLight;
     public BorderPane cat1, cat2, cat3, cat4, cat5, cat6, catDefault, catFinish, bpCats, bpCustomerData;
@@ -66,6 +84,7 @@ public class BuilderController {
     ViewManager vm = ViewManager.getInstance();
     ValidatorManager validatorManager = ValidatorManager.getInstance();
     SVGManager svgManager = SVGManager.getInstance();
+    private boolean configChanged;
 
 
     public BuilderController() {
@@ -74,7 +93,6 @@ public class BuilderController {
     @FXML
     public void initialize() throws IOException {
         catIsOpen = false;
-        activeConfigId = 0;
         setupSideDrawersSet(drawerDefault, drawerFinish, drawerCat1, drawerCat2, drawerCat3, drawerCat4, drawerCat5, drawerCat6);
         setupBottomDrawersSet(drawerBottomCats, drawerBottomData);
         closeAllSideDrawers();
@@ -104,23 +122,23 @@ public class BuilderController {
     }
 
     public void openDashboard(ActionEvent event) throws IOException {
-        // Give back write access for Configuration before returning to dashboard
-        // AR: Main.currentConfig.id throws null when saving new config
-        //PutConfigurationWriteAccessTask writeAccessTask1 = new PutConfigurationWriteAccessTask(activeUser, Main.currentConfig.id);
-        PutConfigurationWriteAccessTask writeAccessTask1 = new PutConfigurationWriteAccessTask(activeUser, activeConfigId);
-        writeAccessTask1.setOnRunning((runningEvent) -> System.out.println("trying to give back writeAccess for configuration..."));
-        writeAccessTask1.setOnSucceeded((WorkerStateEvent writeAccess) -> {
-            System.out.println("writeAccess returned for configuration: " + writeAccessTask1.getValue());
-            Main.currentConfig = null;
-            try {
-                vm.forceView(event, "Dashboard.fxml", "Bicycle Builder - Dashboard", false);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        });
-        writeAccessTask1.setOnFailed((writeAccessFailed) -> System.out.println("Couldn't return writeAccess for configuration"));
-        //Tasks in eigenem Thread ausführen
-        new Thread(writeAccessTask1).start();
+        // Give back write access for Configuration before returning to dashboard when no changes were made / otherwise writeAccess is given back by put operation in server
+        if (Main.currentConfig != null) {
+            PutConfigurationWriteAccessTask writeAccessTask1 = new PutConfigurationWriteAccessTask(activeUser, Main.currentConfig.id);
+            writeAccessTask1.setOnRunning((runningEvent) -> System.out.println("trying to give back writeAccess for configuration..."));
+            writeAccessTask1.setOnSucceeded((WorkerStateEvent writeAccess) -> {
+                System.out.println("writeAccess returned for configuration: " + writeAccessTask1.getValue());
+                Main.currentConfig = null;
+                try {
+                    vm.forceView(event, "Dashboard.fxml", "Bicycle Builder - Dashboard", false);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            });
+            writeAccessTask1.setOnFailed((writeAccessFailed) -> System.out.println("Couldn't return writeAccess for configuration"));
+            //Tasks in eigenem Thread ausführen
+            new Thread(writeAccessTask1).start();
+        }
     }
 
     public void openCustomerDataView(ActionEvent event) throws IOException {
@@ -137,82 +155,20 @@ public class BuilderController {
 
     // AR: "Entwurf speichern"
     public void onSaveDraft(ActionEvent event) throws IOException {
-        saveNewConfiguration(event);
-    }
 
-    private void saveNewConfiguration(ActionEvent event) throws IOException {
-
-        finalArticleIdArray = FXCollections.observableIntegerArray();
-        finalArticleIdArray.addAll(
-            getArticleIDByNameSizeAndColor(cat1SelectName.getValue(), svgInfoFrameSize, svgInfoFrameColorHex), // 0=Rahmen
-            getArticleIDByNameAndColor(cat2SelectModel.getValue(), svgInfoHandlebarColorHex), // 1=Lenker
-            getArticleIdByName(cat2SelectGrip.getValue()), //2=Griffe
-            getArticleIDByNameSizeAndColor(cat3SelectModel.getValue(), svgInfoWheelsSize, svgInfoWheelsColorHex), //3=Räder
-            getArticleIdByName(cat3SelectTyre.getValue()), //4=Reifen
-            getArticleIDByNameAndColor(cat4SelectModel.getValue(), svgInfoSaddleColorHex), //5=Sattel
-            getArticleIdByName(cat5SelectModel.getValue()), //6=Bremsen
-            getArticleIdByName(cat6SelectBell.getValue()), //7=Klingel
-            getArticleIdByName(cat6SelectStand.getValue()), //8=Ständer
-            getArticleIdByName(cat6SelectLight.getValue()) //9=Licht
-        );
-
-        System.out.println("BuilderController: Article-ID Collection = " + finalArticleIdArray);
-
-        int decrement = 1;
-        Configuration configNew = new Configuration(activeUser);
-        configNew.articles.add(Main.ARTICLES.get(finalArticleIdArray.get(0) - decrement)); // Rahmen
-        configNew.articles.add(Main.ARTICLES.get(finalArticleIdArray.get(1) - decrement)); // Lenker
-        configNew.articles.add(Main.ARTICLES.get(finalArticleIdArray.get(2) - decrement)); // Griffe
-        configNew.articles.add(Main.ARTICLES.get(finalArticleIdArray.get(3) - decrement)); // Räder
-        configNew.articles.add(Main.ARTICLES.get(finalArticleIdArray.get(4) - decrement)); // Reifen
-        configNew.articles.add(Main.ARTICLES.get(finalArticleIdArray.get(5) - decrement)); // Sattel
-        configNew.articles.add(Main.ARTICLES.get(finalArticleIdArray.get(6) - decrement)); // Bremsen
-        configNew.articles.add(Main.ARTICLES.get(finalArticleIdArray.get(7) - decrement)); // Klingel
-        configNew.articles.add(Main.ARTICLES.get(finalArticleIdArray.get(8) - decrement)); // Ständer
-        configNew.articles.add(Main.ARTICLES.get(finalArticleIdArray.get(9) - decrement)); // Licht
-        System.out.println("BuilderController: Article-ID config object = " + configNew.articles);
-
-
-        if (Main.currentConfig == null) {
-            // NEW CONFIGURATION
-            PostConfigurationTask configNewPostTask1 = new PostConfigurationTask(activeUser, configNew);
-            configNewPostTask1.setOnRunning((successEvent) -> System.out.println("BuilderController: trying to save configuration..."));
-            configNewPostTask1.setOnSucceeded((WorkerStateEvent e1) -> {
-                System.out.println("BuilderController: configurations saved. id=" + configNewPostTask1.getValue());
-                Configuration createdConfiguration = configNewPostTask1.getValue();
-                System.out.println("BuilderController: Created Configuration = " + createdConfiguration.toString());
-                try {
-                    activeConfigId = createdConfiguration.id;
-                    openDashboard(event);
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-            });
-            configNewPostTask1.setOnFailed((WorkerStateEvent configCreationFailed) -> {
-                System.out.println("BuilderController: saving failed" + configNewPostTask1.getException());
-            });
-            new Thread(configNewPostTask1).start();
-        } else {
-            Main.currentConfig.articles = configNew.articles;
-
-            // Update Configuration
-            PutConfigurationTask configurationPutTask1 = new PutConfigurationTask(activeUser, Main.currentConfig, Main.currentConfig.id);
-            //Erst Task definieren incl. WorkerStateEvent als Flag, um zu wissen, wann fertig
-            configurationPutTask1.setOnRunning((successEvent) -> System.out.println("trying to update configuration..."));
-            configurationPutTask1.setOnSucceeded((WorkerStateEvent configTask4) -> {
-                System.out.println("configuration updated id: " + configurationPutTask1.getValue().id);
-                try {
-                    activeConfigId = Main.currentConfig.id;
-                    openDashboard(event);
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-            });
-            //Tasks in eigenem Thread ausführen
-            new Thread(configurationPutTask1).start();
-        }
-
-
+        SaveConfigurationTask saveConfigTask1 = new SaveConfigurationTask(activeUser, this, "ENTWURF");
+        saveConfigTask1.setOnRunning((runningEvent) -> System.out.println("trying to save configuration..."));
+        saveConfigTask1.setOnSucceeded((WorkerStateEvent writeAccess) -> {
+            System.out.println("configuration saved: " + saveConfigTask1.getValue());
+            try {
+                vm.forceView(event, "Dashboard.fxml", "Bicycle Builder - Dashboard", false);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
+        saveConfigTask1.setOnFailed((writeAccessFailed) -> System.out.println("saving configuration failed"));
+        //Tasks in eigenem Thread ausführen
+        new Thread(saveConfigTask1).start();
     }
 
     public void openSidebarCat1(ActionEvent event) throws IOException {
@@ -318,15 +274,72 @@ public class BuilderController {
     // todo: Kundendaten speichern bzw weiterverarbeiten
     public void onBottomBarFinish(ActionEvent event) throws IOException {
 
-        closeAllBottomDrawers();
-        vm.forceDrawerView(drawerBottomCats, bpCats);
-        vm.forceDrawerView(drawerFinish, catFinish);
-        catsTogglegroup.getToggles().forEach(toggle -> {
-            Node node = (Node) toggle ;
-            node.setDisable(true);
+        SaveConfigurationTask saveConfigTask1 = new SaveConfigurationTask(activeUser, this, "ABGESCHLOSSEN");
+        saveConfigTask1.setOnRunning((runningEvent) -> System.out.println("trying to save configuration..."));
+        saveConfigTask1.setOnSucceeded((WorkerStateEvent writeAccess) -> {
+            System.out.println("configuration saved: " + saveConfigTask1.getValue());
+
+            // Order mit Kundendaten und Gesamtpreis zur Konfiguration hinzufügen
+            Customer newCustomer = new Customer(tfCustomerMail.getText(), tfCustomerFirstName.getText(), tfCustomerLastName.getText(), tfCustomerStreet.getText(), Integer.parseInt(tfCustomerNr.getText()), tfCustomerZipcode.getText(), tfCustomerCity.getText());
+            // Customer in DB erzeugen, um unique ID zu bekommen
+            PostCustomerTask customerTask1 = new PostCustomerTask(activeUser, newCustomer);
+            customerTask1.setOnRunning((runningEvent) -> System.out.println("trying to create customer..."));
+            customerTask1.setOnFailed((WorkerStateEvent createUserFailed) -> System.out.println("creating customer failed..."));
+            customerTask1.setOnSucceeded((WorkerStateEvent customerCreated) -> {
+                System.out.println("customer created id:" + customerTask1.getValue().id);
+
+                float priceTotal = 0;
+                for (Article article : saveConfigTask1.getValue().articles) {
+                    priceTotal += article.price;
+                }
+
+                // CREATE ORDER
+                OrderClass newOrder = new OrderClass(saveConfigTask1.getValue(), customerTask1.getValue(), priceTotal);
+                PostOrderTask orderTask1 = new PostOrderTask(activeUser, newOrder);
+                //Erst Task definieren incl. WorkerStateEvent als Flag, um zu wissen, wann fertig
+                orderTask1.setOnSucceeded((WorkerStateEvent orderCreated) -> {
+                    System.out.println("order created id:" + orderTask1.getValue().id);
+                    //Client Config Objekt aktualisieren
+                    saveConfigTask1.getValue().setOrder(orderTask1.getValue());
+
+                    // CREATE BILL
+                    Bill newBill = new Bill(orderTask1.getValue());
+                    PostBillTask billTask1 = new PostBillTask(activeUser, newBill);
+                    //Erst Task definieren incl. WorkerStateEvent als Flag, um zu wissen, wann fertig
+                    billTask1.setOnSucceeded((WorkerStateEvent billCreated) -> {
+                        System.out.println("bill created id:" + billTask1.getValue().id);
+                        //Client Config Objekt aktualisieren
+                        saveConfigTask1.getValue().order.setBill(billTask1.getValue());
+
+                        // SWITCH UI
+                        closeAllBottomDrawers();
+                        try {
+                            vm.forceDrawerView(drawerBottomCats, bpCats);
+                            vm.forceDrawerView(drawerFinish, catFinish);
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+                        catsTogglegroup.getToggles().forEach(toggle -> {
+                            Node node = (Node) toggle ;
+                            node.setDisable(true);
+                        });
+                        setDefaultFocus();
+                        activateButtonsOnCustomerEdit();
+                    });
+                    //Tasks in eigenem Thread ausführen
+                    new Thread(billTask1).start();
+                });
+                //Tasks in eigenem Thread ausführen
+                new Thread(orderTask1).start();
+            });
+            //Tasks in eigenem Thread ausführen
+            new Thread(customerTask1).start();
+
+
         });
-        setDefaultFocus();
-        activateButtonsOnCustomerEdit();
+        saveConfigTask1.setOnFailed((writeAccessFailed) -> System.out.println("saving configuration failed"));
+        //Tasks in eigenem Thread ausführen
+        new Thread(saveConfigTask1).start();
     }
 
     // AR: Auftrag Button
@@ -814,7 +827,7 @@ public class BuilderController {
         return price;
     }
 
-    private int getArticleIdByName(String name) {
+    public int getArticleIdByName(String name) {
         int id = 0;
         for (Article i : Main.ARTICLES) {
             if (i.name.equals(name)) {
@@ -825,7 +838,7 @@ public class BuilderController {
         return id;
     }
 
-    private int getArticleIDByNameAndColor(String name, String color) {
+    public int getArticleIDByNameAndColor(String name, String color) {
         int id = 0;
         for (Article i : Main.ARTICLES) {
             if (i.name.equals(name)) {
@@ -838,7 +851,7 @@ public class BuilderController {
         return id;
     }
 
-    private int getArticleIDByNameSizeAndColor(String name, String size, String color) {
+    public int getArticleIDByNameSizeAndColor(String name, String size, String color) {
         int id = 0;
         for (Article a : Main.ARTICLES) {
             if (a.name.equals(name)) {
