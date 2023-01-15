@@ -25,7 +25,6 @@ import pf.bb.task.*;
 
 import java.io.IOException;
 import java.util.HashSet;
-import java.util.Objects;
 
 import static pf.bb.controller.LoginController.activeUser;
 
@@ -138,7 +137,10 @@ public class BuilderController {
             writeAccessTask1.setOnFailed((writeAccessFailed) -> System.out.println("Couldn't return writeAccess for configuration"));
             //Tasks in eigenem Thread ausführen
             new Thread(writeAccessTask1).start();
+        } else {
+            vm.forceView(event, "Dashboard.fxml", "Bicycle Builder - Dashboard", false);
         }
+
     }
 
     public void openCustomerDataView(ActionEvent event) throws IOException {
@@ -278,6 +280,7 @@ public class BuilderController {
         saveConfigTask1.setOnRunning((runningEvent) -> System.out.println("trying to save configuration..."));
         saveConfigTask1.setOnSucceeded((WorkerStateEvent writeAccess) -> {
             System.out.println("configuration saved: " + saveConfigTask1.getValue());
+            // set Null before return to dashboard for openDashboard method
 
             // Order mit Kundendaten und Gesamtpreis zur Konfiguration hinzufügen
             Customer newCustomer = new Customer(tfCustomerMail.getText(), tfCustomerFirstName.getText(), tfCustomerLastName.getText(), tfCustomerStreet.getText(), Integer.parseInt(tfCustomerNr.getText()), tfCustomerZipcode.getText(), tfCustomerCity.getText());
