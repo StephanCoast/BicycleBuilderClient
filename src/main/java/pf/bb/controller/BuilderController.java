@@ -166,7 +166,8 @@ public class BuilderController {
             System.out.println("configuration saved: " + saveConfigTask1.getValue());
             try {
                 if (!comingFromSubCat) {
-                    vm.forceView(event, "Dashboard.fxml", "Bicycle Builder - Dashboard", false);
+                    openDashboard(event);
+//                    vm.forceView(event, "Dashboard.fxml", "Bicycle Builder - Dashboard", false);
                 }
             } catch (IOException e) {
                 throw new RuntimeException(e);

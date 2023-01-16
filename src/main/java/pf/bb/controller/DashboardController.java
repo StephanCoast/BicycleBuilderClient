@@ -252,14 +252,21 @@ public class DashboardController {
                     PutConfigurationWriteAccessTask writeAccessTask1 = new PutConfigurationWriteAccessTask(activeUser, Main.currentConfig.id);
                     writeAccessTask1.setOnRunning((runningEvent) -> System.out.println("trying to get writeAccess for configuration..."));
                     writeAccessTask1.setOnSucceeded((WorkerStateEvent writeAccess) -> {
-                        System.out.println("writeAccess for configuration: " + writeAccessTask1.getValue());
-                        try {
-                            vm.forceView(event, "Builder.fxml", "Bicycle Builder - Konfigurator", false);
-                        } catch (IOException e) {
-                            throw new RuntimeException(e);
+                        System.out.println("writeAccess for configuration: " + Main.currentConfig.id + ": " + writeAccessTask1.getValue());
+                        if (writeAccessTask1.getValue().equals("ACCESS GRANTED")) {
+                            // Lokales Objekt aktualisieren
+                            Main.currentConfig.writeAccess = activeUser.name;
+                            try {
+                                vm.forceView(event, "Builder.fxml", "Bicycle Builder - Konfigurator", false);
+                            } catch (IOException e) {
+                                throw new RuntimeException(e);
+                            }
+                        } else {
+                            System.out.println("Couldn't get writeAccess for configuration, another user is editing it...");
                         }
+
                     });
-                    writeAccessTask1.setOnFailed((writeAccessFailed) -> System.out.println("Couldn't get writeAccess for configuration, another user is editing it..."));
+                    writeAccessTask1.setOnFailed((writeAccessFailed) -> System.out.println("Couldn't get writeAccess for configuration." + writeAccessTask1.getMessage()));
                     //Tasks in eigenem Thread ausführen
                     new Thread(writeAccessTask1).start();
                 });
