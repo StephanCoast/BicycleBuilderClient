@@ -248,27 +248,38 @@ public class DashboardController {
                     Configuration config = getTableView().getItems().get(getIndex());
                     System.out.println("row-ID detailButton: " + config.id);
                     Main.currentConfig = config;
-                    // Get write access for Configuration in case another user is editing it atm
-                    PutConfigurationWriteAccessTask writeAccessTask1 = new PutConfigurationWriteAccessTask(activeUser, Main.currentConfig.id);
-                    writeAccessTask1.setOnRunning((runningEvent) -> System.out.println("trying to get writeAccess for configuration..."));
-                    writeAccessTask1.setOnSucceeded((WorkerStateEvent writeAccess) -> {
-                        System.out.println("writeAccess for configuration: " + Main.currentConfig.id + ": " + writeAccessTask1.getValue());
-                        if (writeAccessTask1.getValue().equals("ACCESS GRANTED")) {
-                            // Lokales Objekt aktualisieren
-                            Main.currentConfig.writeAccess = activeUser.name;
-                            try {
-                                vm.forceView(event, "Builder.fxml", "Bicycle Builder - Konfigurator", false);
-                            } catch (IOException e) {
-                                throw new RuntimeException(e);
+                    // if config is in status ENTWURF, check if someone else is editing it ATM
+                    if (Main.currentConfig.status.equals(Configuration.stats[0]))  {
+                        // ENTWURF
+                        // Get write access for Configuration in case another user is editing it atm
+                        PutConfigurationWriteAccessTask writeAccessTask1 = new PutConfigurationWriteAccessTask(activeUser, Main.currentConfig.id);
+                        writeAccessTask1.setOnRunning((runningEvent) -> System.out.println("trying to get writeAccess for configuration..."));
+                        writeAccessTask1.setOnSucceeded((WorkerStateEvent writeAccess) -> {
+                            System.out.println("writeAccess for configuration: " + Main.currentConfig.id + ": " + writeAccessTask1.getValue());
+                            if (writeAccessTask1.getValue().equals("ACCESS GRANTED")) {
+                                // Lokales Objekt aktualisieren
+                                Main.currentConfig.writeAccess = activeUser.name;
+                                try {
+                                    vm.forceView(event, "Builder.fxml", "Bicycle Builder - Konfigurator", false);
+                                } catch (IOException e) {
+                                    throw new RuntimeException(e);
+                                }
                             }
-                        } else {
-                            System.out.println("Couldn't get writeAccess for configuration, another user is editing it...");
+                        });
+                        writeAccessTask1.setOnFailed((writeAccessFailed) -> {
+                            // TODO user notification
+                            System.out.println("Couldn't get writeAccess for configuration." + writeAccessTask1.getMessage());
+                        });
+                        //Tasks in eigenem Thread ausführen
+                        new Thread(writeAccessTask1).start();
+                    } else {
+                        try {
+                            vm.forceView(event, "Builder.fxml", "Bicycle Builder - Konfigurator", false);
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
                         }
+                    }
 
-                    });
-                    writeAccessTask1.setOnFailed((writeAccessFailed) -> System.out.println("Couldn't get writeAccess for configuration." + writeAccessTask1.getMessage()));
-                    //Tasks in eigenem Thread ausführen
-                    new Thread(writeAccessTask1).start();
                 });
 
                 // AR: Mülleimer-Icon-Button

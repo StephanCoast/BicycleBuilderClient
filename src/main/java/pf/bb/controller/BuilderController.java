@@ -104,12 +104,14 @@ public class BuilderController {
     }
 
     public void openDashboard(ActionEvent event) throws IOException {
-        // Give back write access for Configuration before returning to dashboard when no changes were made
-        if (Main.currentConfig != null) {
+        // when new config or status "ABGESCHLOSSEN" no need to return writeAccess
+        if (Main.currentConfig == null) {
+            vm.forceView(event, "Dashboard.fxml", "Bicycle Builder - Dashboard", false);
+        } else {
             PutConfigurationWriteAccessTask writeAccessTask1 = new PutConfigurationWriteAccessTask(activeUser, Main.currentConfig.id);
             writeAccessTask1.setOnRunning((runningEvent) -> System.out.println("trying to give back writeAccess for configuration..."));
             writeAccessTask1.setOnSucceeded((WorkerStateEvent writeAccess) -> {
-                System.out.println("writeAccess returned for configuration: " + writeAccessTask1.getValue());
+                System.out.println("writeAccess returned for configuration " + Main.currentConfig.id + ": " + writeAccessTask1.getValue());
                 Main.currentConfig = null;
                 try {
                     vm.forceView(event, "Dashboard.fxml", "Bicycle Builder - Dashboard", false);
@@ -120,10 +122,7 @@ public class BuilderController {
             writeAccessTask1.setOnFailed((writeAccessFailed) -> System.out.println("Couldn't return writeAccess for configuration"));
             //Tasks in eigenem Thread ausführen
             new Thread(writeAccessTask1).start();
-        } else {
-            vm.forceView(event, "Dashboard.fxml", "Bicycle Builder - Dashboard", false);
         }
-
     }
 
     public void openCustomerDataView(ActionEvent event) throws IOException {
@@ -167,7 +166,6 @@ public class BuilderController {
             try {
                 if (!comingFromSubCat) {
                     openDashboard(event);
-//                    vm.forceView(event, "Dashboard.fxml", "Bicycle Builder - Dashboard", false);
                 }
             } catch (IOException e) {
                 throw new RuntimeException(e);
@@ -300,7 +298,6 @@ public class BuilderController {
             saveConfigTask1.setOnRunning((runningEvent) -> System.out.println("trying to save configuration..."));
             saveConfigTask1.setOnSucceeded((WorkerStateEvent writeAccess) -> {
                 System.out.println("configuration saved: " + saveConfigTask1.getValue());
-                // set Null before return to dashboard for openDashboard method
 
                 // Order mit Kundendaten und Gesamtpreis zur Konfiguration hinzufügen
                 Customer newCustomer = new Customer(tfCustomerMail.getText(), tfCustomerFirstName.getText(), tfCustomerLastName.getText(), tfCustomerStreet.getText(), Integer.parseInt(tfCustomerNr.getText()), tfCustomerZipcode.getText(), tfCustomerCity.getText());
@@ -333,6 +330,7 @@ public class BuilderController {
                             System.out.println("bill created id:" + billTask1.getValue().id);
                             //Client Config Objekt aktualisieren
                             saveConfigTask1.getValue().order.setBill(billTask1.getValue());
+                            saveConfigTask1.getValue().status = Configuration.stats[1]; //ABGESCHLOSSEN
 
                             // SWITCH UI
                             closeAllBottomDrawers();
