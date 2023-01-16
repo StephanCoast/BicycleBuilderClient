@@ -104,7 +104,7 @@ public class BuilderController {
     }
 
     public void openDashboard(ActionEvent event) throws IOException {
-        // Give back write access for Configuration before returning to dashboard when no changes were made / otherwise writeAccess is given back by put operation in server
+        // Give back write access for Configuration before returning to dashboard when no changes were made
         if (Main.currentConfig != null) {
             PutConfigurationWriteAccessTask writeAccessTask1 = new PutConfigurationWriteAccessTask(activeUser, Main.currentConfig.id);
             writeAccessTask1.setOnRunning((runningEvent) -> System.out.println("trying to give back writeAccess for configuration..."));
