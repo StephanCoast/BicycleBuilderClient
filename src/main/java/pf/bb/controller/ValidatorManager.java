@@ -36,4 +36,36 @@ public class ValidatorManager {
             }
         });
     }
+
+    public static void setTextFieldRules(JFXTextField tf, String pattern) {
+        tf.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.matches(pattern)) {
+                tf.setText(newValue.replaceAll("[^" + pattern + "]", ""));
+            }
+        });
+    }
+
+    public static boolean textFieldHaveSymbol(JFXTextField tf, String symbol) {
+        if (!tf.getText().contains(symbol))  {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    public static boolean textFieldIsEmpty(JFXTextField tf) {
+        if (tf.getText().isEmpty()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public static boolean pwFieldIsEmpty(JFXPasswordField pf) {
+        if (pf.getText().isEmpty()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 }

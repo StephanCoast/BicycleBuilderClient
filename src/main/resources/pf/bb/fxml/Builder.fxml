@@ -1058,7 +1058,7 @@
                                              <HBox.margin>
                                                 <Insets />
                                              </HBox.margin></JFXListCell>
-                                          <TextField editable="false" prefWidth="275.0" styleClass="catSidebarFinalCellRight" text="123456">
+                                          <TextField fx:id="tfFinishOrderID" editable="false" prefWidth="275.0" styleClass="catSidebarFinalCellRight">
                                              <HBox.margin>
                                                 <Insets />
                                              </HBox.margin>
@@ -1074,7 +1074,7 @@
                                              <HBox.margin>
                                                 <Insets />
                                              </HBox.margin></JFXListCell>
-                                          <TextField editable="false" prefWidth="275.0" styleClass="catSidebarFinalCellRight" text="123456" />
+                                          <TextField fx:id="tfFinishCustomerID" editable="false" prefWidth="275.0" styleClass="catSidebarFinalCellRight" />
                                        </children>
                                        <VBox.margin>
                                           <Insets left="10.0" right="10.0" />
@@ -1086,7 +1086,7 @@
                                              <HBox.margin>
                                                 <Insets />
                                              </HBox.margin></JFXListCell>
-                                          <TextField editable="false" prefWidth="275.0" styleClass="catSidebarFinalCellRight" text="Max" />
+                                          <TextField fx:id="tfFinishFirstName" editable="false" prefWidth="275.0" styleClass="catSidebarFinalCellRight" />
                                        </children>
                                        <VBox.margin>
                                           <Insets left="10.0" right="10.0" />
@@ -1098,7 +1098,7 @@
                                              <HBox.margin>
                                                 <Insets />
                                              </HBox.margin></JFXListCell>
-                                          <TextField editable="false" prefWidth="275.0" styleClass="catSidebarFinalCellRight" text="Mustermann" />
+                                          <TextField fx:id="tfFinishLastName" editable="false" prefWidth="275.0" styleClass="catSidebarFinalCellRight" />
                                        </children>
                                        <VBox.margin>
                                           <Insets left="10.0" right="10.0" />
@@ -1110,7 +1110,7 @@
                                              <HBox.margin>
                                                 <Insets />
                                              </HBox.margin></JFXListCell>
-                                          <TextField editable="false" prefWidth="275.0" styleClass="catSidebarFinalCellRight" text="Musterstr." />
+                                          <TextField fx:id="tfFinishStreet" editable="false" prefWidth="275.0" styleClass="catSidebarFinalCellRight" />
                                        </children>
                                        <VBox.margin>
                                           <Insets left="10.0" right="10.0" />
@@ -1122,7 +1122,7 @@
                                              <HBox.margin>
                                                 <Insets />
                                              </HBox.margin></JFXListCell>
-                                          <TextField editable="false" prefWidth="275.0" styleClass="catSidebarFinalCellRight" text="11" />
+                                          <TextField fx:id="tfFinishNr" editable="false" prefWidth="275.0" styleClass="catSidebarFinalCellRight" />
                                        </children>
                                        <VBox.margin>
                                           <Insets left="10.0" right="10.0" />
@@ -1134,7 +1134,7 @@
                                              <HBox.margin>
                                                 <Insets />
                                              </HBox.margin></JFXListCell>
-                                          <TextField editable="false" prefWidth="275.0" styleClass="catSidebarFinalCellRight" text="12345" />
+                                          <TextField fx:id="tfFinishZipCode" editable="false" prefWidth="275.0" styleClass="catSidebarFinalCellRight" />
                                        </children>
                                        <VBox.margin>
                                           <Insets left="10.0" right="10.0" />
@@ -1146,7 +1146,7 @@
                                              <HBox.margin>
                                                 <Insets />
                                              </HBox.margin></JFXListCell>
-                                          <TextField editable="false" prefWidth="275.0" styleClass="catSidebarFinalCellRight" text="Musterstadt" />
+                                          <TextField fx:id="tfFinishCity" editable="false" prefWidth="275.0" styleClass="catSidebarFinalCellRight" />
                                        </children>
                                        <VBox.margin>
                                           <Insets left="10.0" right="10.0" />
@@ -1158,7 +1158,7 @@
                                              <HBox.margin>
                                                 <Insets />
                                              </HBox.margin></JFXListCell>
-                                          <TextField editable="false" prefWidth="275.0" styleClass="catSidebarFinalCellRight" text="mustermann@osmi.de" />
+                                          <TextField fx:id="tfFinishMail" editable="false" prefWidth="275.0" styleClass="catSidebarFinalCellRight" />
                                        </children>
                                        <VBox.margin>
                                           <Insets left="10.0" right="10.0" />
@@ -1277,7 +1277,6 @@
                                                             <children>
                                                                <HBox alignment="CENTER_LEFT" prefHeight="100.0" spacing="10.0">
                                                                   <children>
-                                                                     <JFXTextField fx:id="tfCustomerID" labelFloat="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="150.0" promptText=" Kunden-ID" />
                                                                      <JFXTextField fx:id="tfCustomerFirstName" labelFloat="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="150.0" promptText=" Vorname" />
                                                                      <JFXTextField fx:id="tfCustomerLastName" labelFloat="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="150.0" promptText=" Nachname" />
                                                                      <JFXTextField fx:id="tfCustomerMail" labelFloat="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="150.0" promptText=" E-Mail" />
