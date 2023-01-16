@@ -13,6 +13,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.AnchorPane;
@@ -32,7 +33,7 @@ public class BuilderController {
 
     public RequiredFieldValidator validatorCustomerID, validatorCustomerFirstName, validatorCustomerLastName, validatorCustomerMail;
     public RequiredFieldValidator validatorCustomerStreet, validatorCustomerNr, validatorCustomerZipcode, validatorCustomerCity;
-    public JFXTextField tfCustomerID, tfCustomerFirstName, tfCustomerLastName, tfCustomerMail, tfCustomerStreet, tfCustomerNr, tfCustomerZipcode, tfCustomerCity;
+    public JFXTextField tfCustomerFirstName, tfCustomerLastName, tfCustomerMail, tfCustomerStreet, tfCustomerNr, tfCustomerZipcode, tfCustomerCity;
     public AnchorPane anchorContainer;
     public JFXButton btnHeaderHome, btnSaveDraft, btnAddCustomerData, btnSidebarHome, btnCustomerFinish;
     public JFXTextArea svgTextarea;
@@ -41,31 +42,14 @@ public class BuilderController {
     public JFXToggleNode cat2Color1, cat2Color2, cat2Color3;
     public JFXToggleNode cat3Color1, cat3Color2, cat3Color3, cat3Size1, cat3Size2, cat3Size3;
     public JFXToggleNode cat4Color1, cat4Color2, cat4Color3;
-    private String svgInfoFrameModel;
-    private String svgInfoFrameColor;
-    public String svgInfoFrameSize;
-    private String svgInfoFrameProducerName;
-    private String svgInfoFrameDesc;
-    public String svgInfoFrameColorHex;
-    private String svgInfoHandlebarModel;
-    private String svgInfoHandlebarColor;
-    private String svgInfoHandlebarGrip;
-    private String svgInfoHandlebarProducerName;
-    private String svgInfoHandlebarGripProducerName;
-    private String svgInfoHandlebarDesc;
+    public TextField tfFinishOrderID, tfFinishCustomerID, tfFinishFirstName, tfFinishLastName, tfFinishStreet, tfFinishNr, tfFinishZipCode, tfFinishCity, tfFinishMail;
+    private String svgInfoFrameModel, svgInfoFrameColor, svgInfoFrameProducerName, svgInfoFrameDesc;
+    public String svgInfoFrameSize, svgInfoFrameColorHex;
+    private String svgInfoHandlebarModel, svgInfoHandlebarColor, svgInfoHandlebarGrip, svgInfoHandlebarProducerName, svgInfoHandlebarGripProducerName, svgInfoHandlebarDesc;
     public String svgInfoHandlebarColorHex;
-    private String svgInfoWheelsModel;
-    private String svgInfoWheelsColor;
-    public String svgInfoWheelsSize;
-    private String svgInfoWheelsTyre;
-    private String svgInfoWheelsProducerName;
-    private String svgInfoTyresProducerName;
-    private String svgInfoWheelDesc;
-    public String svgInfoWheelsColorHex;
-    private String svgInfoSaddleModel;
-    private String svgInfoSaddleColor;
-    private String svgInfoSaddleProducerName;
-    private String svgInfoSaddleDesc;
+    private String svgInfoWheelsModel, svgInfoWheelsColor, svgInfoWheelsTyre, svgInfoWheelsProducerName, svgInfoTyresProducerName, svgInfoWheelDesc;
+    public String svgInfoWheelsSize, svgInfoWheelsColorHex;
+    private String svgInfoSaddleModel, svgInfoSaddleColor, svgInfoSaddleProducerName, svgInfoSaddleDesc;
     public String svgInfoSaddleColorHex;
     private String svgInfoBrakesModel, svgInfoBrakesProducerName, svgInfoBrakesTypeName, svgInfoBrakeDesc;
     private String svgInfoAttachmentsBell, svgInfoAttachmentsStand, svgInfoAttachmentsLight, svgInfoBellProducerName, svgInfoStandProducerName, svgInfoLightProducerName;
@@ -83,7 +67,6 @@ public class BuilderController {
     ViewManager vm = ViewManager.getInstance();
     ValidatorManager validatorManager = ValidatorManager.getInstance();
     SVGManager svgManager = SVGManager.getInstance();
-    private boolean configChanged;
 
 
     public BuilderController() {
@@ -107,13 +90,13 @@ public class BuilderController {
         onToggleDeselectSubCat(cat4TogglegroupColor);
         setupValidators();
         initSubcatsItems();
-        //initSubcatsColors(); -> // TODO
         initSubcatsListeners();
         initSubcatsInitialValues();
         initFinalPriceArray();
         initFirstSVGSet();
         renderSVGtextarea();
         initTextFieldListeners();
+        loadFinishedConfig();
     }
 
     public void logout(ActionEvent event) throws IOException {
@@ -155,15 +138,20 @@ public class BuilderController {
         deselectAllToggles();
     }
 
-    // AR: "Entwurf speichern"
-    public void onSaveDraft(ActionEvent event) throws IOException {
+    // AR: "Entwurf Speichern"
+    public void onSaveDraft(ActionEvent event) {
+        startDraftSaveConfigurationTask(event, false);
+    }
 
+    private void startDraftSaveConfigurationTask(ActionEvent event, boolean comingFromSubCat) {
         SaveConfigurationTask saveConfigTask1 = new SaveConfigurationTask(activeUser, this, "ENTWURF");
         saveConfigTask1.setOnRunning((runningEvent) -> System.out.println("trying to save configuration..."));
         saveConfigTask1.setOnSucceeded((WorkerStateEvent writeAccess) -> {
             System.out.println("configuration saved: " + saveConfigTask1.getValue());
             try {
-                vm.forceView(event, "Dashboard.fxml", "Bicycle Builder - Dashboard", false);
+                if (!comingFromSubCat) {
+                    vm.forceView(event, "Dashboard.fxml", "Bicycle Builder - Dashboard", false);
+                }
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
@@ -209,7 +197,7 @@ public class BuilderController {
         vm.forceDrawerView(drawerCat6, cat6);
     }
 
-    // AR: hier wird "einzeln" bestimmt was nach dem Speichern der Kategorie 1-8 passieren soll
+    // AR: hier wird "einzeln" bestimmt was nach dem Speichern der Kategorie 1-6 passieren soll
     public void onCat1Save(ActionEvent event) throws IOException {
         finalPriceArray.set(0, cat1FramePrice);
         calcFinalPriceFromArray(finalPriceArray);
@@ -217,6 +205,7 @@ public class BuilderController {
         catLabelFinishPrice.setText(strPriceBeautify(catDefaultFinalPrice));
         onCatSave(event);
     }
+
     public void onCat2Save(ActionEvent event) throws IOException {
         finalPriceArray.set(1, cat2HandlebarPrice);
         finalPriceArray.set(2, cat2GripPrice);
@@ -225,6 +214,7 @@ public class BuilderController {
         catLabelFinishPrice.setText(strPriceBeautify(catDefaultFinalPrice));
         onCatSave(event);
     }
+
     public void onCat3Save(ActionEvent event) throws IOException {
         finalPriceArray.set(3, cat3WheelPrice);
         finalPriceArray.set(4, cat3TyrePrice);
@@ -233,6 +223,7 @@ public class BuilderController {
         catLabelFinishPrice.setText(strPriceBeautify(catDefaultFinalPrice));
         onCatSave(event);
     }
+
     public void onCat4Save(ActionEvent event) throws IOException {
         finalPriceArray.set(5, cat4SaddlePrice);
         calcFinalPriceFromArray(finalPriceArray);
@@ -240,6 +231,7 @@ public class BuilderController {
         catLabelFinishPrice.setText(strPriceBeautify(catDefaultFinalPrice));
         onCatSave(event);
     }
+
     public void onCat5Save(ActionEvent event) throws IOException {
         finalPriceArray.set(6, cat5BrakePrice);
         calcFinalPriceFromArray(finalPriceArray);
@@ -247,6 +239,7 @@ public class BuilderController {
         catLabelFinishPrice.setText(strPriceBeautify(catDefaultFinalPrice));
         onCatSave(event);
     }
+
     public void onCat6Save(ActionEvent event) throws IOException {
         finalPriceArray.set(7, cat6BellPrice);
         finalPriceArray.set(8, cat6StandPrice);
@@ -257,8 +250,9 @@ public class BuilderController {
         onCatSave(event);
     }
 
-    // AR: hier wird "allgemein" bestimmt was nach dem Speichern der Kategorie 1-8 passieren soll
+    // AR: hier wird "allgemein" bestimmt was nach dem Speichern der Kategorie 1-6 passieren soll
     private void onCatSave(ActionEvent e) throws IOException {
+        startDraftSaveConfigurationTask(e, true);
         closeAllSideDrawers();
         vm.forceDrawerView(drawerDefault, catDefault);
         catIsOpen = false;
@@ -273,76 +267,86 @@ public class BuilderController {
     }
 
     // AR: "Abschliessen" - hier wird bestimmt was nach Eingabe der Kundendaten passiert
-    // todo: Kundendaten speichern bzw weiterverarbeiten
-    public void onBottomBarFinish(ActionEvent event) throws IOException {
+    public void onBottomBarFinish(ActionEvent event) {
+        if (ValidatorManager.textFieldIsEmpty(tfCustomerFirstName) ||
+                ValidatorManager.textFieldIsEmpty(tfCustomerLastName) ||
+                ValidatorManager.textFieldIsEmpty(tfCustomerMail) ||
+                ValidatorManager.textFieldIsEmpty(tfCustomerStreet) ||
+                ValidatorManager.textFieldIsEmpty(tfCustomerNr) ||
+                ValidatorManager.textFieldIsEmpty(tfCustomerZipcode) ||
+                ValidatorManager.textFieldIsEmpty(tfCustomerCity)) {
+            ViewManager.createWarningAlert("Bicycle Builder - Warnung", "Bitte füllen Sie alle Felder aus.", null);
+        } else if (!ValidatorManager.textFieldHaveSymbol(tfCustomerMail, "@")) {
+            ViewManager.createWarningAlert("Bicycle Builder - Warnung", "Die E-Mail Adresse muss ein @-Symbol enthalten.", null);
+        } else {
+            SaveConfigurationTask saveConfigTask1 = new SaveConfigurationTask(activeUser, this, "ABGESCHLOSSEN");
+            saveConfigTask1.setOnRunning((runningEvent) -> System.out.println("trying to save configuration..."));
+            saveConfigTask1.setOnSucceeded((WorkerStateEvent writeAccess) -> {
+                System.out.println("configuration saved: " + saveConfigTask1.getValue());
+                // set Null before return to dashboard for openDashboard method
 
-        SaveConfigurationTask saveConfigTask1 = new SaveConfigurationTask(activeUser, this, "ABGESCHLOSSEN");
-        saveConfigTask1.setOnRunning((runningEvent) -> System.out.println("trying to save configuration..."));
-        saveConfigTask1.setOnSucceeded((WorkerStateEvent writeAccess) -> {
-            System.out.println("configuration saved: " + saveConfigTask1.getValue());
-            // set Null before return to dashboard for openDashboard method
+                // Order mit Kundendaten und Gesamtpreis zur Konfiguration hinzufügen
+                Customer newCustomer = new Customer(tfCustomerMail.getText(), tfCustomerFirstName.getText(), tfCustomerLastName.getText(), tfCustomerStreet.getText(), Integer.parseInt(tfCustomerNr.getText()), tfCustomerZipcode.getText(), tfCustomerCity.getText());
+                // Customer in DB erzeugen, um unique ID zu bekommen
+                PostCustomerTask customerTask1 = new PostCustomerTask(activeUser, newCustomer);
+                customerTask1.setOnRunning((runningEvent) -> System.out.println("trying to create customer..."));
+                customerTask1.setOnFailed((WorkerStateEvent createUserFailed) -> System.out.println("creating customer failed..."));
+                customerTask1.setOnSucceeded((WorkerStateEvent customerCreated) -> {
+                    System.out.println("customer created id:" + customerTask1.getValue().id);
 
-            // Order mit Kundendaten und Gesamtpreis zur Konfiguration hinzufügen
-            Customer newCustomer = new Customer(tfCustomerMail.getText(), tfCustomerFirstName.getText(), tfCustomerLastName.getText(), tfCustomerStreet.getText(), Integer.parseInt(tfCustomerNr.getText()), tfCustomerZipcode.getText(), tfCustomerCity.getText());
-            // Customer in DB erzeugen, um unique ID zu bekommen
-            PostCustomerTask customerTask1 = new PostCustomerTask(activeUser, newCustomer);
-            customerTask1.setOnRunning((runningEvent) -> System.out.println("trying to create customer..."));
-            customerTask1.setOnFailed((WorkerStateEvent createUserFailed) -> System.out.println("creating customer failed..."));
-            customerTask1.setOnSucceeded((WorkerStateEvent customerCreated) -> {
-                System.out.println("customer created id:" + customerTask1.getValue().id);
+                    float priceTotal = 0;
+                    for (Article article : saveConfigTask1.getValue().articles) {
+                        priceTotal += article.price;
+                    }
 
-                float priceTotal = 0;
-                for (Article article : saveConfigTask1.getValue().articles) {
-                    priceTotal += article.price;
-                }
-
-                // CREATE ORDER
-                OrderClass newOrder = new OrderClass(saveConfigTask1.getValue(), customerTask1.getValue(), priceTotal);
-                PostOrderTask orderTask1 = new PostOrderTask(activeUser, newOrder);
-                //Erst Task definieren incl. WorkerStateEvent als Flag, um zu wissen, wann fertig
-                orderTask1.setOnSucceeded((WorkerStateEvent orderCreated) -> {
-                    System.out.println("order created id:" + orderTask1.getValue().id);
-                    //Client Config Objekt aktualisieren
-                    saveConfigTask1.getValue().setOrder(orderTask1.getValue());
-
-                    // CREATE BILL
-                    Bill newBill = new Bill(orderTask1.getValue());
-                    PostBillTask billTask1 = new PostBillTask(activeUser, newBill);
+                    // CREATE ORDER
+                    OrderClass newOrder = new OrderClass(saveConfigTask1.getValue(), customerTask1.getValue(), priceTotal);
+                    PostOrderTask orderTask1 = new PostOrderTask(activeUser, newOrder);
                     //Erst Task definieren incl. WorkerStateEvent als Flag, um zu wissen, wann fertig
-                    billTask1.setOnSucceeded((WorkerStateEvent billCreated) -> {
-                        System.out.println("bill created id:" + billTask1.getValue().id);
+                    orderTask1.setOnSucceeded((WorkerStateEvent orderCreated) -> {
+                        System.out.println("order created id:" + orderTask1.getValue().id);
                         //Client Config Objekt aktualisieren
-                        saveConfigTask1.getValue().order.setBill(billTask1.getValue());
+                        saveConfigTask1.getValue().setOrder(orderTask1.getValue());
 
-                        // SWITCH UI
-                        closeAllBottomDrawers();
-                        try {
-                            vm.forceDrawerView(drawerBottomCats, bpCats);
-                            vm.forceDrawerView(drawerFinish, catFinish);
-                        } catch (IOException e) {
-                            throw new RuntimeException(e);
-                        }
-                        catsTogglegroup.getToggles().forEach(toggle -> {
-                            Node node = (Node) toggle ;
-                            node.setDisable(true);
+                        // CREATE BILL
+                        Bill newBill = new Bill(orderTask1.getValue());
+                        PostBillTask billTask1 = new PostBillTask(activeUser, newBill);
+                        //Erst Task definieren incl. WorkerStateEvent als Flag, um zu wissen, wann fertig
+                        billTask1.setOnSucceeded((WorkerStateEvent billCreated) -> {
+                            System.out.println("bill created id:" + billTask1.getValue().id);
+                            //Client Config Objekt aktualisieren
+                            saveConfigTask1.getValue().order.setBill(billTask1.getValue());
+
+                            // SWITCH UI
+                            closeAllBottomDrawers();
+                            try {
+                                vm.forceDrawerView(drawerBottomCats, bpCats);
+                                vm.forceDrawerView(drawerFinish, catFinish);
+                            } catch (IOException e) {
+                                throw new RuntimeException(e);
+                            }
+                            catsTogglegroup.getToggles().forEach(toggle -> {
+                                Node node = (Node) toggle ;
+                                node.setDisable(true);
+                            });
+                            setDefaultFocus();
+                            activateButtonsOnCustomerEdit();
                         });
-                        setDefaultFocus();
-                        activateButtonsOnCustomerEdit();
+                        //Tasks in eigenem Thread ausführen
+                        new Thread(billTask1).start();
                     });
                     //Tasks in eigenem Thread ausführen
-                    new Thread(billTask1).start();
+                    new Thread(orderTask1).start();
                 });
                 //Tasks in eigenem Thread ausführen
-                new Thread(orderTask1).start();
+                new Thread(customerTask1).start();
+
+
             });
+            saveConfigTask1.setOnFailed((writeAccessFailed) -> System.out.println("saving configuration failed"));
             //Tasks in eigenem Thread ausführen
-            new Thread(customerTask1).start();
-
-
-        });
-        saveConfigTask1.setOnFailed((writeAccessFailed) -> System.out.println("saving configuration failed"));
-        //Tasks in eigenem Thread ausführen
-        new Thread(saveConfigTask1).start();
+            new Thread(saveConfigTask1).start();
+        }
     }
 
     // AR: Auftrag Button
@@ -414,7 +418,6 @@ public class BuilderController {
     }
 
     private void setupValidators() {
-        validatorManager.initTextValidators(tfCustomerID, validatorCustomerID);
         validatorManager.initTextValidators(tfCustomerFirstName, validatorCustomerFirstName);
         validatorManager.initTextValidators(tfCustomerLastName, validatorCustomerLastName);
         validatorManager.initTextValidators(tfCustomerMail, validatorCustomerMail);
@@ -425,14 +428,7 @@ public class BuilderController {
     }
 
     private void setDefaultFocus() {
-        Platform.runLater(new Runnable()
-        {
-            @Override
-            public void run()
-            {
-                anchorContainer.requestFocus();
-            }
-        });
+        Platform.runLater(() -> anchorContainer.requestFocus());
     }
 
     private void deactivateButtonsOnCustomerEdit() {
@@ -555,66 +551,6 @@ public class BuilderController {
             cat6SelectBell.getSelectionModel().select(Main.currentConfig.getArticleByType("Klingel").name);
             cat6SelectStand.getSelectionModel().select(Main.currentConfig.getArticleByType("Ständer").name);
             cat6SelectLight.getSelectionModel().select(Main.currentConfig.getArticleByType("Licht").name);
-
-            /*
-            if (Objects.equals(Main.currentConfig.getArticleByType("Rahmen").hexColor, "#000000"))
-                cat1TogglegroupColor.getToggles().get(0).setSelected(true);
-            else if (Objects.equals(Main.currentConfig.getArticleByType("Rahmen").hexColor, "#FFFFFF"))
-                cat1TogglegroupColor.getToggles().get(1).setSelected(true);
-            else
-                cat1TogglegroupColor.getToggles().get(2).setSelected(true);
-
-
-            // CHARACTERISTIC
-            if (Objects.equals(Main.currentConfig.getArticleByType("Rahmen").characteristic, "S"))
-                cat1TogglegroupSize.getToggles().get(0).setSelected(true);
-            else if (Objects.equals(Main.currentConfig.getArticleByType("Rahmen").characteristic, "M"))
-                cat1TogglegroupSize.getToggles().get(1).setSelected(true);
-            else
-                cat1TogglegroupSize.getToggles().get(2).setSelected(true);
-
-            cat2SelectModel.getSelectionModel().select(Main.currentConfig.getArticleByType("Lenker").name);
-            cat2SelectGrip.getSelectionModel().select(Main.currentConfig.getArticleByType("Griff").name);
-            // COLOR
-            if (Objects.equals(Main.currentConfig.getArticleByType("Lenker").hexColor, "#000000"))
-                cat2TogglegroupColor.getToggles().get(0).setSelected(true);
-            else if (Objects.equals(Main.currentConfig.getArticleByType("Lenker").hexColor, "#FFFFFF"))
-                cat2TogglegroupColor.getToggles().get(1).setSelected(true);
-            else
-                cat2TogglegroupColor.getToggles().get(2).setSelected(true);
-
-            cat3SelectModel.getSelectionModel().select(Main.currentConfig.getArticleByType("Laufrad").name);
-            cat3SelectTyre.getSelectionModel().select(Main.currentConfig.getArticleByType("Reifen").name);
-            // FARBE
-            if (Objects.equals(Main.currentConfig.getArticleByType("Laufrad").hexColor, "#000000"))
-                cat3TogglegroupColor.getToggles().get(0).setSelected(true);
-            else if (Objects.equals(Main.currentConfig.getArticleByType("Laufrad").hexColor, "#FFFFFF"))
-                cat3TogglegroupColor.getToggles().get(1).setSelected(true);
-            else
-                cat3TogglegroupColor.getToggles().get(2).setSelected(true);
-            // CHARACTERISTIC
-            if (Objects.equals(Main.currentConfig.getArticleByType("Laufrad").characteristic, "S"))
-                cat3TogglegroupSize.getToggles().get(0).setSelected(true);
-            else if (Objects.equals(Main.currentConfig.getArticleByType("Laufrad").characteristic, "M"))
-                cat3TogglegroupSize.getToggles().get(1).setSelected(true);
-            else
-                cat3TogglegroupSize.getToggles().get(2).setSelected(true);
-
-            cat4SelectModel.getSelectionModel().select(Main.currentConfig.getArticleByType("Sattel").name);
-            // FARBE
-            if (Objects.equals(Main.currentConfig.getArticleByType("Sattel").hexColor, "#000000"))
-                cat4TogglegroupColor.getToggles().get(0).setSelected(true);
-            else if (Objects.equals(Main.currentConfig.getArticleByType("Sattel").hexColor, "#4b2c20"))
-                cat4TogglegroupColor.getToggles().get(1).setSelected(true);
-            else
-                cat4TogglegroupColor.getToggles().get(2).setSelected(true);
-
-            cat5SelectModel.getSelectionModel().select(Main.currentConfig.getArticleByType("Bremse").name);
-
-            cat6SelectBell.getSelectionModel().select(Main.currentConfig.getArticleByType("Klingel").name);
-            cat6SelectStand.getSelectionModel().select(Main.currentConfig.getArticleByType("Ständer").name);
-            cat6SelectLight.getSelectionModel().select(Main.currentConfig.getArticleByType("Licht").name);
-            */
         }
     }
 
@@ -740,25 +676,6 @@ public class BuilderController {
         cat6SelectStand.setItems(getArticleNamesByType("Ständer"));
         cat6SelectLight.setItems(getArticleNamesByType("Licht"));
     }
-
- //   TODO remove before production
-//    public void initSubcatsColor() {
-//
-//        getArticleColorsByName()
-//        cat1TogglegroupColor.getToggles().clear();
-////         for color in cat1.colors
-////         toggle = new JFXToggleNode()
-////         toggle.unselectedColor = Color.web("#0000FF",1.0))
-////         cat1TogglegroupColor.add(toggle)
-//
-//
-//        for (Toggle toggle : cat1TogglegroupColor.getToggles()) {
-//            JFXToggleNode jfxToggleNode = (JFXToggleNode) toggle;
-//            jfxToggleNode.setUnSelectedColor(Color.web("#0000FF",1.0));
-//            System.out.println(jfxToggleNode.getUnSelectedColor());
-//        }
-//    }
-
 
     // AR: get model names with the given type, remove duplicates
     private ObservableList<String> getArticleNamesByType(String typeString) {
@@ -1314,24 +1231,15 @@ public class BuilderController {
     }
 
     private void initTextFieldListeners() {
-        setTextFieldRules(tfCustomerID, "[\\d+]");
-        setTextFieldRules(tfCustomerFirstName, "[a-zA-Z-'`´]");
-        setTextFieldRules(tfCustomerLastName, "[a-zA-Z-'`´]");
-        setTextFieldRules(tfCustomerMail, "[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$");
-        setTextFieldRules(tfCustomerStreet, "[a-zA-Z-'`´]");
-        setTextFieldRules(tfCustomerNr, "[a-z0-9]");
-        setTextFieldRules(tfCustomerZipcode, "[\\d{0,5}]");
-        setTextFieldRules(tfCustomerCity, "[a-zA-Z-'`´]");
+        ValidatorManager.setTextFieldRules(tfCustomerFirstName, "[a-zA-Z-'`´]");
+        ValidatorManager.setTextFieldRules(tfCustomerLastName, "[a-zA-Z-'`´]");
+        ValidatorManager.setTextFieldRules(tfCustomerMail, "[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$");
+        ValidatorManager.setTextFieldRules(tfCustomerStreet, "[a-zA-Z-'`´]");
+        ValidatorManager.setTextFieldRules(tfCustomerNr, "[0-9]");
+        ValidatorManager.setTextFieldRules(tfCustomerZipcode, "[\\d{0,5}]");
+        ValidatorManager.setTextFieldRules(tfCustomerCity, "[a-zA-Z-'`´]");
 
         int maxLengthZipCode = 5;
-        int maxLengthCustomerID = 10;
-
-        tfCustomerID.textProperty().addListener((ov, oldValue, newValue) -> {
-            if (tfCustomerID.getText().length() > maxLengthCustomerID) {
-                String str = tfCustomerID.getText().substring(0, maxLengthCustomerID);
-                tfCustomerID.setText(str);
-            }
-        });
 
         tfCustomerNr.textProperty().addListener((ov, oldValue, newValue) -> {
             if (tfCustomerNr.getText().length() > maxLengthZipCode) {
@@ -1348,12 +1256,41 @@ public class BuilderController {
         });
     }
 
-    private void setTextFieldRules(JFXTextField tf, String pattern) {
-        tf.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (!newValue.matches(pattern)) {
-                tf.setText(newValue.replaceAll("[^" + pattern + "]", ""));
+    private void loadFinishedConfig() throws IOException {
+        if (Main.currentConfig != null) {
+            if (Main.currentConfig.status.equals("ABGESCHLOSSEN")) {
+                closeAllSideDrawers();
+                closeAllBottomDrawers();
+                vm.forceDrawerView(drawerBottomCats, bpCats);
+                vm.forceDrawerView(drawerFinish, catFinish);
+
+                tfFinishOrderID.clear();
+                tfFinishCustomerID.clear();
+                tfCustomerFirstName.clear();
+                tfFinishLastName.clear();
+                tfFinishStreet.clear();
+                tfFinishNr.clear();
+                tfFinishZipCode.clear();
+                tfFinishCity.clear();
+                tfFinishMail.clear();
+
+                tfFinishOrderID.setText(String.valueOf(Main.currentConfig.order.id));
+                tfFinishCustomerID.setText(String.valueOf(Main.currentConfig.order.customer.id));
+                tfFinishFirstName.setText(Main.currentConfig.order.customer.forename);
+                tfFinishLastName.setText(Main.currentConfig.order.customer.lastname);
+                tfFinishStreet.setText(Main.currentConfig.order.customer.street);
+                tfFinishNr.setText(String.valueOf(Main.currentConfig.order.customer.houseNumber));
+                tfFinishZipCode.setText(Main.currentConfig.order.customer.zipCode);
+                tfFinishCity.setText(Main.currentConfig.order.customer.city);
+                tfFinishMail.setText(Main.currentConfig.order.customer.email);
+
+                catsTogglegroup.getToggles().forEach(toggle -> {
+                    Node node = (Node) toggle ;
+                    node.setDisable(true);
+                });
+                setDefaultFocus();
             }
-        });
+        }
     }
 
 }
