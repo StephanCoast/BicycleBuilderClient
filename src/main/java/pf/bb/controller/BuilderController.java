@@ -341,6 +341,27 @@ public class BuilderController {
                             } catch (IOException e) {
                                 throw new RuntimeException(e);
                             }
+
+                            tfFinishOrderID.clear();
+                            tfFinishCustomerID.clear();
+                            tfCustomerFirstName.clear();
+                            tfFinishLastName.clear();
+                            tfFinishStreet.clear();
+                            tfFinishNr.clear();
+                            tfFinishZipCode.clear();
+                            tfFinishCity.clear();
+                            tfFinishMail.clear();
+
+                            tfFinishOrderID.setText(String.valueOf(orderTask1.getValue().id));
+                            tfFinishCustomerID.setText(String.valueOf(newCustomer.id));
+                            tfFinishFirstName.setText(newCustomer.forename);
+                            tfFinishLastName.setText(newCustomer.lastname);
+                            tfFinishStreet.setText(newCustomer.street);
+                            tfFinishNr.setText(String.valueOf(newCustomer.houseNumber));
+                            tfFinishZipCode.setText(newCustomer.zipCode);
+                            tfFinishCity.setText(newCustomer.city);
+                            tfFinishMail.setText(newCustomer.email);
+
                             catsTogglegroup.getToggles().forEach(toggle -> {
                                 Node node = (Node) toggle ;
                                 node.setDisable(true);
