@@ -129,6 +129,22 @@ public class BuilderController {
     public void openCustomerDataView(ActionEvent event) throws IOException {
         vm.forceDrawerView(drawerBottomData, bpCustomerData);
         deactivateButtonsOnCustomerEdit();
+
+        tfCustomerFirstName.clear();
+        tfCustomerLastName.clear();
+        tfCustomerMail.clear();
+        tfCustomerStreet.clear();
+        tfCustomerNr.clear();
+        tfCustomerZipcode.clear();
+        tfCustomerCity.clear();
+
+        tfCustomerFirstName.resetValidation();
+        tfCustomerLastName.resetValidation();
+        tfCustomerMail.resetValidation();
+        tfCustomerStreet.resetValidation();
+        tfCustomerNr.resetValidation();
+        tfCustomerZipcode.resetValidation();
+        tfCustomerCity.resetValidation();
     }
 
     public void openSidebarDefault(ActionEvent event) throws IOException {
