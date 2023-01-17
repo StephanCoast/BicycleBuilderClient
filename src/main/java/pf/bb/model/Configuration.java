@@ -107,25 +107,41 @@ public class Configuration extends EntityWithID {
     };
 
 
-    public void createAndOpenTempPdfBill (){
+    public void createAndOpenTempPdf(String docType){
 
         if(!(this.order == null)) {
             if(!(this.order.bill == null)) {
                 try {
-                    // create and open pdf file
-                    String filepath = System.getProperty("java.io.tmpdir") + System.getProperty("file.separator") + "bicycleBill.pdf";
+                    String filepath;
+
+                    if(docType.equals("ORDER")) {
+                        filepath = System.getProperty("java.io.tmpdir") + System.getProperty("file.separator") + "bicycleOrder.pdf";
+                    } else {
+                        // create and open pdf file
+                        filepath = System.getProperty("java.io.tmpdir") + System.getProperty("file.separator") + "bicycleBill.pdf";
+                    }
+
                     PdfWriter writer = new PdfWriter(filepath);
                     PdfDocument pdfDoc = new PdfDocument(writer);
                     Document doc = new Document(pdfDoc);
+                    Table table1 = null;
 
                     //adds elements
                     // TABLE1 bill
                     // Creating a table object with
-                    String[] headers1 = new String[]{"RECHNUNG", ""};
-                    Table table1 = this.createTableWithHeaderNames(headers1);
-                    table1.setFixedPosition(360, 652, 200);
-                    this.addCell(table1, "Rechnungs-Nr.:");
-                    this.addCell(table1, String.valueOf(this.order.bill.id));
+                    if(docType.equals("ORDER")) {
+                        String[] headers1 = new String[]{"AUFTRAG", ""};
+                        table1 = this.createTableWithHeaderNames(headers1);
+                        table1.setFixedPosition(360, 652, 200);
+                        this.addCell(table1, "");
+                        this.addCell(table1, "");
+                    } else {
+                        String[] headers1 = new String[]{"RECHNUNG", ""};
+                        table1 = this.createTableWithHeaderNames(headers1);
+                        table1.setFixedPosition(360, 652, 200);
+                        this.addCell(table1, "Rechnungs-Nr.:");
+                        this.addCell(table1, String.valueOf(this.order.bill.id));
+                    }
                     this.addCell(table1, "Datum:");
                     this.addCell(table1, this.formatDateStringGermany(this.order.bill.timestampCreated.substring(0,10)));
                     this.addCell(table1, "Auftrags-Nr.:");
@@ -143,7 +159,7 @@ public class Configuration extends EntityWithID {
                     Table table2 = this.createTableWithHeaderNames(headers2);
                     ImageData data = ImageDataFactory.create("src/main/resources/img/logo.PNG");
                     Image img = new Image(data);
-                    img.scale((float) 0.1, (float) 0.1);
+                    img.scale((float) 0.3, (float) 0.3);
                     this.addCell(table2, "").add(img);             // add logo
                     this.addCell(table2, "").setHeight(15);
                     this.addCell(table2, this.order.customer.forename + " " + this.order.customer.lastname);
