@@ -138,7 +138,7 @@ public class TestPdfCreation {
             Table table2 = this.createTableWithHeaderNames(headers2);
             ImageData data = ImageDataFactory.create("src/main/resources/img/logo.PNG");
             Image img = new Image(data);
-            img.scale((float) 0.1, (float) 0.1);
+            img.scale((float) 0.3, (float) 0.3);
             this.addCell(table2, "").add(img);             // add logo
             this.addCell(table2, "").setHeight(15);
             this.addCell(table2, config.order.customer.forename + " " + config.order.customer.lastname);

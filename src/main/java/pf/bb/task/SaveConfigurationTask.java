@@ -80,6 +80,8 @@ public class SaveConfigurationTask extends Task<Configuration> {
                 return configNew;
 
             } else {
+                // Artikelliste der bestehenden Konfiguration aktualisieren
+                Main.currentConfig.articles = configNew.articles;
                 Main.currentConfig.status = this.status;
                 configJSON = gson.toJson(Main.currentConfig);
                 String url = Configuration.getUrl() + "/" + Main.currentConfig.id;
@@ -90,9 +92,6 @@ public class SaveConfigurationTask extends Task<Configuration> {
                 if(res.getStatus() == 403) { //FORBIDDEN
                     System.out.println("WRITE ACCESS TO CONFIGURATION DENIED, you must get write access via PutConfigurationWriteAccessTask before you can run a PutConfigurationTask!");
                 }
-//                Configuration tempConfig = Main.currentConfig;
-//                // set back to null after edit -> for check if writeAccess needs to be returned
-//                Main.currentConfig = null;
                 //System.out.println("Answer to PUT body:" + res.getHeaders() + "\n" + res.getBody());
                 return Main.currentConfig;
             }

@@ -388,13 +388,13 @@ public class BuilderController {
     // AR: Auftrag Button
     // todo: PDF erstellen und anzeigen/herunterladen
     public void onFinalOrder(ActionEvent event) {
-
+        Main.currentConfig.createAndOpenTempPdf("ORDER");
     }
 
     // AR: Rechnung Button
     // todo: PDF erstellen und anzeigen/herunterladen
     public void onFinalInvoice(ActionEvent event) {
-
+        Main.currentConfig.createAndOpenTempPdf("INVOICE");
     }
 
     private void setupSideDrawersSet(JFXDrawer drawerDefault, JFXDrawer drawerFinish, JFXDrawer drawerCat1, JFXDrawer drawerCat2, JFXDrawer drawerCat3, JFXDrawer drawerCat4, JFXDrawer drawerCat5, JFXDrawer drawerCat6) {
