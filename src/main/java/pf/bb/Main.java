@@ -26,6 +26,7 @@ public class Main extends Application {
     public static final ArrayList<Article> ARTICLES = new ArrayList<>();
     public static ObservableList<Configuration> CONFIGURATIONS = FXCollections.observableArrayList();
     public static Configuration currentConfig = null;
+    public static boolean writeAccessGiven = false;
     public static final String API_HOST = "http://localhost:8080";
 
     @Override

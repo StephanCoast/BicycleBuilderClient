@@ -104,14 +104,15 @@ public class BuilderController {
     }
 
     public void openDashboard(ActionEvent event) throws IOException {
-        // when new config or status "ABGESCHLOSSEN" no need to return writeAccess
-        if (Main.currentConfig == null) {
-            vm.forceView(event, "Dashboard.fxml", "Bicycle Builder - Dashboard", false);
-        } else {
+        // when new config or status "ABGESCHLOSSEN"&& "ENTWURF" nicht abgeschlossen no need to return writeAccess
+//        if (Main.currentConfig == null || (draftOpened && draftWasFinished) || (Main.currentConfig.status.equals(Configuration.stats[1]) && !draftWasFinished)) {
+        if(Main.writeAccessGiven) {
+            //return write Access
             PutConfigurationWriteAccessTask writeAccessTask1 = new PutConfigurationWriteAccessTask(activeUser, Main.currentConfig.id);
-            writeAccessTask1.setOnRunning((runningEvent) -> System.out.println("trying to give back writeAccess for configuration..."));
-            writeAccessTask1.setOnSucceeded((WorkerStateEvent writeAccess) -> {
-                System.out.println("writeAccess returned for configuration " + Main.currentConfig.id + ": " + writeAccessTask1.getValue());
+            writeAccessTask1.setOnRunning((runningEvent) -> System.out.println("trying switch writeAccess for configuration..."));
+            writeAccessTask1.setOnSucceeded((WorkerStateEvent switchSuccess) -> {
+                Main.writeAccessGiven = false; // flag zurücksetzen
+                System.out.println("OnExitBuilderController: writeAccess for configuration " + Main.currentConfig.id + " switched to: " + writeAccessTask1.getValue());
                 Main.currentConfig = null;
                 try {
                     vm.forceView(event, "Dashboard.fxml", "Bicycle Builder - Dashboard", false);
@@ -119,9 +120,12 @@ public class BuilderController {
                     throw new RuntimeException(e);
                 }
             });
-            writeAccessTask1.setOnFailed((writeAccessFailed) -> System.out.println("Couldn't return writeAccess for configuration"));
+            writeAccessTask1.setOnFailed((writeAccessFailed) -> System.out.println("Couldn't switch writeAccess for configuration"));
             //Tasks in eigenem Thread ausführen
             new Thread(writeAccessTask1).start();
+
+        } else {
+            vm.forceView(event, "Dashboard.fxml", "Bicycle Builder - Dashboard", false);
         }
     }
 
@@ -161,7 +165,7 @@ public class BuilderController {
     private void startDraftSaveConfigurationTask(ActionEvent event, boolean comingFromSubCat) {
         SaveConfigurationTask saveConfigTask1 = new SaveConfigurationTask(activeUser, this, "ENTWURF");
         saveConfigTask1.setOnRunning((runningEvent) -> System.out.println("trying to save configuration..."));
-        saveConfigTask1.setOnSucceeded((WorkerStateEvent writeAccess) -> {
+        saveConfigTask1.setOnSucceeded((WorkerStateEvent saveConfigSucceded) -> {
             System.out.println("configuration saved: " + saveConfigTask1.getValue());
             try {
                 if (!comingFromSubCat) {
@@ -171,7 +175,7 @@ public class BuilderController {
                 throw new RuntimeException(e);
             }
         });
-        saveConfigTask1.setOnFailed((writeAccessFailed) -> System.out.println("saving configuration failed"));
+        saveConfigTask1.setOnFailed((saveConfigFailed) -> System.out.println("saving configuration failed"));
         //Tasks in eigenem Thread ausführen
         new Thread(saveConfigTask1).start();
     }
@@ -296,8 +300,9 @@ public class BuilderController {
         } else {
             SaveConfigurationTask saveConfigTask1 = new SaveConfigurationTask(activeUser, this, "ABGESCHLOSSEN");
             saveConfigTask1.setOnRunning((runningEvent) -> System.out.println("trying to save configuration..."));
-            saveConfigTask1.setOnSucceeded((WorkerStateEvent writeAccess) -> {
+            saveConfigTask1.setOnSucceeded((WorkerStateEvent saveConfig1Success) -> {
                 System.out.println("configuration saved: " + saveConfigTask1.getValue());
+                Main.currentConfig = saveConfigTask1.getValue();
 
                 // Order mit Kundendaten und Gesamtpreis zur Konfiguration hinzufügen
                 Customer newCustomer = new Customer(tfCustomerMail.getText(), tfCustomerFirstName.getText(), tfCustomerLastName.getText(), tfCustomerStreet.getText(), Integer.parseInt(tfCustomerNr.getText()), tfCustomerZipcode.getText(), tfCustomerCity.getText());
@@ -314,13 +319,13 @@ public class BuilderController {
                     }
 
                     // CREATE ORDER
-                    OrderClass newOrder = new OrderClass(saveConfigTask1.getValue(), customerTask1.getValue(), priceTotal);
+                    OrderClass newOrder = new OrderClass(Main.currentConfig, customerTask1.getValue(), priceTotal);
                     PostOrderTask orderTask1 = new PostOrderTask(activeUser, newOrder);
                     //Erst Task definieren incl. WorkerStateEvent als Flag, um zu wissen, wann fertig
                     orderTask1.setOnSucceeded((WorkerStateEvent orderCreated) -> {
                         System.out.println("order created id:" + orderTask1.getValue().id);
                         //Client Config Objekt aktualisieren
-                        saveConfigTask1.getValue().setOrder(orderTask1.getValue());
+                        Main.currentConfig.setOrder(orderTask1.getValue());
 
                         // CREATE BILL
                         Bill newBill = new Bill(orderTask1.getValue());
@@ -328,9 +333,9 @@ public class BuilderController {
                         //Erst Task definieren incl. WorkerStateEvent als Flag, um zu wissen, wann fertig
                         billTask1.setOnSucceeded((WorkerStateEvent billCreated) -> {
                             System.out.println("bill created id:" + billTask1.getValue().id);
-                            //Client Config Objekt aktualisieren
-                            saveConfigTask1.getValue().order.setBill(billTask1.getValue());
-                            saveConfigTask1.getValue().status = Configuration.stats[1]; //ABGESCHLOSSEN
+                            //Client Config Objekt für PDFs aktualisieren
+                            Main.currentConfig.order.setBill(billTask1.getValue());
+                            Main.currentConfig.status = Configuration.stats[1]; // ABGESCHLOSSEN
 
                             // SWITCH UI
                             closeAllBottomDrawers();
@@ -379,7 +384,7 @@ public class BuilderController {
 
 
             });
-            saveConfigTask1.setOnFailed((writeAccessFailed) -> System.out.println("saving configuration failed"));
+            saveConfigTask1.setOnFailed((saveConfigFail1) -> System.out.println("saving configuration failed"));
             //Tasks in eigenem Thread ausführen
             new Thread(saveConfigTask1).start();
         }
