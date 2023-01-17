@@ -195,6 +195,24 @@ public class Configuration extends EntityWithID {
                     //close the PDF file
                     doc.close();
 
+                    // AR: Linux debug
+                    new Thread(() -> {
+                        try {
+                            File file = new File(filepath);
+                            if(!Desktop.isDesktopSupported()) //check if Desktop is supported by Platform or not
+                            {
+                                System.out.println("opening of File is not supported on this os");
+                            } else {
+                                if (file.exists()) {
+                                    Desktop.getDesktop().open(file);
+                                }
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }).start();
+
+                    /*
                     try  // to open the temp file in default Desktop App
                     {
                         //constructor of file class having file as argument
@@ -212,6 +230,7 @@ public class Configuration extends EntityWithID {
                     {
                         e.printStackTrace();
                     }
+                     */
 
                 } catch (FileNotFoundException e) {
                     System.out.println(e.getMessage());
