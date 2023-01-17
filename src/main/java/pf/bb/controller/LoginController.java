@@ -2,7 +2,6 @@ package pf.bb.controller;
 
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
-import javafx.animation.RotateTransition;
 import javafx.application.Platform;
 import com.jfoenix.validation.RequiredFieldValidator;
 import javafx.event.ActionEvent;
@@ -12,8 +11,6 @@ import javafx.scene.control.ButtonType;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
-import javafx.scene.transform.Rotate;
-import javafx.util.Duration;
 import pf.bb.Main;
 import pf.bb.model.*;
 import pf.bb.task.*;
@@ -39,7 +36,6 @@ public class LoginController {
     public void initialize() {
         validatorManager.initTextValidators(username, validatorName);
         validatorManager.initPasswordValidators(password, validatorPW);
-        rotateAppIcon(sPaneAppIcon);
 
         // for developing only
         // todo: must be removed for shipping, causes label float bug
@@ -60,7 +56,7 @@ public class LoginController {
         loginTask.setOnSucceeded((WorkerStateEvent e2) -> {
             activeUser = loginTask.getValue();
             if (activeUser == null) {
-                // login failed -> Show somehow in FXML
+                // login failed
                 loginFailure.setVisible(true);
             } else {
 
@@ -100,13 +96,6 @@ public class LoginController {
         if (alert.getResult() == ButtonType.YES) {
             Platform.exit();
         }
-    }
-
-    private void rotateAppIcon(StackPane pane) {
-        RotateTransition rt = new RotateTransition(Duration.millis(2000), pane);
-        rt.setByAngle(360);
-        rt.setAxis(Rotate.Y_AXIS);
-        rt.play();
     }
 
     public static void testConfigurationApi() {
