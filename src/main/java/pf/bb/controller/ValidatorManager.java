@@ -45,27 +45,13 @@ public class ValidatorManager {
         });
     }
 
-    public static boolean textFieldHaveSymbol(JFXTextField tf, String symbol) {
-        if (!tf.getText().contains(symbol))  {
-            return false;
-        } else {
-            return true;
-        }
-    }
+    public static boolean textFieldNotHaveSymbol(JFXTextField tf, String symbol) { return !tf.getText().contains(symbol); }
 
     public static boolean textFieldIsEmpty(JFXTextField tf) {
-        if (tf.getText().isEmpty()) {
-            return true;
-        } else {
-            return false;
-        }
+        return tf.getText().isEmpty();
     }
 
     public static boolean pwFieldIsEmpty(JFXPasswordField pf) {
-        if (pf.getText().isEmpty()) {
-            return true;
-        } else {
-            return false;
-        }
+        return pf.getText().isEmpty();
     }
 }

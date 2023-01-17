@@ -291,7 +291,7 @@ public class BuilderController {
                 ValidatorManager.textFieldIsEmpty(tfCustomerZipcode) ||
                 ValidatorManager.textFieldIsEmpty(tfCustomerCity)) {
             ViewManager.createWarningAlert("Bicycle Builder - Warnung", "Bitte füllen Sie alle Felder aus.", null);
-        } else if (!ValidatorManager.textFieldHaveSymbol(tfCustomerMail, "@")) {
+        } else if (ValidatorManager.textFieldNotHaveSymbol(tfCustomerMail, "@")) {
             ViewManager.createWarningAlert("Bicycle Builder - Warnung", "Die E-Mail Adresse muss ein @-Symbol enthalten.", null);
         } else {
             SaveConfigurationTask saveConfigTask1 = new SaveConfigurationTask(activeUser, this, "ABGESCHLOSSEN");
@@ -1276,10 +1276,11 @@ public class BuilderController {
         ValidatorManager.setTextFieldRules(tfCustomerCity, "[a-zA-Z-'`´]");
 
         int maxLengthZipCode = 5;
+        int maxLengthHouseNumber = 3;
 
         tfCustomerNr.textProperty().addListener((ov, oldValue, newValue) -> {
-            if (tfCustomerNr.getText().length() > maxLengthZipCode) {
-                String str = tfCustomerNr.getText().substring(0, maxLengthZipCode);
+            if (tfCustomerNr.getText().length() > maxLengthHouseNumber) {
+                String str = tfCustomerNr.getText().substring(0, maxLengthHouseNumber);
                 tfCustomerNr.setText(str);
             }
         });

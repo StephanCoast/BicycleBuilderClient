@@ -121,7 +121,7 @@ public class DashboardController {
     public void onBottomBarSaveAdmin(ActionEvent event) {
         if (ValidatorManager.textFieldIsEmpty(tfAdminUserName) || ValidatorManager.textFieldIsEmpty(tfAdminFirstName) || ValidatorManager.textFieldIsEmpty(tfAdminLastName) || ValidatorManager.textFieldIsEmpty(tfAdminMail) || ValidatorManager.pwFieldIsEmpty(pfAdminPW)) {
             ViewManager.createWarningAlert("Bicycle Builder - Warnung", "Bitte füllen Sie alle Felder aus.", null);
-        } else if (!ValidatorManager.textFieldHaveSymbol(tfAdminMail, "@")) {
+        } else if (ValidatorManager.textFieldNotHaveSymbol(tfAdminMail, "@")) {
             ViewManager.createWarningAlert("Bicycle Builder - Warnung", "Die E-Mail Adresse muss ein @-Symbol enthalten.", null);
         } else {
             User newUser = new User(tfAdminUserName.getText(), pfAdminPW.getText(), tfAdminMail.getText(), tfAdminFirstName.getText(), tfAdminLastName.getText(), "CONSULTANT");
@@ -149,7 +149,7 @@ public class DashboardController {
     public void onBottomBarSaveProfile(ActionEvent event) {
         if (ValidatorManager.textFieldIsEmpty(tfProfileUserName) || ValidatorManager.textFieldIsEmpty(tfProfileFirstName) || ValidatorManager.textFieldIsEmpty(tfProfileLastName) || ValidatorManager.textFieldIsEmpty(tfProfileMail)) {
             ViewManager.createWarningAlert("Bicycle Builder - Warnung", "Bitte füllen Sie alle Felder aus.", null);
-        } else if (!ValidatorManager.textFieldHaveSymbol(tfProfileMail, "@")) {
+        } else if (ValidatorManager.textFieldNotHaveSymbol(tfProfileMail, "@")) {
             ViewManager.createWarningAlert("Bicycle Builder - Warnung", "Die E-Mail Adresse muss ein @-Symbol enthalten.", null);
         } else {
             User updatedUser = activeUser;
