@@ -11,7 +11,7 @@ import pf.bb.model.User;
  * Klasse für das Überprüfen des Logins.
  * @author Stephan Kost
  * @version 1.0
- * TH-Brandenburg Semesterprojekt Pattern & Frameworks Winter 2022/2023
+ * TH-Brandenburg Semesterprojekt Pattern und Frameworks Winter 2022/2023
  */
 public class PostLoginTask extends Task<User> {
 

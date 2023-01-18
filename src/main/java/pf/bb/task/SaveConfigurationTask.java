@@ -19,7 +19,7 @@ import static pf.bb.controller.LoginController.activeUser;
  * Klasse für das Auslagern des SaveConfigurationTasks.
  * @author Stephan Kost
  * @version 1.0
- * TH-Brandenburg Semesterprojekt Pattern & Frameworks Winter 2022/2023
+ * TH-Brandenburg Semesterprojekt Pattern und Frameworks Winter 2022/2023
  */
 public class SaveConfigurationTask extends Task<Configuration> {
 
