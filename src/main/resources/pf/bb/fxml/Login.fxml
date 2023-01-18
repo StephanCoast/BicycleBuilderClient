@@ -14,60 +14,63 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="475.0" prefWidth="400.0" styleClass="apane" stylesheets="@styles/Login.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pf.bb.controller.LoginController">
-   <children>
-      <VBox alignment="CENTER" layoutX="40.0" layoutY="40.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-         <children>
-            <StackPane fx:id="sPaneAppIcon" prefHeight="66.0">
-               <children>
-                  <FontAwesomeIconView glyphName="BICYCLE" selectionFill="#ff8f00" size="66" styleClass="logo" tabSize="6" text="" textAlignment="CENTER">
-                     <font>
-                        <Font size="80.0" />
-                     </font>
-                  </FontAwesomeIconView>
-               </children>
-               <VBox.margin>
-                  <Insets bottom="40.0" />
-               </VBox.margin>
-            </StackPane>
-            <RequiredFieldValidator fx:id="validatorName" message="Benutzername fehlt">
-               <VBox.margin>
-                  <Insets />
-               </VBox.margin>
-               <cursor>
-                  <Cursor fx:constant="NONE" />
-               </cursor></RequiredFieldValidator>
-            <RequiredFieldValidator fx:id="validatorPW" message="Passwort fehlt">
-               <cursor>
-                  <Cursor fx:constant="NONE" />
-               </cursor>
-            </RequiredFieldValidator>
-            <JFXTextField fx:id="username" labelFloat="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="200.0" promptText=" Benutzername">
-               <VBox.margin>
-                  <Insets bottom="55.0" left="5.0" right="5.0" />
-               </VBox.margin>
-            </JFXTextField>
-            <JFXPasswordField fx:id="password" labelFloat="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="200.0" promptText=" Passwort" styleClass="jfx-text-field">
-               <VBox.margin>
-                  <Insets bottom="40.0" left="5.0" right="5.0" />
-               </VBox.margin>
-            </JFXPasswordField>
-            <HBox alignment="CENTER" nodeOrientation="LEFT_TO_RIGHT" prefHeight="40.0" prefWidth="300.0" spacing="36.0">
-               <children>
-                  <JFXButton buttonType="RAISED" onAction="#close" prefHeight="36.0" prefWidth="110.0" styleClass="btn-close, btn-standard-comp" text="ABBRECHEN" />
-                  <JFXButton buttonType="RAISED" onAction="#authenticate" prefHeight="36.0" prefWidth="110.0" styleClass="btn-login, btn-standard-comp" text="LOGIN" />
-               </children>
-               <VBox.margin>
-                  <Insets bottom="20.0" />
-               </VBox.margin>
-            </HBox>
-            <Label fx:id="loginFailure" text="Login fehlgeschlagen" visible="false" />
-         </children>
-         <padding>
-            <Insets top="20.0" />
-         </padding>
-      </VBox>
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="475.0"
+            prefWidth="400.0" styleClass="apane" stylesheets="@styles/Login.css" xmlns="http://javafx.com/javafx/19"
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="pf.bb.controller.LoginController">
 
-   </children>
+   <VBox alignment="CENTER" layoutX="40.0" layoutY="40.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
+         AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <padding>
+         <Insets top="20.0"/>
+      </padding>
+      <StackPane prefHeight="66.0">
+         <VBox.margin>
+            <Insets bottom="40.0"/>
+         </VBox.margin>
+         <FontAwesomeIconView glyphName="BICYCLE" selectionFill="#ff8f00" size="66" styleClass="logo" tabSize="6"
+                              text="" textAlignment="CENTER">
+            <font>
+               <Font size="80.0"/>
+            </font>
+         </FontAwesomeIconView>
+      </StackPane>
+      <RequiredFieldValidator fx:id="validatorName" message="Benutzername fehlt">
+         <VBox.margin>
+            <Insets/>
+         </VBox.margin>
+         <cursor>
+            <Cursor fx:constant="NONE"/>
+         </cursor>
+      </RequiredFieldValidator>
+      <RequiredFieldValidator fx:id="validatorPW" message="Passwort fehlt">
+         <cursor>
+            <Cursor fx:constant="NONE"/>
+         </cursor>
+      </RequiredFieldValidator>
+      <JFXTextField fx:id="username" labelFloat="true" maxHeight="-Infinity" maxWidth="-Infinity"
+                    minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="200.0"
+                    promptText=" Benutzername">
+         <VBox.margin>
+            <Insets bottom="55.0" left="5.0" right="5.0"/>
+         </VBox.margin>
+      </JFXTextField>
+      <JFXPasswordField fx:id="password" labelFloat="true" maxHeight="-Infinity" maxWidth="-Infinity"
+                        minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="200.0"
+                        promptText=" Passwort" styleClass="jfx-text-field">
+         <VBox.margin>
+            <Insets bottom="40.0" left="5.0" right="5.0"/>
+         </VBox.margin>
+      </JFXPasswordField>
+      <HBox alignment="CENTER" nodeOrientation="LEFT_TO_RIGHT" prefHeight="40.0" prefWidth="300.0" spacing="36.0">
+         <VBox.margin>
+            <Insets bottom="20.0"/>
+         </VBox.margin>
+         <JFXButton buttonType="RAISED" onAction="#close" prefHeight="36.0" prefWidth="110.0"
+                    styleClass="btn-standard-comp" text="ABBRECHEN"/>
+         <JFXButton buttonType="RAISED" onAction="#authenticate" prefHeight="36.0" prefWidth="110.0"
+                    styleClass="btn-standard-comp" text="LOGIN"/>
+      </HBox>
+      <Label fx:id="loginFailure" text="Login fehlgeschlagen" visible="false"/>
+   </VBox>
 
 </AnchorPane>
