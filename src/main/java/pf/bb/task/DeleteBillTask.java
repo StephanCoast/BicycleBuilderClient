@@ -8,6 +8,12 @@ import javafx.concurrent.Task;
 import pf.bb.model.Bill;
 import pf.bb.model.User;
 
+/**
+ * Klasse für das Löschen einer Rechnung.
+ * @author Stephan Kost
+ * @version 1.0
+ * TH-Brandenburg Semesterprojekt Pattern & Frameworks Winter 2022/2023
+ */
 public class DeleteBillTask extends Task<Boolean> {
 
 	private final User user;

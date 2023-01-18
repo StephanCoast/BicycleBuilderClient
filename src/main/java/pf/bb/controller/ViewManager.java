@@ -17,24 +17,60 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.Objects;
 
+/**
+ * Diese Klasse regelt alle Ansichten des BicycleBuilder.
+ * @author Alexander Rauch
+ * @version 1.0
+ * TH-Brandenburg Semesterprojekt Pattern & Frameworks Winter 2022/2023
+ */
 public class ViewManager {
 
+    /**
+     * Variablendeklaration für die Singleton ViewManager Instanz.
+     */
     private static final ViewManager instance = new ViewManager();
+    /**
+     * Variablendeklaration für die JavaFX Stage und Scene.
+     */
     private Stage stage;
     private Scene scene;
+    /**
+     * Variablendeklaration für die Default-Fenster Dimensionen.
+     */
     private final double defaultWidth = 1280.00;
     private final double defaultHeight = 800.00;
+    /**
+     * Variablendeklaration für das Merken veralteter Dimensions-Daten der Fenster.
+     */
     private double oldWidth;
     private double oldHeight;
+    /**
+     * Variablendeklaration für das verwendete Betriebssystem.
+     */
     private static final String OS = System.getProperty("os.name");
 
+    /**
+     * Standard-Konstruktor der Klasse
+     */
     public ViewManager() {
     }
 
+    /**
+     * Rückgabe-Methode der Singleton Instanz.
+     * @return ViewManager Instanz
+     */
     public static ViewManager getInstance() {
         return instance;
     }
 
+    /**
+     * Wird aufgerufen, um die Hauptfenster Dashboard und Konfigurator anzuzeigen.
+     * @param e Click-Event des Buttons
+     * @param fileName FXML Dateiname
+     * @param title Titel des Fensters
+     * @param comingFromLogin Boolean wenn man vom Login-Fenster kommt
+     * @throws IOException Fehlerbehandlung
+     */
     public void forceView(ActionEvent e, String fileName, String title, boolean comingFromLogin) throws IOException {
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/pf/bb/fxml/" + fileName)));
         stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
@@ -61,6 +97,13 @@ public class ViewManager {
         if (comingFromLogin) { stage.centerOnScreen(); }
     }
 
+    /**
+     * Wird aufgerufen, um das Hauptfenster des Login anzuzeigen.
+     * @param e Click-Event des Buttons
+     * @param fileNameLogin FXML Dateiname
+     * @param title Titel des Fensters
+     * @throws IOException Fehlerbehandlung
+     */
     public void forceLoginView(ActionEvent e, String fileNameLogin, String title) throws IOException {
         Parent rootLogin = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/pf/bb/fxml/" + fileNameLogin)));
         stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
@@ -75,6 +118,12 @@ public class ViewManager {
         centerLoginScene(stage);
     }
 
+    /**
+     * Wird aufgerufen, um die verschiedenen JFX-Drawer Container anzuzeigen.
+     * @param drawer JFX-Drawer Container
+     * @param category Container der Kategorie
+     * @throws IOException Fehlerbehandlung
+     */
     public void forceDrawerView(JFXDrawer drawer, BorderPane category) throws  IOException {
         drawer.setSidePane(category);
         drawer.setVisible(true); /* AR: BugFix - JFXButton-Events not passing the JFXDrawer UI */
@@ -82,12 +131,22 @@ public class ViewManager {
         drawer.open();
     }
 
+    /**
+     * Zentriert das Fenster mittig auf dem vorhandenen Bildschirm.
+     * @param stage Stage, die verwendet werden soll
+     */
     private void centerLoginScene(Stage stage) {
         Rectangle2D sb = Screen.getPrimary().getVisualBounds();
         stage.setX((sb.getWidth() - stage.getWidth()) / 2);
         stage.setY((sb.getHeight() - stage.getHeight()) / 2);
     }
 
+    /**
+     * Setzt die Fenster-Dimensionen entsprechend der aktuellen Fenstergröße.
+     * @param stage Stage, die verwendet werden soll
+     * @param oldWidth Alte Breite
+     * @param oldHeight Alte Höhe
+     */
     private void calcWindowSize(Stage stage, double oldWidth, double oldHeight) {
         if (oldWidth < defaultWidth || oldWidth > defaultWidth || oldHeight < defaultHeight || oldHeight > defaultHeight) {
             stage.setWidth(oldWidth);
@@ -95,6 +154,12 @@ public class ViewManager {
         }
     }
 
+    /**
+     * Standard Warn-Dialog wird geöffnet.
+     * @param title Titel des Fensters
+     * @param headerText Überschrift
+     * @param contentText Inhalt
+     */
     public static void createWarningAlert(String title, String headerText, String contentText) {
         Alert alert = new Alert(Alert.AlertType.WARNING);
         alert.setTitle(title);
@@ -103,6 +168,12 @@ public class ViewManager {
         alert.showAndWait();
     }
 
+    /**
+     * Standard Info-Dialog wird geöffnet.
+     * @param title Titel des Fensters
+     * @param headerText Überschrift
+     * @param contentText Inhalt
+     */
     public static void createInfoAlert(String title, String headerText, String contentText) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle(title);

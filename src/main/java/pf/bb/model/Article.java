@@ -1,5 +1,11 @@
 package pf.bb.model;
 
+/**
+ * Klasse für das Artikelobjekt.
+ * @author Stephan Kost
+ * @version 1.0
+ * TH-Brandenburg Semesterprojekt Pattern & Frameworks Winter 2022/2023
+ */
 public class Article extends EntityWithID {
 
 	// GSON options: serialize only ID for less content in JSON, deserialize=true=default all fields from Server

@@ -10,28 +10,67 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.scene.control.Label;
-import javafx.scene.layout.StackPane;
 import pf.bb.Main;
 import pf.bb.model.*;
 import pf.bb.task.*;
 import java.io.IOException;
 
+/**
+ * Diese Klasse steuert die Login-Ansicht des BicycleBuilder und alle enthaltenen Elemente.
+ * @author Alexander Rauch
+ * @supportedby Stephan Kost
+ * @version 1.0
+ * TH-Brandenburg Semesterprojekt Pattern & Frameworks Winter 2022/2023
+ */
 public class LoginController {
 
-    public static User activeUser; // user who is currently logged in
+    /**
+     * Zur Kommunikation mit dem Backend.
+     * Bestimmt den aktuell angemeldeten Benutzer.
+     */
+    public static User activeUser;
+
+    /**
+     * Variablendeklaration für die Text-Boxen Benutzername & Passworteingabe.
+     */
     @FXML
     public JFXTextField username;
     @FXML
     public JFXPasswordField password;
+
+    /**
+     * Label zur Anzeige bei fehlerhaftem Login-Versuch.
+     */
     @FXML
     public Label loginFailure;
-    public StackPane sPaneAppIcon;
 
+    /**
+     * Variablendeklaration für verschiedene Singleton-Instanzen.
+     * ViewManager = steuert die verschiedenen Ansichten, stellt Methoden bereit
+     * ValidatorManager = initialisiert einzelne Validator, stellt Methoden bereit
+     */
     ViewManager vm = ViewManager.getInstance();
     ValidatorManager validatorManager = ValidatorManager.getInstance();
+
+    /**
+     * Variablendeklaration für die Validierung's-Objekte des Benutzer-Textfeldes und Passwort-Textfeldes.
+     * Wurden in Login.fxml gesetzt.
+     */
     public RequiredFieldValidator validatorName;
     public RequiredFieldValidator validatorPW;
 
+    /**
+     * Standard-Konstruktor der Klasse
+     */
+    public LoginController() {
+    }
+
+    /**
+     * FXML Konstruktor der Klasse
+     * Zusammenfassung aller Funktionen, die beim Start geladen werden sollen.
+     * Regelt den Initial-Status des Logins.
+     * Validatoren werden dem Benutzer- und Passwort-Textfeld zugeordnet.
+     */
     @FXML
     public void initialize() {
         validatorManager.initTextValidators(username, validatorName);
@@ -43,6 +82,12 @@ public class LoginController {
         password.setText("osmi");
     }
 
+    /**
+     * Login Button
+     * @param event Click-Event des Buttons
+     * @supportedby SK
+     * Login-Daten werden überprüft und Benutzer Detail-Informationen werden zugewiesen.
+     */
     public void authenticate(ActionEvent event){
 
         PostLoginTask loginTask = new PostLoginTask(username.getText(), password.getText());
@@ -86,6 +131,11 @@ public class LoginController {
         new Thread(loginTask).start();
     }
 
+    /**
+     * Abbrechen Button
+     * @throws IOException Fehlerbehandlung
+     * Standard Frage-Dialog wird geöffnet, bei positiver Bestätigung wird die Anwendung geschlossen.
+     */
     public void close() throws IOException {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "", ButtonType.YES, ButtonType.NO);
         alert.setTitle("Bicycle Builder");
@@ -98,6 +148,7 @@ public class LoginController {
         }
     }
 
+    // Todo Remove before production - TEST Configuration Api
     public static void testConfigurationApi() {
 
         // USER SUCCESSFULLY LOGGED IN -> ACCESS TO GET, POST, PUT, DELETE
