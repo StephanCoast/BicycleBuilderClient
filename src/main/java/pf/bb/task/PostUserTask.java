@@ -9,6 +9,12 @@ import com.mashape.unirest.http.exceptions.UnirestException;
 import javafx.concurrent.Task;
 import pf.bb.model.User;
 
+/**
+ * Klasse für das Speichern von neuen Benutzern.
+ * @author Stephan Kost
+ * @version 1.0
+ * TH-Brandenburg Semesterprojekt Pattern & Frameworks Winter 2022/2023
+ */
 public class PostUserTask extends Task<User> {
 
     private final String newUserJson;

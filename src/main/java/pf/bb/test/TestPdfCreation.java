@@ -30,6 +30,12 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+/**
+ * Test-Klasse Bicycle Builder zur PDF-Erstellung.
+ * @author Stephan Kost
+ * @version 1.0
+ * TH-Brandenburg Semesterprojekt Pattern & Frameworks Winter 2022/2023
+ */
 public class TestPdfCreation {
 
     public static List<Configuration> CONFIGURATIONS = new ArrayList<>();

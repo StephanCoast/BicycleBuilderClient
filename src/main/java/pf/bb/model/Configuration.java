@@ -26,6 +26,12 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.Objects;
 
+/**
+ * Klasse für das Konfigurationsobjekt.
+ * @author Stephan Kost
+ * @version 1.0
+ * TH-Brandenburg Semesterprojekt Pattern & Frameworks Winter 2022/2023
+ */
 public class Configuration extends EntityWithID {
 
     public static String[] stats = {"ENTWURF", "ABGESCHLOSSEN", "EINKAUF", "STORNO"};

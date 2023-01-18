@@ -10,6 +10,12 @@ import javafx.concurrent.Task;
 import pf.bb.model.Customer;
 import pf.bb.model.User;
 
+/**
+ * Klasse für das Speichern von Kundendaten.
+ * @author Stephan Kost
+ * @version 1.0
+ * TH-Brandenburg Semesterprojekt Pattern & Frameworks Winter 2022/2023
+ */
 public class PostCustomerTask extends Task<Customer> {
 
     private final String configJSON;

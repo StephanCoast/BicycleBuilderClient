@@ -5,8 +5,6 @@ import com.jfoenix.validation.RequiredFieldValidator;
 import javafx.animation.FadeTransition;
 import javafx.animation.ScaleTransition;
 import javafx.application.Platform;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.*;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.event.ActionEvent;
@@ -14,7 +12,6 @@ import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
@@ -29,20 +26,62 @@ import java.util.HashSet;
 
 import static pf.bb.controller.LoginController.activeUser;
 
+/**
+ * Diese Klasse steuert die Konfigurator-Ansicht des BicycleBuilder und alle enthaltenen Elemente.
+ * @author Alexander Rauch
+ * @supportedby Stephan Kost
+ * @version 1.0
+ * TH-Brandenburg Semesterprojekt Pattern & Frameworks Winter 2022/2023
+ */
 public class BuilderController {
 
+    /**
+     * Variablendeklaration für die Validierung's-Objekte der Kundendaten Eingabefelder.
+     * Wurden in Builder.fxml gesetzt.
+     */
     public RequiredFieldValidator validatorCustomerID, validatorCustomerFirstName, validatorCustomerLastName, validatorCustomerMail;
     public RequiredFieldValidator validatorCustomerStreet, validatorCustomerNr, validatorCustomerZipcode, validatorCustomerCity;
+    /**
+     * Variablendeklaration für die Text-Boxen des Kundendaten-Container & Kundendaten-Übersicht.
+     */
     public JFXTextField tfCustomerFirstName, tfCustomerLastName, tfCustomerMail, tfCustomerStreet, tfCustomerNr, tfCustomerZipcode, tfCustomerCity;
+    public TextField tfFinishOrderID, tfFinishCustomerID, tfFinishFirstName, tfFinishLastName, tfFinishStreet, tfFinishNr, tfFinishZipCode, tfFinishCity, tfFinishMail;
+    /**
+     * Variablendeklaration für den Hauptcontainer des Konfigurator's.
+     */
     public AnchorPane anchorContainer;
+    /**
+     * Variablendeklaration für die Buttons: Home-Icon(Kopfbereich), Entwurf speichern, Kundendaten eingeben, Dashboard(Sidebar), Abschliessen.
+     */
     public JFXButton btnHeaderHome, btnSaveDraft, btnAddCustomerData, btnSidebarHome, btnCustomerFinish;
+    /**
+     * Variablendeklaration für die Text-Area der technischen Informationen.
+     */
     public JFXTextArea svgTextarea;
+    /**
+     * Variablendeklaration für den Halte-Container der SVG Pfade.
+     */
     public StackPane spaneSVG;
+    /**
+     * Variablendeklaration für die Farben- und Größen-Toggles in den Unterkategorien.
+     */
     public JFXToggleNode cat1Color1, cat1Color2, cat1Color3, cat1Size1, cat1Size2, cat1Size3;
     public JFXToggleNode cat2Color1, cat2Color2, cat2Color3;
     public JFXToggleNode cat3Color1, cat3Color2, cat3Color3, cat3Size1, cat3Size2, cat3Size3;
     public JFXToggleNode cat4Color1, cat4Color2, cat4Color3;
-    public TextField tfFinishOrderID, tfFinishCustomerID, tfFinishFirstName, tfFinishLastName, tfFinishStreet, tfFinishNr, tfFinishZipCode, tfFinishCity, tfFinishMail;
+    /**
+     * Variablendeklaration für die technische Übersicht neben dem SVG Container.
+     * ...Model = Name des Artikels
+     * ...Color = Farbe des Artikels
+     * ...ColorHex = Hex-Wert der Farbe des Artikels
+     * ...Size = Größe des Artikels
+     * ...ProducerName = Produzent des Artikels
+     * ...Desc = Beschreibung des Artikels
+     * ...Tyre = Name des Reifen-Artikel's
+     * ...Bell = Name des Klingel-Artikel's
+     * ...Stand = Name des Ständer-Artikel's
+     * ...Light = Name des Licht-Artikel's
+     */
     private String svgInfoFrameModel, svgInfoFrameColor, svgInfoFrameProducerName, svgInfoFrameDesc;
     public String svgInfoFrameSize, svgInfoFrameColorHex;
     private String svgInfoHandlebarModel, svgInfoHandlebarColor, svgInfoHandlebarGrip, svgInfoHandlebarProducerName, svgInfoHandlebarGripProducerName, svgInfoHandlebarDesc;
@@ -53,25 +92,68 @@ public class BuilderController {
     public String svgInfoSaddleColorHex;
     private String svgInfoBrakesModel, svgInfoBrakesProducerName, svgInfoBrakesTypeName, svgInfoBrakeDesc;
     private String svgInfoAttachmentsBell, svgInfoAttachmentsStand, svgInfoAttachmentsLight, svgInfoBellProducerName, svgInfoStandProducerName, svgInfoLightProducerName;
+    /**
+     * Variablendeklaration für die Preise einzelnen Artikelgruppen.
+     */
     private float cat1FramePrice, cat2HandlebarPrice, cat2GripPrice, cat3WheelPrice, cat3TyrePrice, cat4SaddlePrice, cat5BrakePrice, cat6BellPrice, cat6StandPrice, cat6LightPrice, catDefaultFinalPrice;
+    /**
+     * Variablendeklaration für das Label(Textanzeige) der Preise, sowohl Gesamtpreis, als auch Zwischenpreise der Unterkategorien.
+     */
     public Label cat1LabelPrice, cat2LabelPrice, cat3LabelPrice, cat4LabelPrice, cat5LabelPrice, cat6LabelPrice;
     public Label catLabelDefaultPrice, catLabelFinishPrice;
+    /**
+     * Variablendeklaration für eine Gruppe von Preisen und Artikeln für spätere Berechnungen.
+     */
     public ObservableFloatArray finalPriceArray;
     public ObservableIntegerArray finalArticleIdArray;
+    /**
+     * Variablendeklaration für ein Boolean zur Erfassung, wenn eine Unterkategorie geöffnet ist.
+     */
     private boolean catIsOpen;
+    /**
+     * Variablendeklaration für die verschiedenen Toggle-Gruppen der Unterkategorien.
+     * Wird benötigt, um ein bestimmtes Verhalten der einzelnen Toggle-Buttons zu erreichen.
+     */
     public ToggleGroup catsTogglegroup, cat1TogglegroupColor, cat1TogglegroupSize, cat2TogglegroupColor, cat3TogglegroupColor, cat3TogglegroupSize, cat4TogglegroupColor;
+    /**
+     * Variablendeklaration für die Auswahl-Boxen in den Unterkategorien.
+     */
     public JFXComboBox<String> cat1SelectName, cat2SelectModel, cat2SelectGrip, cat3SelectModel, cat3SelectTyre, cat4SelectModel, cat5SelectModel, cat6SelectBell, cat6SelectStand, cat6SelectLight;
+    /**
+     * Variablendeklaration für die Halte-Container der Side- und Bottombar.
+     */
     public BorderPane cat1, cat2, cat3, cat4, cat5, cat6, catDefault, catFinish, bpCats, bpCustomerData;
+    /**
+     * Variablendeklaration für die JFX-Drawer der Side- und Bottombar.
+     */
     public JFXDrawer drawerDefault, drawerCat1, drawerCat2, drawerCat3, drawerCat4, drawerCat5, drawerCat6, drawerBottomCats, drawerBottomData, drawerFinish;
+    /**
+     * Variablendeklaration für ein Hashset in dem nur einzigartige Elemente aufgenommen werden können.
+     * Zur Anzeigen-Hilfe von verschiedenen JFX-Drawer.
+     */
     private HashSet<JFXDrawer> drawersBuilderSide, drawersBuilderBottom;
+    /**
+     * Variablendeklaration für verschiedene Singleton-Instanzen.
+     * ViewManager = steuert die verschiedenen Ansichten, stellt Methoden bereit
+     * ValidatorManager = initialisiert einzelne Validator, stellt Methoden bereit
+     * SVGManager = steuert die verschiedenen SVG-Sets, stellt Methoden bereit
+     */
     ViewManager vm = ViewManager.getInstance();
     ValidatorManager validatorManager = ValidatorManager.getInstance();
     SVGManager svgManager = SVGManager.getInstance();
 
-
+    /**
+     * Standard-Konstruktor der Klasse
+     */
     public BuilderController() {
     }
 
+    /**
+     * FXML Konstruktor der Klasse
+     * @throws IOException
+     * Zusammenfassung aller Funktionen, die beim Start geladen werden sollen.
+     * Regelt den Initial-Status des Konfigurators.
+     */
     @FXML
     public void initialize() throws IOException {
         catIsOpen = false;
@@ -99,10 +181,135 @@ public class BuilderController {
         loadFinishedConfig();
     }
 
+    /* =====================================
+     * BUTTONS
+    ========================================= */
+
+    /**
+     * Logout-Icon-Button im Header-Bereich
+     * @param event Click-Event des Buttons
+     * @throws IOException
+     * Login-Fenster wird über den ViewManager angefordert.
+     */
     public void logout(ActionEvent event) throws IOException {
         vm.forceLoginView(event, "Login.fxml", "Bicycle Builder - Login");
     }
 
+    /**
+     * X-Icon-Buttons der Unterkategorien
+     * @throws IOException
+     * Wird von verschiedenen X-Icon-Buttons in den Unterkategorien ausgelöst.
+     * Default-Fenster der Sidebar wird über den ViewManager angefordert.
+     */
+    public void openSidebarDefault() throws IOException {
+        catIsOpen = false;
+        closeAllSideDrawers();
+        vm.forceDrawerView(drawerDefault, catDefault);
+        deselectAllToggles();
+    }
+
+    /**
+     * Rahmen-Toggle-Button
+     * @throws IOException
+     * Kategorie 1 wird in der Sidebar über den ViewManger angefordert.
+     */
+    public void openSidebarCat1() throws IOException {
+        catIsOpen = true;
+        closeAllSideDrawers();
+        vm.forceDrawerView(drawerCat1, cat1);
+    }
+
+    /**
+     * Lenker-Toggle-Button
+     * @throws IOException
+     * Kategorie 2 wird in der Sidebar über den ViewManger angefordert.
+     */
+    public void openSidebarCat2() throws IOException {
+        catIsOpen = true;
+        closeAllSideDrawers();
+        vm.forceDrawerView(drawerCat2, cat2);
+    }
+
+    /**
+     * Räder-Toggle-Button
+     * @throws IOException
+     * Kategorie 3 wird in der Sidebar über den ViewManger angefordert.
+     */
+    public void openSidebarCat3() throws IOException {
+        catIsOpen = true;
+        closeAllSideDrawers();
+        vm.forceDrawerView(drawerCat3, cat3);
+    }
+
+    /**
+     * Sattel-Toggle-Button
+     * @throws IOException
+     * Kategorie 4 wird in der Sidebar über den ViewManger angefordert.
+     */
+    public void openSidebarCat4() throws IOException {
+        catIsOpen = true;
+        closeAllSideDrawers();
+        vm.forceDrawerView(drawerCat4, cat4);
+    }
+
+    /**
+     * Bremsen-Toggle-Button
+     * @throws IOException
+     * Kategorie 5 wird in der Sidebar über den ViewManger angefordert.
+     */
+    public void openSidebarCat5() throws IOException {
+        catIsOpen = true;
+        closeAllSideDrawers();
+        vm.forceDrawerView(drawerCat5, cat5);
+    }
+
+    /**
+     * Zubehör-Toggle-Button
+     * @throws IOException
+     * Kategorie 6 wird in der Sidebar über den ViewManger angefordert.
+     */
+    public void openSidebarCat6() throws IOException {
+        catIsOpen = true;
+        closeAllSideDrawers();
+        vm.forceDrawerView(drawerCat6, cat6);
+    }
+
+    /**
+     * Kundendaten eingeben Button
+     * @throws IOException
+     * Kundendaten-Container wird in der Bottombar über den ViewManager angefordert.
+     * Buttons der Default-Sidebar werden deaktiviert.
+     */
+    public void openCustomerDataView() throws IOException {
+        vm.forceDrawerView(drawerBottomData, bpCustomerData);
+        deactivateButtonsOnCustomerEdit();
+
+        tfCustomerFirstName.clear();
+        tfCustomerLastName.clear();
+        tfCustomerMail.clear();
+        tfCustomerStreet.clear();
+        tfCustomerNr.clear();
+        tfCustomerZipcode.clear();
+        tfCustomerCity.clear();
+
+        tfCustomerFirstName.resetValidation();
+        tfCustomerLastName.resetValidation();
+        tfCustomerMail.resetValidation();
+        tfCustomerStreet.resetValidation();
+        tfCustomerNr.resetValidation();
+        tfCustomerZipcode.resetValidation();
+        tfCustomerCity.resetValidation();
+    }
+
+    /**
+     * Home-Icon-Button, Dashboard-Button(Default-Sidebar), Dashboard-Button(Final-Sidebar)
+     * @param event Click-Event des Buttons
+     * @throws IOException Fehlerbehandlung Input/Output
+     * @supportedby SK
+     * Schreibzugriff für die Konfiguration wird gesteuert.
+     * PUT Configuration Task wird ausgeführt.
+     * Dashboard-Ansicht wird über den ViewManager angefordert.
+     */
     public void openDashboard(ActionEvent event) throws IOException {
         // when new config or status "ABGESCHLOSSEN"&& "ENTWURF" nicht abgeschlossen no need to return writeAccess
 //        if (Main.currentConfig == null || (draftOpened && draftWasFinished) || (Main.currentConfig.status.equals(Configuration.stats[1]) && !draftWasFinished)) {
@@ -129,94 +336,14 @@ public class BuilderController {
         }
     }
 
-    public void openCustomerDataView(ActionEvent event) throws IOException {
-        vm.forceDrawerView(drawerBottomData, bpCustomerData);
-        deactivateButtonsOnCustomerEdit();
-
-        tfCustomerFirstName.clear();
-        tfCustomerLastName.clear();
-        tfCustomerMail.clear();
-        tfCustomerStreet.clear();
-        tfCustomerNr.clear();
-        tfCustomerZipcode.clear();
-        tfCustomerCity.clear();
-
-        tfCustomerFirstName.resetValidation();
-        tfCustomerLastName.resetValidation();
-        tfCustomerMail.resetValidation();
-        tfCustomerStreet.resetValidation();
-        tfCustomerNr.resetValidation();
-        tfCustomerZipcode.resetValidation();
-        tfCustomerCity.resetValidation();
-    }
-
-    public void openSidebarDefault(ActionEvent event) throws IOException {
-        catIsOpen = false;
-        closeAllSideDrawers();
-        vm.forceDrawerView(drawerDefault, catDefault);
-        deselectAllToggles();
-    }
-
-    // AR: "Entwurf Speichern"
-    public void onSaveDraft(ActionEvent event) {
-        startDraftSaveConfigurationTask(event, false);
-    }
-
-    private void startDraftSaveConfigurationTask(ActionEvent event, boolean comingFromSubCat) {
-        SaveConfigurationTask saveConfigTask1 = new SaveConfigurationTask(activeUser, this, "ENTWURF");
-        saveConfigTask1.setOnRunning((runningEvent) -> System.out.println("trying to save configuration..."));
-        saveConfigTask1.setOnSucceeded((WorkerStateEvent saveConfigSucceded) -> {
-            System.out.println("configuration saved: " + saveConfigTask1.getValue());
-            try {
-                if (!comingFromSubCat) {
-                    openDashboard(event);
-                }
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        });
-        saveConfigTask1.setOnFailed((saveConfigFailed) -> System.out.println("saving configuration failed"));
-        //Tasks in eigenem Thread ausführen
-        new Thread(saveConfigTask1).start();
-    }
-
-    public void openSidebarCat1(ActionEvent event) throws IOException {
-        catIsOpen = true;
-        closeAllSideDrawers();
-        vm.forceDrawerView(drawerCat1, cat1);
-    }
-
-    public void openSidebarCat2(ActionEvent event) throws IOException {
-        catIsOpen = true;
-        closeAllSideDrawers();
-        vm.forceDrawerView(drawerCat2, cat2);
-    }
-
-    public void openSidebarCat3(ActionEvent event) throws IOException {
-        catIsOpen = true;
-        closeAllSideDrawers();
-        vm.forceDrawerView(drawerCat3, cat3);
-    }
-
-    public void openSidebarCat4(ActionEvent event) throws IOException {
-        catIsOpen = true;
-        closeAllSideDrawers();
-        vm.forceDrawerView(drawerCat4, cat4);
-    }
-
-    public void openSidebarCat5(ActionEvent event) throws IOException {
-        catIsOpen = true;
-        closeAllSideDrawers();
-        vm.forceDrawerView(drawerCat5, cat5);
-    }
-
-    public void openSidebarCat6(ActionEvent event) throws IOException {
-        catIsOpen = true;
-        closeAllSideDrawers();
-        vm.forceDrawerView(drawerCat6, cat6);
-    }
-
     // AR: hier wird "einzeln" bestimmt was nach dem Speichern der Kategorie 1-6 passieren soll
+
+    /**
+     * Speichern Button Kategorie 1
+     * @param event Click-Event des Buttons
+     * @throws IOException
+     * Preis-Array wird aktualisiert & kalkuliert, Labels zur Textausgabe werden aktualisiert, Abschlussfunktion wird aufgerufen.
+     */
     public void onCat1Save(ActionEvent event) throws IOException {
         finalPriceArray.set(0, cat1FramePrice);
         calcFinalPriceFromArray(finalPriceArray);
@@ -225,6 +352,12 @@ public class BuilderController {
         onCatSave(event);
     }
 
+    /**
+     * Speichern Button Kategorie 2
+     * @param event Click-Event des Buttons
+     * @throws IOException
+     * Preis-Array wird aktualisiert & kalkuliert, Labels zur Textausgabe werden aktualisiert, Abschlussfunktion wird aufgerufen.
+     */
     public void onCat2Save(ActionEvent event) throws IOException {
         finalPriceArray.set(1, cat2HandlebarPrice);
         finalPriceArray.set(2, cat2GripPrice);
@@ -234,6 +367,12 @@ public class BuilderController {
         onCatSave(event);
     }
 
+    /**
+     * Speichern Button Kategorie 3
+     * @param event Click-Event des Buttons
+     * @throws IOException
+     * Preis-Array wird aktualisiert & kalkuliert, Labels zur Textausgabe werden aktualisiert, Abschlussfunktion wird aufgerufen.
+     */
     public void onCat3Save(ActionEvent event) throws IOException {
         finalPriceArray.set(3, cat3WheelPrice);
         finalPriceArray.set(4, cat3TyrePrice);
@@ -243,6 +382,12 @@ public class BuilderController {
         onCatSave(event);
     }
 
+    /**
+     * Speichern Button Kategorie 4
+     * @param event Click-Event des Buttons
+     * @throws IOException
+     * Preis-Array wird aktualisiert & kalkuliert, Labels zur Textausgabe werden aktualisiert, Abschlussfunktion wird aufgerufen.
+     */
     public void onCat4Save(ActionEvent event) throws IOException {
         finalPriceArray.set(5, cat4SaddlePrice);
         calcFinalPriceFromArray(finalPriceArray);
@@ -251,6 +396,12 @@ public class BuilderController {
         onCatSave(event);
     }
 
+    /**
+     * Speichern Button Kategorie 5
+     * @param event Click-Event des Buttons
+     * @throws IOException
+     * Preis-Array wird aktualisiert & kalkuliert, Labels zur Textausgabe werden aktualisiert, Abschlussfunktion wird aufgerufen.
+     */
     public void onCat5Save(ActionEvent event) throws IOException {
         finalPriceArray.set(6, cat5BrakePrice);
         calcFinalPriceFromArray(finalPriceArray);
@@ -259,6 +410,12 @@ public class BuilderController {
         onCatSave(event);
     }
 
+    /**
+     * Speichern Button Kategorie 6
+     * @param event Click-Event des Buttons
+     * @throws IOException
+     * Preis-Array wird aktualisiert & kalkuliert, Labels zur Textausgabe werden aktualisiert, Abschlussfunktion wird aufgerufen.
+     */
     public void onCat6Save(ActionEvent event) throws IOException {
         finalPriceArray.set(7, cat6BellPrice);
         finalPriceArray.set(8, cat6StandPrice);
@@ -269,24 +426,46 @@ public class BuilderController {
         onCatSave(event);
     }
 
-    // AR: hier wird "allgemein" bestimmt was nach dem Speichern der Kategorie 1-6 passieren soll
-    private void onCatSave(ActionEvent e) throws IOException {
-        startDraftSaveConfigurationTask(e, true);
+    /**
+     * Abschlussfunktion zur Speicherung der Unterkategorien.
+     * @param event Click-Event des Buttons
+     * @throws IOException
+     * Save Configuration Task wird ausgeführt, Default-Sidebar wird über den ViewManager angefordert.
+     * Toggle-Buttons der Kategorien werden zurückgesetzt.
+     */
+    private void onCatSave(ActionEvent event) throws IOException {
+        startDraftSaveConfigurationTask(event, true);
         closeAllSideDrawers();
         vm.forceDrawerView(drawerDefault, catDefault);
         catIsOpen = false;
         deselectAllToggles();
     }
 
-    public void onBottomBarClose(ActionEvent event) throws IOException {
-        closeAllBottomDrawers();
-        vm.forceDrawerView(drawerBottomCats, bpCats);
-        setDefaultFocus();
-        activateButtonsOnCustomerEdit();
+    /**
+     * Entwurf speichern Button
+     * @param event
+     * Save Configuration Task wird ausgeführt.
+     * Boolean wird gesetzt, um zu bestimmen, ob die Speicherung von einer Unterkategorie kommt.
+     */
+    public void onSaveDraft(ActionEvent event) {
+        startDraftSaveConfigurationTask(event, false);
     }
 
-    // AR: "Abschliessen" - hier wird bestimmt was nach Eingabe der Kundendaten passiert
-    public void onBottomBarFinish(ActionEvent event) {
+    /**
+     * Abschliessen Button
+     * @supportedby SK
+     * Textfelder der Kundendaten werden durch den ValidatorManager überprüft.
+     * E-Mail-Adresse in den Textfeldern wird auf das @-Symbol geprüft.
+     * Save Configuration Task wird ausgeführt.
+     * Kunde wird erstellt und gespeichert.
+     * Gesamtpreis wird berechnet, Auftrag & Rechnung wird erstellt.
+     * Status der Konfiguration wird auf "ABGESCHLOSSEN" gesetzt.
+     * Finale Ansicht in der Sidebar wird über den ViewManager angefordert.
+     * Kategorie-Ansicht wird in der Bottombar über den ViewManager angefordert.
+     * Kundendaten werden in die finale Ansicht übertragen.
+     * Toggle-Buttons der Kategorien werden deaktiviert.
+     */
+    public void onBottomBarFinish() {
         if (ValidatorManager.textFieldIsEmpty(tfCustomerFirstName) ||
                 ValidatorManager.textFieldIsEmpty(tfCustomerLastName) ||
                 ValidatorManager.textFieldIsEmpty(tfCustomerMail) ||
@@ -390,20 +569,48 @@ public class BuilderController {
         }
     }
 
-    // AR: Auftrag Button
-    // todo: PDF erstellen und anzeigen/herunterladen
-    public void onFinalOrder(ActionEvent event) {
-        Main.currentConfig.createAndOpenTempPdf("ORDER");
+    /**
+     * X-Icon Button im Kundendaten-Container
+     * @throws IOException
+     * Kategorie-Ansicht wird in der Bottombar über den ViewManager angefordert.
+     * Buttons der Default-Sidebar werden aktiviert.
+     */
+    public void onBottomBarClose() throws IOException {
+        closeAllBottomDrawers();
+        vm.forceDrawerView(drawerBottomCats, bpCats);
+        setDefaultFocus();
+        activateButtonsOnCustomerEdit();
     }
 
-    // AR: Rechnung Button
-    // todo: PDF erstellen und anzeigen/herunterladen
-    public void onFinalInvoice(ActionEvent event) {
-        Main.currentConfig.createAndOpenTempPdf("INVOICE");
-    }
+    /**
+     * Auftrag Button
+     * PDF-Dokument wird über die Configuration-Klasse erzeugt und ausgegeben.
+     */
+    public void onFinalOrder() { Main.currentConfig.createAndOpenTempPdf("ORDER"); }
 
+    /**
+     * Rechnung Button
+     * PDF-Dokument wird über die Configuration-Klasse erzeugt und ausgegeben.
+     */
+    public void onFinalInvoice() { Main.currentConfig.createAndOpenTempPdf("INVOICE"); }
+
+    /* =====================================
+     * SETUP
+     ========================================= */
+
+    /**
+     * JFX-Drawer für die Sidebar werden dem Hashset-Datentyp hinzugefügt.
+     * @param drawerDefault Default-Sidebar
+     * @param drawerFinish Final-Sidebar
+     * @param drawerCat1 Kategorie 1
+     * @param drawerCat2 Kategorie 2
+     * @param drawerCat3 Kategorie 3
+     * @param drawerCat4 Kategorie 4
+     * @param drawerCat5 Kategorie 5
+     * @param drawerCat6 Kategorie 6
+     */
     private void setupSideDrawersSet(JFXDrawer drawerDefault, JFXDrawer drawerFinish, JFXDrawer drawerCat1, JFXDrawer drawerCat2, JFXDrawer drawerCat3, JFXDrawer drawerCat4, JFXDrawer drawerCat5, JFXDrawer drawerCat6) {
-        drawersBuilderSide = new HashSet<JFXDrawer>();
+        drawersBuilderSide = new HashSet<>();
         drawersBuilderSide.add(drawerDefault);
         drawersBuilderSide.add(drawerFinish);
         drawersBuilderSide.add(drawerCat1);
@@ -414,50 +621,20 @@ public class BuilderController {
         drawersBuilderSide.add(drawerCat6);
     }
 
+    /**
+     * JFX-Drawer für die Bottombar werden dem Hashset-Datentyp hinzugefügt.
+     * @param drawerCats Kategorie Toggles
+     * @param drawerData Kundendaten
+     */
     private void setupBottomDrawersSet(JFXDrawer drawerCats, JFXDrawer drawerData) {
-        drawersBuilderBottom = new HashSet<JFXDrawer>();
+        drawersBuilderBottom = new HashSet<>();
         drawersBuilderBottom.add(drawerCats);
         drawersBuilderBottom.add(drawerData);
     }
 
-    private void closeAllBottomDrawers() {
-        for (JFXDrawer i : drawersBuilderBottom) {
-            i.close();
-            i.setVisible(false);
-        }
-    }
-
-    private void closeAllSideDrawers() {
-        for (JFXDrawer i : drawersBuilderSide) {
-            i.close();
-            i.setVisible(false);
-        }
-    }
-
-    private void onToggleDeselect() {
-        catsTogglegroup.selectedToggleProperty().addListener((observable, oldValue, newValue) -> {
-            if (catIsOpen) {
-                if (newValue == null) {
-                    oldValue.setSelected(true);
-                }
-            }
-        });
-    }
-
-    private void onToggleDeselectSubCat(ToggleGroup tg) {
-        tg.selectedToggleProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue == null) {
-                oldValue.setSelected(true);
-            }
-        });
-    }
-
-    private void deselectAllToggles() {
-        if (catsTogglegroup.getSelectedToggle() != null) {
-            catsTogglegroup.getSelectedToggle().setSelected(false);
-        }
-    }
-
+    /**
+     * Validatoren werden über den ValidatorManager den Kundendaten-Textfeldern zugeordnet.
+     */
     private void setupValidators() {
         validatorManager.initTextValidators(tfCustomerFirstName, validatorCustomerFirstName);
         validatorManager.initTextValidators(tfCustomerLastName, validatorCustomerLastName);
@@ -468,24 +645,19 @@ public class BuilderController {
         validatorManager.initTextValidators(tfCustomerCity, validatorCustomerCity);
     }
 
+    /**
+     * Setzt den Fokus auf den Hauptcontainer.
+     */
     private void setDefaultFocus() {
         Platform.runLater(() -> anchorContainer.requestFocus());
     }
 
-    private void deactivateButtonsOnCustomerEdit() {
-        btnHeaderHome.setDisable(true);
-        btnAddCustomerData.setDisable(true);
-        btnSaveDraft.setDisable(true);
-        btnSidebarHome.setDisable(true);
-    }
-
-    private void activateButtonsOnCustomerEdit() {
-        btnHeaderHome.setDisable(false);
-        btnAddCustomerData.setDisable(false);
-        btnSaveDraft.setDisable(false);
-        btnSidebarHome.setDisable(false);
-    }
-
+    /**
+     * Bestimmt über den SVGManager das initiale SVG-Set.
+     * Wenn keine Konfiguration vorhanden ist, wird eine Default-Konfiguration geladen.
+     * Wenn eine Konfiguration vorhanden ist, wird die SVG-Gruppe aktualisiert.
+     * Die Start-Animation der SVG-Gruppe wird gesetzt.
+     */
     private void initFirstSVGSet() {
         if (Main.currentConfig == null) {
             svgManager.setFrame(SVGManager.FRAME1);
@@ -500,63 +672,95 @@ public class BuilderController {
         }
         spaneSVG.getChildren().clear();
         spaneSVG.getChildren().add(SVGManager.svgGroup);
-        fadeIn(SVGManager.svgGroup.getChildren().get(0), 1000);
-        scaleInX(SVGManager.svgGroup.getChildren().get(1), 1000);
+        fadeIn(SVGManager.svgGroup.getChildren().get(0));
+        scaleInX(SVGManager.svgGroup.getChildren().get(1));
         scaleIn(SVGManager.svgGroup.getChildren().get(2), 1000);
-        scaleInX(SVGManager.svgGroup.getChildren().get(3), 1000);
+        scaleInX(SVGManager.svgGroup.getChildren().get(3));
     }
 
-    private void fadeIn(Node node, int ms) {
-        FadeTransition ft = new FadeTransition(Duration.millis(ms), node);
-        ft.setFromValue(0.0);
-        ft.setToValue(1.0);
-        ft.play();
+    /**
+     * Die Auswahl-Boxen der Unterkategorien werden mit den vorhandenen Artikeln der jeweiligen Kategorie aus der Datenbank gefüllt.
+     */
+    private void initSubcatsItems() {
+        cat1SelectName.setItems(getArticleNamesByType("Rahmen"));
+        cat2SelectModel.setItems(getArticleNamesByType("Lenker"));
+        cat2SelectGrip.setItems(getArticleNamesByType("Griff"));
+        cat3SelectModel.setItems(getArticleNamesByType("Laufrad"));
+        cat3SelectTyre.setItems(getArticleNamesByType("Reifen"));
+        cat4SelectModel.setItems(getArticleNamesByType("Sattel"));
+        cat5SelectModel.setItems(getArticleNamesByType("Bremse"));
+        cat6SelectBell.setItems(getArticleNamesByType("Klingel"));
+        cat6SelectStand.setItems(getArticleNamesByType("Ständer"));
+        cat6SelectLight.setItems(getArticleNamesByType("Licht"));
     }
 
-    private void scaleIn(Node node, int ms) {
-        ScaleTransition st = new ScaleTransition(Duration.millis(ms), node);
-        st.setFromX(0);
-        st.setFromY(0);
-        st.setFromZ(0);
-        st.setByX(1);
-        st.setByY(1);
-        st.setByZ(1);
-        st.play();
+    /**
+     * Eingabe-Regeln werden über den ValidatorManager den Kundendaten-Textfeldern zugeordnet.
+     * Über RegEx-Pattern werden Symbol-Regeln erstellt.
+     * Kundendaten-Textfelder für Hausnummer & PLZ bekommen Limitierungen im Listener.
+     */
+    private void initTextFieldListeners() {
+        ValidatorManager.setTextFieldRules(tfCustomerFirstName, "[a-zA-Z-'`´]");
+        ValidatorManager.setTextFieldRules(tfCustomerLastName, "[a-zA-Z-'`´]");
+        ValidatorManager.setTextFieldRules(tfCustomerMail, "[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$");
+        ValidatorManager.setTextFieldRules(tfCustomerStreet, "[a-zA-Z-'`´]");
+        ValidatorManager.setTextFieldRules(tfCustomerNr, "[0-9]");
+        ValidatorManager.setTextFieldRules(tfCustomerZipcode, "[\\d{0,5}]");
+        ValidatorManager.setTextFieldRules(tfCustomerCity, "[a-zA-Z-'`´]");
+
+        int maxLengthZipCode = 5;
+        int maxLengthHouseNumber = 3;
+
+        tfCustomerNr.textProperty().addListener((ov, oldValue, newValue) -> {
+            if (tfCustomerNr.getText().length() > maxLengthHouseNumber) {
+                String str = tfCustomerNr.getText().substring(0, maxLengthHouseNumber);
+                tfCustomerNr.setText(str);
+            }
+        });
+
+        tfCustomerZipcode.textProperty().addListener((ov, oldValue, newValue) -> {
+            if (tfCustomerZipcode.getText().length() > maxLengthZipCode) {
+                String str = tfCustomerZipcode.getText().substring(0, maxLengthZipCode);
+                tfCustomerZipcode.setText(str);
+            }
+        });
     }
 
-    private void scaleInX(Node node, int ms) {
-        ScaleTransition st = new ScaleTransition(Duration.millis(ms), node);
-        st.setFromX(0);
-        st.setByX(1);
-        st.play();
-    }
+    /* =====================================
+     * LOGIC
+     ========================================= */
 
+    /**
+     * Wenn keine Konfiguration vorhanden ist, werden Default-Auswahlmöglichkeiten in den Unterkategorien gesetzt.
+     * Wenn eine Konfiguration vorhanden ist, werden die Auswahlmöglichkeiten anhand der gespeicherten Konfiguration in den Unterkategorien gesetzt.
+     * @supportedby SK
+     */
     private void initSubcatsInitialValues() {
         if (Main.currentConfig == null) {
             // SET DEFAULT CONFIG VALUES
-            setSubcatSelectboxDefault(cat1SelectName, 0);
-            setSubcatToggleDefault(cat1TogglegroupColor,0);
-            setSubcatToggleDefault(cat1TogglegroupSize,0);
+            setSubcatSelectboxDefault(cat1SelectName);
+            setSubcatToggleDefault(cat1TogglegroupColor);
+            setSubcatToggleDefault(cat1TogglegroupSize);
 
-            setSubcatSelectboxDefault(cat2SelectModel, 0);
-            setSubcatSelectboxDefault(cat2SelectGrip, 0);
-            setSubcatToggleDefault(cat2TogglegroupColor,0);
+            setSubcatSelectboxDefault(cat2SelectModel);
+            setSubcatSelectboxDefault(cat2SelectGrip);
+            setSubcatToggleDefault(cat2TogglegroupColor);
 
-            setSubcatSelectboxDefault(cat3SelectModel, 0);
-            setSubcatSelectboxDefault(cat3SelectTyre, 0);
-            setSubcatToggleDefault(cat3TogglegroupColor,0);
-            setSubcatToggleDefault(cat3TogglegroupSize,0);
+            setSubcatSelectboxDefault(cat3SelectModel);
+            setSubcatSelectboxDefault(cat3SelectTyre);
+            setSubcatToggleDefault(cat3TogglegroupColor);
+            setSubcatToggleDefault(cat3TogglegroupSize);
 
-            setSubcatSelectboxDefault(cat4SelectModel, 0);
-            setSubcatToggleDefault(cat4TogglegroupColor,0);
+            setSubcatSelectboxDefault(cat4SelectModel);
+            setSubcatToggleDefault(cat4TogglegroupColor);
 
-            setSubcatSelectboxDefault(cat5SelectModel, 0);
+            setSubcatSelectboxDefault(cat5SelectModel);
 
-            setSubcatSelectboxDefault(cat6SelectBell, 0);
-            setSubcatSelectboxDefault(cat6SelectStand, 0);
-            setSubcatSelectboxDefault(cat6SelectLight, 0);
+            setSubcatSelectboxDefault(cat6SelectBell);
+            setSubcatSelectboxDefault(cat6SelectStand);
+            setSubcatSelectboxDefault(cat6SelectLight);
         } else {
-            // SET CURRENT CONFIG VALUES - QUICK'n'Dirty statische Variante für 3 feste Toggles, besser Toggles dynamisch laden und Farbe aus DB zuweisen!
+            // SET CURRENT CONFIG VALUES
             // !! There must be one article of every type in the configuration! Make sure client side before save in the database!
             // RAHMEN
             cat1SelectName.getSelectionModel().select(Main.currentConfig.getArticleByType("Rahmen").name);// There must be only one RAHMEN in every config!
@@ -595,48 +799,10 @@ public class BuilderController {
         }
     }
 
-    private void setSubcatColorToggleOnLoad(String conditionColorString, JFXToggleNode tn1, JFXToggleNode tn2, JFXToggleNode tn3) {
-        switch (conditionColorString) {
-            case "#000000":
-                tn1.setSelected(true);
-                break;
-            case "#FFFFFF":
-                tn2.setSelected(true);
-                break;
-            case "#808080":
-                tn3.setSelected(true);
-                break;
-        }
-    }
-
-    private void setSubcatColorToggleOnLoadSaddle(String conditionColorString, JFXToggleNode tn1, JFXToggleNode tn2, JFXToggleNode tn3) {
-        switch (conditionColorString) {
-            case "#000000":
-                tn1.setSelected(true);
-                break;
-            case "#FFFFFF":
-                tn3.setSelected(true);
-                break;
-            case "#4b2c20":
-                tn2.setSelected(true);
-                break;
-        }
-    }
-
-    private void setSubcatSizeToggleOnLoad(String conditionSizeString, JFXToggleNode tn1, JFXToggleNode tn2, JFXToggleNode tn3) {
-        switch (conditionSizeString) {
-            case "S":
-                tn1.setSelected(true);
-                break;
-            case "M":
-                tn2.setSelected(true);
-                break;
-            case "L":
-                tn3.setSelected(true);
-                break;
-        }
-    }
-
+    /**
+     * Die verschiedenen Zwischenpreise werden in einem Array zusammengefasst.
+     * Der Gesamtpreis wird berechnet und in den Anzeige-Labeln ausgegeben.
+     */
     private void initFinalPriceArray() {
         catDefaultFinalPrice = 0.0f;
         finalPriceArray = FXCollections.observableFloatArray();
@@ -646,29 +812,11 @@ public class BuilderController {
         catLabelFinishPrice.setText(strPriceBeautify(catDefaultFinalPrice));
     }
 
-    private void setSubcatSelectboxDefault(JFXComboBox cb, int pos) {
-        if (cb.getSelectionModel().isEmpty()) {
-            cb.getSelectionModel().select(pos);
-        }
-    }
-
-    private void setSubcatToggleDefault(ToggleGroup tg, int pos) {
-        if (tg.getSelectedToggle() == null) {
-            tg.getToggles().get(pos).setSelected(true);
-        }
-    }
-
-    private String strPriceBeautify(float value) {
-        return String.valueOf(String.format("%.02f", value));
-    }
-
-    private void calcFinalPriceFromArray(ObservableFloatArray fArray) {
-        catDefaultFinalPrice = 0.0f;
-        for (int i = 0; i < fArray.size(); i++) {
-            catDefaultFinalPrice += fArray.get(i);
-        }
-    }
-
+    /**
+     * Ausgabe der technischen Informationen zur aktuellen Auswahl in der Text-Area.
+     * Trennzeichen & Zeilenumbrüche werden vorbestimmt.
+     * Ausgabestruktur wird mit entsprechenden Variablen zusammengestellt.
+     */
     private void renderSVGtextarea() {
         String newline = "\n";
         String sep = ", ";
@@ -684,620 +832,62 @@ public class BuilderController {
         // AR: must be setText() to prevent textarea scrollToTop bug
         svgTextarea.setText(
                 frame + newline
-                + svgInfoFrameModel + " von " + svgInfoFrameProducerName + newline + svgInfoFrameColor + sep + "Größe: " + svgInfoFrameSize + newline + "Info: " + svgInfoFrameDesc + newline + newline
-                + handlebar + newline
-                + svgInfoHandlebarModel + " von " + svgInfoHandlebarProducerName + " in " + svgInfoHandlebarColor + newline + "Info: " + svgInfoHandlebarDesc + newline + "Griff: " + svgInfoHandlebarGrip + " von " + svgInfoHandlebarGripProducerName + newline + newline
-                + wheels + newline
-                + svgInfoWheelsModel + " von " + svgInfoWheelsProducerName + newline
-                + svgInfoWheelsColor + sep + "Größe: " + svgInfoWheelsSize + newline
-                + "Info: " + svgInfoWheelDesc + newline
-                + "Reifen: " + svgInfoWheelsTyre + " von " + svgInfoTyresProducerName + newline + newline
-                + saddle + newline
-                + svgInfoSaddleModel + " von " + svgInfoSaddleProducerName + " in " + svgInfoSaddleColor + newline
-                + "Info: " + svgInfoSaddleDesc + newline + newline
-                + brakes + newline
-                + svgInfoBrakesModel + " von " + svgInfoBrakesProducerName + sep + svgInfoBrakesTypeName + newline
-                + "Info: " + svgInfoBrakeDesc + newline + newline
-                + attachments + newline
-                + svgInfoAttachmentsBell + " von " + svgInfoBellProducerName + newline
-                + svgInfoAttachmentsStand + " von " + svgInfoStandProducerName + newline
-                + "Beleuchtung: " + svgInfoAttachmentsLight + " von " + svgInfoLightProducerName + newline
+                        + svgInfoFrameModel + " von " + svgInfoFrameProducerName + newline + svgInfoFrameColor + sep + "Größe: " + svgInfoFrameSize + newline + "Info: " + svgInfoFrameDesc + newline + newline
+                        + handlebar + newline
+                        + svgInfoHandlebarModel + " von " + svgInfoHandlebarProducerName + " in " + svgInfoHandlebarColor + newline + "Info: " + svgInfoHandlebarDesc + newline + "Griff: " + svgInfoHandlebarGrip + " von " + svgInfoHandlebarGripProducerName + newline + newline
+                        + wheels + newline
+                        + svgInfoWheelsModel + " von " + svgInfoWheelsProducerName + newline
+                        + svgInfoWheelsColor + sep + "Größe: " + svgInfoWheelsSize + newline
+                        + "Info: " + svgInfoWheelDesc + newline
+                        + "Reifen: " + svgInfoWheelsTyre + " von " + svgInfoTyresProducerName + newline + newline
+                        + saddle + newline
+                        + svgInfoSaddleModel + " von " + svgInfoSaddleProducerName + " in " + svgInfoSaddleColor + newline
+                        + "Info: " + svgInfoSaddleDesc + newline + newline
+                        + brakes + newline
+                        + svgInfoBrakesModel + " von " + svgInfoBrakesProducerName + sep + svgInfoBrakesTypeName + newline
+                        + "Info: " + svgInfoBrakeDesc + newline + newline
+                        + attachments + newline
+                        + svgInfoAttachmentsBell + " von " + svgInfoBellProducerName + newline
+                        + svgInfoAttachmentsStand + " von " + svgInfoStandProducerName + newline
+                        + "Beleuchtung: " + svgInfoAttachmentsLight + " von " + svgInfoLightProducerName + newline
         );
     }
 
-    private void initSubcatsItems() {
-        cat1SelectName.setItems(getArticleNamesByType("Rahmen"));
-        cat2SelectModel.setItems(getArticleNamesByType("Lenker"));
-        cat2SelectGrip.setItems(getArticleNamesByType("Griff"));
-        cat3SelectModel.setItems(getArticleNamesByType("Laufrad"));
-        cat3SelectTyre.setItems(getArticleNamesByType("Reifen"));
-        cat4SelectModel.setItems(getArticleNamesByType("Sattel"));
-        cat5SelectModel.setItems(getArticleNamesByType("Bremse"));
-        cat6SelectBell.setItems(getArticleNamesByType("Klingel"));
-        cat6SelectStand.setItems(getArticleNamesByType("Ständer"));
-        cat6SelectLight.setItems(getArticleNamesByType("Licht"));
+    /**
+     * Save Configuration Task.
+     * Wird jeweils von "Entwurf speichern" und den Unterkategorien aufgerufen.
+     * @param event Click-Event des Buttons
+     * @param comingFromSubCat Boolean, um zu wissen, ob aus einer Unterkategorie gespeichert wurde
+     * @supportedby SK
+     * Konfiguration wird gespeichert und je nach Boolean wird über den ViewManager die Dashboard-Ansicht angefordert.
+     */
+    private void startDraftSaveConfigurationTask(ActionEvent event, boolean comingFromSubCat) {
+        SaveConfigurationTask saveConfigTask1 = new SaveConfigurationTask(activeUser, this, "ENTWURF");
+        saveConfigTask1.setOnRunning((runningEvent) -> System.out.println("trying to save configuration..."));
+        saveConfigTask1.setOnSucceeded((WorkerStateEvent saveConfigSucceded) -> {
+            System.out.println("configuration saved: " + saveConfigTask1.getValue());
+            try {
+                if (!comingFromSubCat) {
+                    openDashboard(event);
+                }
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
+        saveConfigTask1.setOnFailed((saveConfigFailed) -> System.out.println("saving configuration failed"));
+        //Tasks in eigenem Thread ausführen
+        new Thread(saveConfigTask1).start();
     }
 
-    // AR: get model names with the given type, remove duplicates
-    private ObservableList<String> getArticleNamesByType(String typeString) {
-        ObservableList<String> data = FXCollections.observableArrayList();
-        for (Article i : Main.ARTICLES) {
-            if (i.type.equals(typeString)) {
-                if (!data.contains(i.name)) {
-                    data.add(i.name);
-                }
-            }
-        }
-        return data;
-    }
-
-    private String getProducerByArticleName(String name) {
-        String pName = "";
-        for (Article i : Main.ARTICLES) {
-            if (i.name.equals(name)) {
-                pName = i.producer;
-                break; //stop iterating list when found
-            }
-        }
-        return pName;
-    }
-
-    private String getCharacteristicByArticleName(String name) {
-        String tName = "";
-        for (Article i : Main.ARTICLES) {
-            if (i.name.equals(name)) {
-                tName = i.characteristic;
-                break; //stop iterating list when found
-            }
-        }
-        return tName;
-    }
-
-    private String getDescriptionByArticleName(String name) {
-        String dText = "";
-        for (Article i : Main.ARTICLES) {
-            if (i.name.equals(name)) {
-                dText = i.description;
-                break; //stop iterating list when found
-            }
-        }
-        return dText;
-    }
-
-    private float getPriceByArticleName(String name) {
-        float price = 0.0f;
-        for (Article i : Main.ARTICLES) {
-            if (i.name.equals(name)) {
-                price = i.price;
-                break; //stop iterating list when found
-            }
-        }
-        return price;
-    }
-
-    private float getPriceByArticleNameAndSize(String name, String size) {
-        float price = 0.0f;
-        for (Article i : Main.ARTICLES) {
-            if (i.name.equals(name)) {
-                if (i.characteristic.equals(size)) {
-                    price = i.price;
-                    break; //stop iterating list when found
-                }
-            }
-        }
-        return price;
-    }
-
-    public int getArticleIdByName(String name) {
-        int id = 0;
-        for (Article i : Main.ARTICLES) {
-            if (i.name.equals(name)) {
-                id = i.id;
-                break; //stop iterating list when found
-            }
-        }
-        return id;
-    }
-
-    public int getArticleIDByNameAndColor(String name, String color) {
-        int id = 0;
-        for (Article i : Main.ARTICLES) {
-            if (i.name.equals(name)) {
-                if (i.hexColor.equals(color)) {
-                    id = i.id;
-                    break; //stop iterating list when found
-                }
-            }
-        }
-        return id;
-    }
-
-    public int getArticleIDByNameSizeAndColor(String name, String size, String color) {
-        int id = 0;
-        for (Article a : Main.ARTICLES) {
-            if (a.name.equals(name)) {
-                if (a.characteristic.equals(size) && a.hexColor.equals(color)) {
-                    id = a.id;
-                    break; //stop iterating list when found
-                }
-            }
-        }
-        return id;
-    }
-
-    // Rahmen
-    private void initSubcatsListeners() {
-
-        // Rahmen
-        cat1SelectName.valueProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                svgInfoFrameModel = newValue;
-                svgInfoFrameProducerName = getProducerByArticleName(cat1SelectName.getValue());
-                svgInfoFrameDesc = getDescriptionByArticleName(cat1SelectName.getValue());
-                renderSVGtextarea();
-                switch (cat1SelectName.getSelectionModel().getSelectedIndex()) {
-                    case 0:
-                        svgInfoFrameProducerName = getProducerByArticleName(cat1SelectName.getValue());
-                        svgInfoFrameDesc = getDescriptionByArticleName(cat1SelectName.getValue());
-                        svgManager.setFrame(SVGManager.FRAME1);
-                        svgManager.setSVGSet();
-                        scaleIn(SVGManager.svgGroup.getChildren().get(0), 500);
-                        cat1FramePrice = getPriceByArticleNameAndSize(cat1SelectName.getValue(), svgInfoFrameSize);
-                        cat1LabelPrice.setText(strPriceBeautify(cat1FramePrice));
-                        break;
-                    case 1:
-                        svgInfoFrameProducerName = getProducerByArticleName(cat1SelectName.getValue());
-                        svgInfoFrameDesc = getDescriptionByArticleName(cat1SelectName.getValue());
-                        svgManager.setFrame(SVGManager.FRAME2);
-                        svgManager.setSVGSet();
-                        scaleIn(SVGManager.svgGroup.getChildren().get(0), 500);
-                        cat1FramePrice = getPriceByArticleNameAndSize(cat1SelectName.getValue(), svgInfoFrameSize);
-                        cat1LabelPrice.setText(strPriceBeautify(cat1FramePrice));
-                        break;
-                    case 2:
-                        svgInfoFrameProducerName = getProducerByArticleName(cat1SelectName.getValue());
-                        svgInfoFrameDesc = getDescriptionByArticleName(cat1SelectName.getValue());
-                        svgManager.setFrame(SVGManager.FRAME3);
-                        svgManager.setSVGSet();
-                        scaleIn(SVGManager.svgGroup.getChildren().get(0), 500);
-                        cat1FramePrice = getPriceByArticleNameAndSize(cat1SelectName.getValue(), svgInfoFrameSize);
-                        cat1LabelPrice.setText(strPriceBeautify(cat1FramePrice));
-                        break;
-                }
-                spaneSVG.getChildren().clear();
-                spaneSVG.getChildren().add(SVGManager.svgGroup);
-            }
-        });
-
-        cat1TogglegroupColor.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
-            @Override
-            public void changed(ObservableValue<? extends Toggle> observable, Toggle oldValue, Toggle newValue) {
-                if (cat1TogglegroupColor.getSelectedToggle() != null) {
-                    String fxid = ((JFXToggleNode) cat1TogglegroupColor.getSelectedToggle()).getId();
-                    switch (fxid) {
-                        case "cat1Color1":
-                            svgInfoFrameColor = "schwarz";
-                            svgInfoFrameColorHex = "#000000";
-                            renderSVGtextarea();
-                            svgManager.setFrameColor(SVGManager.COLOR_BLACK);
-                            svgManager.setSVGSet();
-                            break;
-                        case "cat1Color2":
-                            svgInfoFrameColor = "weiß";
-                            svgInfoFrameColorHex = "#FFFFFF";
-                            renderSVGtextarea();
-                            svgManager.setFrameColor(SVGManager.COLOR_WHITE);
-                            svgManager.setSVGSet();
-                            break;
-                        case "cat1Color3":
-                            svgInfoFrameColor = "silber";
-                            svgInfoFrameColorHex = "#808080";
-                            renderSVGtextarea();
-                            svgManager.setFrameColor(SVGManager.COLOR_SILVER);
-                            svgManager.setSVGSet();
-                            break;
-                    }
-                }
-            }
-        });
-
-        cat1TogglegroupSize.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
-            @Override
-            public void changed(ObservableValue<? extends Toggle> observable, Toggle oldValue, Toggle newValue) {
-                if (cat1TogglegroupSize.getSelectedToggle() != null) {
-                    String fxid = ((JFXToggleNode) cat1TogglegroupSize.getSelectedToggle()).getId();
-                    switch (fxid) {
-                        case "cat1Size1":
-                            svgInfoFrameSize = "S";
-                            renderSVGtextarea();
-                            cat1FramePrice = getPriceByArticleNameAndSize(cat1SelectName.getValue(), svgInfoFrameSize);
-                            cat1LabelPrice.setText(strPriceBeautify(cat1FramePrice));
-                            break;
-                        case "cat1Size2":
-                            svgInfoFrameSize = "M";
-                            renderSVGtextarea();
-                            cat1FramePrice = getPriceByArticleNameAndSize(cat1SelectName.getValue(), svgInfoFrameSize);
-                            cat1LabelPrice.setText(strPriceBeautify(cat1FramePrice));
-                            break;
-                        case "cat1Size3":
-                            svgInfoFrameSize = "L";
-                            renderSVGtextarea();
-                            cat1FramePrice = getPriceByArticleNameAndSize(cat1SelectName.getValue(), svgInfoFrameSize);
-                            cat1LabelPrice.setText(strPriceBeautify(cat1FramePrice));
-                            break;
-                    }
-                }
-            }
-        });
-
-        // Lenker
-        cat2SelectModel.valueProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                svgInfoHandlebarModel = newValue;
-                svgInfoHandlebarProducerName = getProducerByArticleName(cat2SelectModel.getValue());
-                svgInfoHandlebarDesc = getDescriptionByArticleName(cat2SelectModel.getValue());
-                renderSVGtextarea();
-                switch (cat2SelectModel.getSelectionModel().getSelectedIndex()) {
-                    case 0:
-                        svgInfoHandlebarProducerName = getProducerByArticleName(cat2SelectModel.getValue());
-                        svgInfoHandlebarDesc = getDescriptionByArticleName(cat2SelectModel.getValue());
-                        svgManager.setHandlebar(SVGManager.HANDLEBAR1);
-                        svgManager.setSVGSet();
-                        scaleIn(SVGManager.svgGroup.getChildren().get(3), 500);
-                        cat2HandlebarPrice = getPriceByArticleName(cat2SelectModel.getValue());
-                        cat2GripPrice = getPriceByArticleName(cat2SelectGrip.getValue());
-                        cat2LabelPrice.setText(strPriceBeautify(Float.sum(cat2HandlebarPrice, cat2GripPrice)));
-                        break;
-                    case 1:
-                        svgInfoHandlebarProducerName = getProducerByArticleName(cat2SelectModel.getValue());
-                        svgInfoHandlebarDesc = getDescriptionByArticleName(cat2SelectModel.getValue());
-                        svgManager.setHandlebar(SVGManager.HANDLEBAR2);
-                        svgManager.setSVGSet();
-                        scaleIn(SVGManager.svgGroup.getChildren().get(3), 500);
-                        cat2HandlebarPrice = getPriceByArticleName(cat2SelectModel.getValue());
-                        cat2GripPrice = getPriceByArticleName(cat2SelectGrip.getValue());
-                        cat2LabelPrice.setText(strPriceBeautify(Float.sum(cat2HandlebarPrice, cat2GripPrice)));
-                        break;
-                    case 2:
-                        svgInfoHandlebarProducerName = getProducerByArticleName(cat2SelectModel.getValue());
-                        svgInfoHandlebarDesc = getDescriptionByArticleName(cat2SelectModel.getValue());
-                        svgManager.setHandlebar(SVGManager.HANDLEBAR3);
-                        svgManager.setSVGSet();
-                        scaleIn(SVGManager.svgGroup.getChildren().get(3), 500);
-                        cat2HandlebarPrice = getPriceByArticleName(cat2SelectModel.getValue());
-                        cat2GripPrice = getPriceByArticleName(cat2SelectGrip.getValue());
-                        cat2LabelPrice.setText(strPriceBeautify(Float.sum(cat2HandlebarPrice, cat2GripPrice)));
-                        break;
-                }
-                spaneSVG.getChildren().clear();
-                spaneSVG.getChildren().add(SVGManager.svgGroup);
-            }
-        });
-
-        cat2SelectGrip.valueProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                svgInfoHandlebarGrip = newValue;
-                svgInfoHandlebarGripProducerName = getProducerByArticleName(cat2SelectGrip.getValue());
-                renderSVGtextarea();
-                cat2HandlebarPrice = getPriceByArticleName(cat2SelectModel.getValue());
-                cat2GripPrice = getPriceByArticleName(cat2SelectGrip.getValue());
-                cat2LabelPrice.setText(strPriceBeautify(Float.sum(cat2HandlebarPrice, cat2GripPrice)));
-            }
-        });
-
-        cat2TogglegroupColor.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
-            @Override
-            public void changed(ObservableValue<? extends Toggle> observable, Toggle oldValue, Toggle newValue) {
-                if (cat2TogglegroupColor.getSelectedToggle() != null) {
-                    String fxid = ((JFXToggleNode) cat2TogglegroupColor.getSelectedToggle()).getId();
-                    switch (fxid) {
-                        case "cat2Color1":
-                            svgInfoHandlebarColor = "schwarz";
-                            svgInfoHandlebarColorHex = "#000000";
-                            renderSVGtextarea();
-                            svgManager.setHandlebarColor(SVGManager.COLOR_BLACK);
-                            svgManager.setSVGSet();
-                            break;
-                        case "cat2Color2":
-                            svgInfoHandlebarColor = "weiß";
-                            svgInfoHandlebarColorHex = "#FFFFFF";
-                            renderSVGtextarea();
-                            svgManager.setHandlebarColor(SVGManager.COLOR_WHITE);
-                            svgManager.setSVGSet();
-                            break;
-                        case "cat2Color3":
-                            svgInfoHandlebarColor = "silber";
-                            svgInfoHandlebarColorHex = "#808080";
-                            renderSVGtextarea();
-                            svgManager.setHandlebarColor(SVGManager.COLOR_SILVER);
-                            svgManager.setSVGSet();
-                            break;
-                    }
-                }
-            }
-        });
-
-        // Räder
-        cat3SelectModel.valueProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                svgInfoWheelsModel = newValue;
-                svgInfoWheelsProducerName = getProducerByArticleName(cat3SelectModel.getValue());
-                svgInfoWheelDesc = getDescriptionByArticleName(cat3SelectModel.getValue());
-                renderSVGtextarea();
-                switch (cat3SelectModel.getSelectionModel().getSelectedIndex()) {
-                    case 0:
-                        svgInfoWheelsProducerName = getProducerByArticleName(cat3SelectModel.getValue());
-                        svgInfoWheelDesc = getDescriptionByArticleName(cat3SelectModel.getValue());
-                        svgManager.setTire(SVGManager.TIRE1);
-                        svgManager.setSVGSet();
-                        fadeIn(SVGManager.svgGroup.getChildren().get(2), 1000);
-                        cat3WheelPrice = getPriceByArticleNameAndSize(cat3SelectModel.getValue(), svgInfoWheelsSize);
-                        cat3TyrePrice = getPriceByArticleName(cat3SelectTyre.getValue());
-                        cat3LabelPrice.setText(strPriceBeautify(Float.sum(cat3WheelPrice, cat3TyrePrice)));
-                        break;
-                    case 1:
-                        svgInfoWheelsProducerName = getProducerByArticleName(cat3SelectModel.getValue());
-                        svgInfoWheelDesc = getDescriptionByArticleName(cat3SelectModel.getValue());
-                        svgManager.setTire(SVGManager.TIRE2);
-                        svgManager.setSVGSet();
-                        fadeIn(SVGManager.svgGroup.getChildren().get(2), 1000);
-                        cat3WheelPrice = getPriceByArticleNameAndSize(cat3SelectModel.getValue(), svgInfoWheelsSize);
-                        cat3TyrePrice = getPriceByArticleName(cat3SelectTyre.getValue());
-                        cat3LabelPrice.setText(strPriceBeautify(Float.sum(cat3WheelPrice, cat3TyrePrice)));
-                        break;
-                    case 2:
-                        svgInfoWheelsProducerName = getProducerByArticleName(cat3SelectModel.getValue());
-                        svgInfoWheelDesc = getDescriptionByArticleName(cat3SelectModel.getValue());
-                        svgManager.setTire(SVGManager.TIRE3);
-                        svgManager.setSVGSet();
-                        fadeIn(SVGManager.svgGroup.getChildren().get(2), 1000);
-                        cat3WheelPrice = getPriceByArticleNameAndSize(cat3SelectModel.getValue(), svgInfoWheelsSize);
-                        cat3TyrePrice = getPriceByArticleName(cat3SelectTyre.getValue());
-                        cat3LabelPrice.setText(strPriceBeautify(Float.sum(cat3WheelPrice, cat3TyrePrice)));
-                        break;
-                }
-                spaneSVG.getChildren().clear();
-                spaneSVG.getChildren().add(SVGManager.svgGroup);
-            }
-        });
-
-        cat3SelectTyre.valueProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                svgInfoWheelsTyre = newValue;
-                svgInfoTyresProducerName = getProducerByArticleName(cat3SelectTyre.getValue());
-                renderSVGtextarea();
-                cat3WheelPrice = getPriceByArticleNameAndSize(cat3SelectModel.getValue(), svgInfoWheelsSize);
-                cat3TyrePrice = getPriceByArticleName(cat3SelectTyre.getValue());
-                cat3LabelPrice.setText(strPriceBeautify(Float.sum(cat3WheelPrice, cat3TyrePrice)));
-            }
-        });
-
-        cat3TogglegroupColor.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
-            @Override
-            public void changed(ObservableValue<? extends Toggle> observable, Toggle oldValue, Toggle newValue) {
-                if (cat3TogglegroupColor.getSelectedToggle() != null) {
-                    String fxid = ((JFXToggleNode) cat3TogglegroupColor.getSelectedToggle()).getId();
-                    switch (fxid) {
-                        case "cat3Color1":
-                            svgInfoWheelsColor = "schwarz";
-                            svgInfoWheelsColorHex = "#000000";
-                            renderSVGtextarea();
-                            svgManager.setTireColor(SVGManager.COLOR_BLACK);
-                            svgManager.setSVGSet();
-                            break;
-                        case "cat3Color2":
-                            svgInfoWheelsColor = "weiß";
-                            svgInfoWheelsColorHex = "#FFFFFF";
-                            renderSVGtextarea();
-                            svgManager.setTireColor(SVGManager.COLOR_WHITE);
-                            svgManager.setSVGSet();
-                            break;
-                        case "cat3Color3":
-                            svgInfoWheelsColor = "silber";
-                            svgInfoWheelsColorHex = "#808080";
-                            renderSVGtextarea();
-                            svgManager.setTireColor(SVGManager.COLOR_SILVER);
-                            svgManager.setSVGSet();
-                            break;
-                    }
-                }
-            }
-        });
-
-        cat3TogglegroupSize.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
-            @Override
-            public void changed(ObservableValue<? extends Toggle> observable, Toggle oldValue, Toggle newValue) {
-                if (cat3TogglegroupSize.getSelectedToggle() != null) {
-                    String fxid = ((JFXToggleNode) cat3TogglegroupSize.getSelectedToggle()).getId();
-                    switch (fxid) {
-                        case "cat3Size1":
-                            svgInfoWheelsSize = "S";
-                            renderSVGtextarea();
-                            cat3WheelPrice = getPriceByArticleNameAndSize(cat3SelectModel.getValue(), svgInfoWheelsSize);
-                            cat3TyrePrice = getPriceByArticleName(cat3SelectTyre.getValue());
-                            cat3LabelPrice.setText(strPriceBeautify(Float.sum(cat3WheelPrice, cat3TyrePrice)));
-                            break;
-                        case "cat3Size2":
-                            svgInfoWheelsSize = "M";
-                            renderSVGtextarea();
-                            cat3WheelPrice = getPriceByArticleNameAndSize(cat3SelectModel.getValue(), svgInfoWheelsSize);
-                            cat3TyrePrice = getPriceByArticleName(cat3SelectTyre.getValue());
-                            cat3LabelPrice.setText(strPriceBeautify(Float.sum(cat3WheelPrice, cat3TyrePrice)));
-                            break;
-                        case "cat3Size3":
-                            svgInfoWheelsSize = "L";
-                            renderSVGtextarea();
-                            cat3WheelPrice = getPriceByArticleNameAndSize(cat3SelectModel.getValue(), svgInfoWheelsSize);
-                            cat3TyrePrice = getPriceByArticleName(cat3SelectTyre.getValue());
-                            cat3LabelPrice.setText(strPriceBeautify(Float.sum(cat3WheelPrice, cat3TyrePrice)));
-                            break;
-                    }
-                }
-            }
-        });
-
-        // Sattel
-        cat4SelectModel.valueProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                svgInfoSaddleModel = newValue;
-                svgInfoSaddleProducerName = getProducerByArticleName(cat4SelectModel.getValue());
-                svgInfoSaddleDesc = getDescriptionByArticleName(cat4SelectModel.getValue());
-                renderSVGtextarea();
-                switch (cat4SelectModel.getSelectionModel().getSelectedIndex()) {
-                    case 0:
-                        svgInfoSaddleProducerName = getProducerByArticleName(cat4SelectModel.getValue());
-                        svgInfoSaddleDesc = getDescriptionByArticleName(cat4SelectModel.getValue());
-                        svgManager.setSeat(SVGManager.SEAT1);
-                        svgManager.setSVGSet();
-                        scaleIn(SVGManager.svgGroup.getChildren().get(1), 500);
-                        cat4SaddlePrice = getPriceByArticleName(cat4SelectModel.getValue());
-                        cat4LabelPrice.setText(strPriceBeautify(cat4SaddlePrice));
-                        break;
-                    case 1:
-                        svgInfoSaddleProducerName = getProducerByArticleName(cat4SelectModel.getValue());
-                        svgInfoSaddleDesc = getDescriptionByArticleName(cat4SelectModel.getValue());
-                        svgManager.setSeat(SVGManager.SEAT2);
-                        svgManager.setSVGSet();
-                        scaleIn(SVGManager.svgGroup.getChildren().get(1), 500);
-                        cat4SaddlePrice = getPriceByArticleName(cat4SelectModel.getValue());
-                        cat4LabelPrice.setText(strPriceBeautify(cat4SaddlePrice));
-                        break;
-                    case 2:
-                        svgInfoSaddleProducerName = getProducerByArticleName(cat4SelectModel.getValue());
-                        svgInfoSaddleDesc = getDescriptionByArticleName(cat4SelectModel.getValue());
-                        svgManager.setSeat(SVGManager.SEAT3);
-                        svgManager.setSVGSet();
-                        scaleIn(SVGManager.svgGroup.getChildren().get(1), 500);
-                        cat4SaddlePrice = getPriceByArticleName(cat4SelectModel.getValue());
-                        cat4LabelPrice.setText(strPriceBeautify(cat4SaddlePrice));
-                        break;
-                }
-                spaneSVG.getChildren().clear();
-                spaneSVG.getChildren().add(SVGManager.svgGroup);
-            }
-        });
-
-        cat4TogglegroupColor.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
-            @Override
-            public void changed(ObservableValue<? extends Toggle> observable, Toggle oldValue, Toggle newValue) {
-                if (cat4TogglegroupColor.getSelectedToggle() != null) {
-                    String fxid = ((JFXToggleNode) cat4TogglegroupColor.getSelectedToggle()).getId();
-                    switch (fxid) {
-                        case "cat4Color1":
-                            svgInfoSaddleColor = "schwarz";
-                            svgInfoSaddleColorHex = "#000000";
-                            renderSVGtextarea();
-                            svgManager.setSeatColor(SVGManager.COLOR_BLACK);
-                            svgManager.setSVGSet();
-                            break;
-                        case "cat4Color2":
-                            svgInfoSaddleColor = "braun";
-                            svgInfoSaddleColorHex = "#4b2c20";
-                            renderSVGtextarea();
-                            svgManager.setSeatColor(SVGManager.COLOR_BROWN);
-                            svgManager.setSVGSet();
-                            break;
-                        case "cat4Color3":
-                            svgInfoSaddleColor = "weiß";
-                            svgInfoSaddleColorHex = "#FFFFFF";
-                            renderSVGtextarea();
-                            svgManager.setSeatColor(SVGManager.COLOR_WHITE);
-                            svgManager.setSVGSet();
-                            break;
-                    }
-                }
-            }
-        });
-
-        // Bremsen
-        cat5SelectModel.valueProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                svgInfoBrakesModel = newValue;
-                svgInfoBrakesProducerName = getProducerByArticleName(cat5SelectModel.getValue());
-                svgInfoBrakesTypeName = getCharacteristicByArticleName(cat5SelectModel.getValue());
-                svgInfoBrakeDesc = getDescriptionByArticleName(cat5SelectModel.getValue());
-                renderSVGtextarea();
-                cat5BrakePrice = getPriceByArticleName(cat5SelectModel.getValue());
-                cat5LabelPrice.setText(strPriceBeautify(cat5BrakePrice));
-            }
-        });
-
-        // Zubehör
-        cat6SelectBell.valueProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                svgInfoAttachmentsBell = newValue;
-                svgInfoBellProducerName = getProducerByArticleName(cat6SelectBell.getValue());
-                renderSVGtextarea();
-                cat6BellPrice = getPriceByArticleName(cat6SelectBell.getValue());
-                cat6StandPrice = getPriceByArticleName(cat6SelectStand.getValue());
-                cat6LightPrice = getPriceByArticleName(cat6SelectLight.getValue());
-                cat6LabelPrice.setText(strPriceBeautify(Float.sum(Float.sum(cat6BellPrice, cat6StandPrice), cat6LightPrice)));
-            }
-        });
-
-        cat6SelectStand.valueProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                svgInfoAttachmentsStand = newValue;
-                svgInfoStandProducerName = getProducerByArticleName(cat6SelectStand.getValue());
-                renderSVGtextarea();
-                cat6BellPrice = getPriceByArticleName(cat6SelectBell.getValue());
-                cat6StandPrice = getPriceByArticleName(cat6SelectStand.getValue());
-                cat6LightPrice = getPriceByArticleName(cat6SelectLight.getValue());
-                cat6LabelPrice.setText(strPriceBeautify(Float.sum(Float.sum(cat6BellPrice, cat6StandPrice), cat6LightPrice)));
-            }
-        });
-
-        cat6SelectLight.valueProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                svgInfoAttachmentsLight = newValue;
-                svgInfoLightProducerName = getProducerByArticleName(cat6SelectLight.getValue());
-                renderSVGtextarea();
-                cat6BellPrice = getPriceByArticleName(cat6SelectBell.getValue());
-                cat6StandPrice = getPriceByArticleName(cat6SelectStand.getValue());
-                cat6LightPrice = getPriceByArticleName(cat6SelectLight.getValue());
-                cat6LabelPrice.setText(strPriceBeautify(Float.sum(Float.sum(cat6BellPrice, cat6StandPrice), cat6LightPrice)));
-            }
-        });
-
-    }
-
-    private void initTextFieldListeners() {
-        ValidatorManager.setTextFieldRules(tfCustomerFirstName, "[a-zA-Z-'`´]");
-        ValidatorManager.setTextFieldRules(tfCustomerLastName, "[a-zA-Z-'`´]");
-        ValidatorManager.setTextFieldRules(tfCustomerMail, "[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$");
-        ValidatorManager.setTextFieldRules(tfCustomerStreet, "[a-zA-Z-'`´]");
-        ValidatorManager.setTextFieldRules(tfCustomerNr, "[0-9]");
-        ValidatorManager.setTextFieldRules(tfCustomerZipcode, "[\\d{0,5}]");
-        ValidatorManager.setTextFieldRules(tfCustomerCity, "[a-zA-Z-'`´]");
-
-        int maxLengthZipCode = 5;
-        int maxLengthHouseNumber = 3;
-
-        tfCustomerNr.textProperty().addListener((ov, oldValue, newValue) -> {
-            if (tfCustomerNr.getText().length() > maxLengthHouseNumber) {
-                String str = tfCustomerNr.getText().substring(0, maxLengthHouseNumber);
-                tfCustomerNr.setText(str);
-            }
-        });
-
-        tfCustomerZipcode.textProperty().addListener((ov, oldValue, newValue) -> {
-            if (tfCustomerZipcode.getText().length() > maxLengthZipCode) {
-                String str = tfCustomerZipcode.getText().substring(0, maxLengthZipCode);
-                tfCustomerZipcode.setText(str);
-            }
-        });
-    }
-
+    /**
+     * Lädt eine Konfiguration in der Konfigurator-Ansicht, die den Status "ABGESCHLOSSEN" aufweist.
+     * @throws IOException
+     * Prüft, ob eine Konfiguration vorhanden ist und ob sie den Status "ABGESCHLOSSEN" hat.
+     * Öffnet die finale Ansicht in der Sidebar.
+     * Deaktiviert alle Kategorie-Toggles in der Bottombar.
+     * Zeigt die Kundendaten in den Textfeldern der Sidebar an.
+     *
+     */
     private void loadFinishedConfig() throws IOException {
         if (Main.currentConfig != null) {
             if (Main.currentConfig.status.equals("ABGESCHLOSSEN")) {
@@ -1333,6 +923,790 @@ public class BuilderController {
                 setDefaultFocus();
             }
         }
+    }
+
+    /**
+     * Initialisiert & steuert alle Change-Listeners der Auswahl-Boxen, Größen- und Farben-Toggles in den Unterkategorien.
+     * Je nach Auswahl werden technische Informationen, SVG-Pfade, Preise, Größen und Farben gesetzt & aktualisiert.
+     */
+    private void initSubcatsListeners() {
+        // Rahmen
+        cat1SelectName.valueProperty().addListener((observable, oldValue, newValue) -> {
+            svgInfoFrameModel = newValue;
+            svgInfoFrameProducerName = getProducerByArticleName(cat1SelectName.getValue());
+            svgInfoFrameDesc = getDescriptionByArticleName(cat1SelectName.getValue());
+            renderSVGtextarea();
+            switch (cat1SelectName.getSelectionModel().getSelectedIndex()) {
+                case 0:
+                    svgInfoFrameProducerName = getProducerByArticleName(cat1SelectName.getValue());
+                    svgInfoFrameDesc = getDescriptionByArticleName(cat1SelectName.getValue());
+                    svgManager.setFrame(SVGManager.FRAME1);
+                    svgManager.setSVGSet();
+                    scaleIn(SVGManager.svgGroup.getChildren().get(0), 500);
+                    cat1FramePrice = getPriceByArticleNameAndSize(cat1SelectName.getValue(), svgInfoFrameSize);
+                    cat1LabelPrice.setText(strPriceBeautify(cat1FramePrice));
+                    break;
+                case 1:
+                    svgInfoFrameProducerName = getProducerByArticleName(cat1SelectName.getValue());
+                    svgInfoFrameDesc = getDescriptionByArticleName(cat1SelectName.getValue());
+                    svgManager.setFrame(SVGManager.FRAME2);
+                    svgManager.setSVGSet();
+                    scaleIn(SVGManager.svgGroup.getChildren().get(0), 500);
+                    cat1FramePrice = getPriceByArticleNameAndSize(cat1SelectName.getValue(), svgInfoFrameSize);
+                    cat1LabelPrice.setText(strPriceBeautify(cat1FramePrice));
+                    break;
+                case 2:
+                    svgInfoFrameProducerName = getProducerByArticleName(cat1SelectName.getValue());
+                    svgInfoFrameDesc = getDescriptionByArticleName(cat1SelectName.getValue());
+                    svgManager.setFrame(SVGManager.FRAME3);
+                    svgManager.setSVGSet();
+                    scaleIn(SVGManager.svgGroup.getChildren().get(0), 500);
+                    cat1FramePrice = getPriceByArticleNameAndSize(cat1SelectName.getValue(), svgInfoFrameSize);
+                    cat1LabelPrice.setText(strPriceBeautify(cat1FramePrice));
+                    break;
+            }
+            spaneSVG.getChildren().clear();
+            spaneSVG.getChildren().add(SVGManager.svgGroup);
+        });
+
+        cat1TogglegroupColor.selectedToggleProperty().addListener((observable, oldValue, newValue) -> {
+            if (cat1TogglegroupColor.getSelectedToggle() != null) {
+                String fxid = ((JFXToggleNode) cat1TogglegroupColor.getSelectedToggle()).getId();
+                switch (fxid) {
+                    case "cat1Color1":
+                        svgInfoFrameColor = "schwarz";
+                        svgInfoFrameColorHex = "#000000";
+                        renderSVGtextarea();
+                        svgManager.setFrameColor(SVGManager.COLOR_BLACK);
+                        svgManager.setSVGSet();
+                        break;
+                    case "cat1Color2":
+                        svgInfoFrameColor = "weiß";
+                        svgInfoFrameColorHex = "#FFFFFF";
+                        renderSVGtextarea();
+                        svgManager.setFrameColor(SVGManager.COLOR_WHITE);
+                        svgManager.setSVGSet();
+                        break;
+                    case "cat1Color3":
+                        svgInfoFrameColor = "silber";
+                        svgInfoFrameColorHex = "#808080";
+                        renderSVGtextarea();
+                        svgManager.setFrameColor(SVGManager.COLOR_SILVER);
+                        svgManager.setSVGSet();
+                        break;
+                }
+            }
+        });
+
+        cat1TogglegroupSize.selectedToggleProperty().addListener((observable, oldValue, newValue) -> {
+            if (cat1TogglegroupSize.getSelectedToggle() != null) {
+                String fxid = ((JFXToggleNode) cat1TogglegroupSize.getSelectedToggle()).getId();
+                switch (fxid) {
+                    case "cat1Size1":
+                        svgInfoFrameSize = "S";
+                        renderSVGtextarea();
+                        cat1FramePrice = getPriceByArticleNameAndSize(cat1SelectName.getValue(), svgInfoFrameSize);
+                        cat1LabelPrice.setText(strPriceBeautify(cat1FramePrice));
+                        break;
+                    case "cat1Size2":
+                        svgInfoFrameSize = "M";
+                        renderSVGtextarea();
+                        cat1FramePrice = getPriceByArticleNameAndSize(cat1SelectName.getValue(), svgInfoFrameSize);
+                        cat1LabelPrice.setText(strPriceBeautify(cat1FramePrice));
+                        break;
+                    case "cat1Size3":
+                        svgInfoFrameSize = "L";
+                        renderSVGtextarea();
+                        cat1FramePrice = getPriceByArticleNameAndSize(cat1SelectName.getValue(), svgInfoFrameSize);
+                        cat1LabelPrice.setText(strPriceBeautify(cat1FramePrice));
+                        break;
+                }
+            }
+        });
+
+        // Lenker
+        cat2SelectModel.valueProperty().addListener((observable, oldValue, newValue) -> {
+            svgInfoHandlebarModel = newValue;
+            svgInfoHandlebarProducerName = getProducerByArticleName(cat2SelectModel.getValue());
+            svgInfoHandlebarDesc = getDescriptionByArticleName(cat2SelectModel.getValue());
+            renderSVGtextarea();
+            switch (cat2SelectModel.getSelectionModel().getSelectedIndex()) {
+                case 0:
+                    svgInfoHandlebarProducerName = getProducerByArticleName(cat2SelectModel.getValue());
+                    svgInfoHandlebarDesc = getDescriptionByArticleName(cat2SelectModel.getValue());
+                    svgManager.setHandlebar(SVGManager.HANDLEBAR1);
+                    svgManager.setSVGSet();
+                    scaleIn(SVGManager.svgGroup.getChildren().get(3), 500);
+                    cat2HandlebarPrice = getPriceByArticleName(cat2SelectModel.getValue());
+                    cat2GripPrice = getPriceByArticleName(cat2SelectGrip.getValue());
+                    cat2LabelPrice.setText(strPriceBeautify(Float.sum(cat2HandlebarPrice, cat2GripPrice)));
+                    break;
+                case 1:
+                    svgInfoHandlebarProducerName = getProducerByArticleName(cat2SelectModel.getValue());
+                    svgInfoHandlebarDesc = getDescriptionByArticleName(cat2SelectModel.getValue());
+                    svgManager.setHandlebar(SVGManager.HANDLEBAR2);
+                    svgManager.setSVGSet();
+                    scaleIn(SVGManager.svgGroup.getChildren().get(3), 500);
+                    cat2HandlebarPrice = getPriceByArticleName(cat2SelectModel.getValue());
+                    cat2GripPrice = getPriceByArticleName(cat2SelectGrip.getValue());
+                    cat2LabelPrice.setText(strPriceBeautify(Float.sum(cat2HandlebarPrice, cat2GripPrice)));
+                    break;
+                case 2:
+                    svgInfoHandlebarProducerName = getProducerByArticleName(cat2SelectModel.getValue());
+                    svgInfoHandlebarDesc = getDescriptionByArticleName(cat2SelectModel.getValue());
+                    svgManager.setHandlebar(SVGManager.HANDLEBAR3);
+                    svgManager.setSVGSet();
+                    scaleIn(SVGManager.svgGroup.getChildren().get(3), 500);
+                    cat2HandlebarPrice = getPriceByArticleName(cat2SelectModel.getValue());
+                    cat2GripPrice = getPriceByArticleName(cat2SelectGrip.getValue());
+                    cat2LabelPrice.setText(strPriceBeautify(Float.sum(cat2HandlebarPrice, cat2GripPrice)));
+                    break;
+            }
+            spaneSVG.getChildren().clear();
+            spaneSVG.getChildren().add(SVGManager.svgGroup);
+        });
+
+        cat2SelectGrip.valueProperty().addListener((observable, oldValue, newValue) -> {
+            svgInfoHandlebarGrip = newValue;
+            svgInfoHandlebarGripProducerName = getProducerByArticleName(cat2SelectGrip.getValue());
+            renderSVGtextarea();
+            cat2HandlebarPrice = getPriceByArticleName(cat2SelectModel.getValue());
+            cat2GripPrice = getPriceByArticleName(cat2SelectGrip.getValue());
+            cat2LabelPrice.setText(strPriceBeautify(Float.sum(cat2HandlebarPrice, cat2GripPrice)));
+        });
+
+        cat2TogglegroupColor.selectedToggleProperty().addListener((observable, oldValue, newValue) -> {
+            if (cat2TogglegroupColor.getSelectedToggle() != null) {
+                String fxid = ((JFXToggleNode) cat2TogglegroupColor.getSelectedToggle()).getId();
+                switch (fxid) {
+                    case "cat2Color1":
+                        svgInfoHandlebarColor = "schwarz";
+                        svgInfoHandlebarColorHex = "#000000";
+                        renderSVGtextarea();
+                        svgManager.setHandlebarColor(SVGManager.COLOR_BLACK);
+                        svgManager.setSVGSet();
+                        break;
+                    case "cat2Color2":
+                        svgInfoHandlebarColor = "weiß";
+                        svgInfoHandlebarColorHex = "#FFFFFF";
+                        renderSVGtextarea();
+                        svgManager.setHandlebarColor(SVGManager.COLOR_WHITE);
+                        svgManager.setSVGSet();
+                        break;
+                    case "cat2Color3":
+                        svgInfoHandlebarColor = "silber";
+                        svgInfoHandlebarColorHex = "#808080";
+                        renderSVGtextarea();
+                        svgManager.setHandlebarColor(SVGManager.COLOR_SILVER);
+                        svgManager.setSVGSet();
+                        break;
+                }
+            }
+        });
+
+        // Räder
+        cat3SelectModel.valueProperty().addListener((observable, oldValue, newValue) -> {
+            svgInfoWheelsModel = newValue;
+            svgInfoWheelsProducerName = getProducerByArticleName(cat3SelectModel.getValue());
+            svgInfoWheelDesc = getDescriptionByArticleName(cat3SelectModel.getValue());
+            renderSVGtextarea();
+            switch (cat3SelectModel.getSelectionModel().getSelectedIndex()) {
+                case 0:
+                    svgInfoWheelsProducerName = getProducerByArticleName(cat3SelectModel.getValue());
+                    svgInfoWheelDesc = getDescriptionByArticleName(cat3SelectModel.getValue());
+                    svgManager.setTire(SVGManager.TIRE1);
+                    svgManager.setSVGSet();
+                    fadeIn(SVGManager.svgGroup.getChildren().get(2));
+                    cat3WheelPrice = getPriceByArticleNameAndSize(cat3SelectModel.getValue(), svgInfoWheelsSize);
+                    cat3TyrePrice = getPriceByArticleName(cat3SelectTyre.getValue());
+                    cat3LabelPrice.setText(strPriceBeautify(Float.sum(cat3WheelPrice, cat3TyrePrice)));
+                    break;
+                case 1:
+                    svgInfoWheelsProducerName = getProducerByArticleName(cat3SelectModel.getValue());
+                    svgInfoWheelDesc = getDescriptionByArticleName(cat3SelectModel.getValue());
+                    svgManager.setTire(SVGManager.TIRE2);
+                    svgManager.setSVGSet();
+                    fadeIn(SVGManager.svgGroup.getChildren().get(2));
+                    cat3WheelPrice = getPriceByArticleNameAndSize(cat3SelectModel.getValue(), svgInfoWheelsSize);
+                    cat3TyrePrice = getPriceByArticleName(cat3SelectTyre.getValue());
+                    cat3LabelPrice.setText(strPriceBeautify(Float.sum(cat3WheelPrice, cat3TyrePrice)));
+                    break;
+                case 2:
+                    svgInfoWheelsProducerName = getProducerByArticleName(cat3SelectModel.getValue());
+                    svgInfoWheelDesc = getDescriptionByArticleName(cat3SelectModel.getValue());
+                    svgManager.setTire(SVGManager.TIRE3);
+                    svgManager.setSVGSet();
+                    fadeIn(SVGManager.svgGroup.getChildren().get(2));
+                    cat3WheelPrice = getPriceByArticleNameAndSize(cat3SelectModel.getValue(), svgInfoWheelsSize);
+                    cat3TyrePrice = getPriceByArticleName(cat3SelectTyre.getValue());
+                    cat3LabelPrice.setText(strPriceBeautify(Float.sum(cat3WheelPrice, cat3TyrePrice)));
+                    break;
+            }
+            spaneSVG.getChildren().clear();
+            spaneSVG.getChildren().add(SVGManager.svgGroup);
+        });
+
+        cat3SelectTyre.valueProperty().addListener((observable, oldValue, newValue) -> {
+            svgInfoWheelsTyre = newValue;
+            svgInfoTyresProducerName = getProducerByArticleName(cat3SelectTyre.getValue());
+            renderSVGtextarea();
+            cat3WheelPrice = getPriceByArticleNameAndSize(cat3SelectModel.getValue(), svgInfoWheelsSize);
+            cat3TyrePrice = getPriceByArticleName(cat3SelectTyre.getValue());
+            cat3LabelPrice.setText(strPriceBeautify(Float.sum(cat3WheelPrice, cat3TyrePrice)));
+        });
+
+        cat3TogglegroupColor.selectedToggleProperty().addListener((observable, oldValue, newValue) -> {
+            if (cat3TogglegroupColor.getSelectedToggle() != null) {
+                String fxid = ((JFXToggleNode) cat3TogglegroupColor.getSelectedToggle()).getId();
+                switch (fxid) {
+                    case "cat3Color1":
+                        svgInfoWheelsColor = "schwarz";
+                        svgInfoWheelsColorHex = "#000000";
+                        renderSVGtextarea();
+                        svgManager.setTireColor(SVGManager.COLOR_BLACK);
+                        svgManager.setSVGSet();
+                        break;
+                    case "cat3Color2":
+                        svgInfoWheelsColor = "weiß";
+                        svgInfoWheelsColorHex = "#FFFFFF";
+                        renderSVGtextarea();
+                        svgManager.setTireColor(SVGManager.COLOR_WHITE);
+                        svgManager.setSVGSet();
+                        break;
+                    case "cat3Color3":
+                        svgInfoWheelsColor = "silber";
+                        svgInfoWheelsColorHex = "#808080";
+                        renderSVGtextarea();
+                        svgManager.setTireColor(SVGManager.COLOR_SILVER);
+                        svgManager.setSVGSet();
+                        break;
+                }
+            }
+        });
+
+        cat3TogglegroupSize.selectedToggleProperty().addListener((observable, oldValue, newValue) -> {
+            if (cat3TogglegroupSize.getSelectedToggle() != null) {
+                String fxid = ((JFXToggleNode) cat3TogglegroupSize.getSelectedToggle()).getId();
+                switch (fxid) {
+                    case "cat3Size1":
+                        svgInfoWheelsSize = "S";
+                        renderSVGtextarea();
+                        cat3WheelPrice = getPriceByArticleNameAndSize(cat3SelectModel.getValue(), svgInfoWheelsSize);
+                        cat3TyrePrice = getPriceByArticleName(cat3SelectTyre.getValue());
+                        cat3LabelPrice.setText(strPriceBeautify(Float.sum(cat3WheelPrice, cat3TyrePrice)));
+                        break;
+                    case "cat3Size2":
+                        svgInfoWheelsSize = "M";
+                        renderSVGtextarea();
+                        cat3WheelPrice = getPriceByArticleNameAndSize(cat3SelectModel.getValue(), svgInfoWheelsSize);
+                        cat3TyrePrice = getPriceByArticleName(cat3SelectTyre.getValue());
+                        cat3LabelPrice.setText(strPriceBeautify(Float.sum(cat3WheelPrice, cat3TyrePrice)));
+                        break;
+                    case "cat3Size3":
+                        svgInfoWheelsSize = "L";
+                        renderSVGtextarea();
+                        cat3WheelPrice = getPriceByArticleNameAndSize(cat3SelectModel.getValue(), svgInfoWheelsSize);
+                        cat3TyrePrice = getPriceByArticleName(cat3SelectTyre.getValue());
+                        cat3LabelPrice.setText(strPriceBeautify(Float.sum(cat3WheelPrice, cat3TyrePrice)));
+                        break;
+                }
+            }
+        });
+
+        // Sattel
+        cat4SelectModel.valueProperty().addListener((observable, oldValue, newValue) -> {
+            svgInfoSaddleModel = newValue;
+            svgInfoSaddleProducerName = getProducerByArticleName(cat4SelectModel.getValue());
+            svgInfoSaddleDesc = getDescriptionByArticleName(cat4SelectModel.getValue());
+            renderSVGtextarea();
+            switch (cat4SelectModel.getSelectionModel().getSelectedIndex()) {
+                case 0:
+                    svgInfoSaddleProducerName = getProducerByArticleName(cat4SelectModel.getValue());
+                    svgInfoSaddleDesc = getDescriptionByArticleName(cat4SelectModel.getValue());
+                    svgManager.setSeat(SVGManager.SEAT1);
+                    svgManager.setSVGSet();
+                    scaleIn(SVGManager.svgGroup.getChildren().get(1), 500);
+                    cat4SaddlePrice = getPriceByArticleName(cat4SelectModel.getValue());
+                    cat4LabelPrice.setText(strPriceBeautify(cat4SaddlePrice));
+                    break;
+                case 1:
+                    svgInfoSaddleProducerName = getProducerByArticleName(cat4SelectModel.getValue());
+                    svgInfoSaddleDesc = getDescriptionByArticleName(cat4SelectModel.getValue());
+                    svgManager.setSeat(SVGManager.SEAT2);
+                    svgManager.setSVGSet();
+                    scaleIn(SVGManager.svgGroup.getChildren().get(1), 500);
+                    cat4SaddlePrice = getPriceByArticleName(cat4SelectModel.getValue());
+                    cat4LabelPrice.setText(strPriceBeautify(cat4SaddlePrice));
+                    break;
+                case 2:
+                    svgInfoSaddleProducerName = getProducerByArticleName(cat4SelectModel.getValue());
+                    svgInfoSaddleDesc = getDescriptionByArticleName(cat4SelectModel.getValue());
+                    svgManager.setSeat(SVGManager.SEAT3);
+                    svgManager.setSVGSet();
+                    scaleIn(SVGManager.svgGroup.getChildren().get(1), 500);
+                    cat4SaddlePrice = getPriceByArticleName(cat4SelectModel.getValue());
+                    cat4LabelPrice.setText(strPriceBeautify(cat4SaddlePrice));
+                    break;
+            }
+            spaneSVG.getChildren().clear();
+            spaneSVG.getChildren().add(SVGManager.svgGroup);
+        });
+
+        cat4TogglegroupColor.selectedToggleProperty().addListener((observable, oldValue, newValue) -> {
+            if (cat4TogglegroupColor.getSelectedToggle() != null) {
+                String fxid = ((JFXToggleNode) cat4TogglegroupColor.getSelectedToggle()).getId();
+                switch (fxid) {
+                    case "cat4Color1":
+                        svgInfoSaddleColor = "schwarz";
+                        svgInfoSaddleColorHex = "#000000";
+                        renderSVGtextarea();
+                        svgManager.setSeatColor(SVGManager.COLOR_BLACK);
+                        svgManager.setSVGSet();
+                        break;
+                    case "cat4Color2":
+                        svgInfoSaddleColor = "braun";
+                        svgInfoSaddleColorHex = "#4b2c20";
+                        renderSVGtextarea();
+                        svgManager.setSeatColor(SVGManager.COLOR_BROWN);
+                        svgManager.setSVGSet();
+                        break;
+                    case "cat4Color3":
+                        svgInfoSaddleColor = "weiß";
+                        svgInfoSaddleColorHex = "#FFFFFF";
+                        renderSVGtextarea();
+                        svgManager.setSeatColor(SVGManager.COLOR_WHITE);
+                        svgManager.setSVGSet();
+                        break;
+                }
+            }
+        });
+
+        // Bremsen
+        cat5SelectModel.valueProperty().addListener((observable, oldValue, newValue) -> {
+            svgInfoBrakesModel = newValue;
+            svgInfoBrakesProducerName = getProducerByArticleName(cat5SelectModel.getValue());
+            svgInfoBrakesTypeName = getCharacteristicByArticleName(cat5SelectModel.getValue());
+            svgInfoBrakeDesc = getDescriptionByArticleName(cat5SelectModel.getValue());
+            renderSVGtextarea();
+            cat5BrakePrice = getPriceByArticleName(cat5SelectModel.getValue());
+            cat5LabelPrice.setText(strPriceBeautify(cat5BrakePrice));
+        });
+
+        // Zubehör
+        cat6SelectBell.valueProperty().addListener((observable, oldValue, newValue) -> {
+            svgInfoAttachmentsBell = newValue;
+            svgInfoBellProducerName = getProducerByArticleName(cat6SelectBell.getValue());
+            renderSVGtextarea();
+            cat6BellPrice = getPriceByArticleName(cat6SelectBell.getValue());
+            cat6StandPrice = getPriceByArticleName(cat6SelectStand.getValue());
+            cat6LightPrice = getPriceByArticleName(cat6SelectLight.getValue());
+            cat6LabelPrice.setText(strPriceBeautify(Float.sum(Float.sum(cat6BellPrice, cat6StandPrice), cat6LightPrice)));
+        });
+
+        cat6SelectStand.valueProperty().addListener((observable, oldValue, newValue) -> {
+            svgInfoAttachmentsStand = newValue;
+            svgInfoStandProducerName = getProducerByArticleName(cat6SelectStand.getValue());
+            renderSVGtextarea();
+            cat6BellPrice = getPriceByArticleName(cat6SelectBell.getValue());
+            cat6StandPrice = getPriceByArticleName(cat6SelectStand.getValue());
+            cat6LightPrice = getPriceByArticleName(cat6SelectLight.getValue());
+            cat6LabelPrice.setText(strPriceBeautify(Float.sum(Float.sum(cat6BellPrice, cat6StandPrice), cat6LightPrice)));
+        });
+
+        cat6SelectLight.valueProperty().addListener((observable, oldValue, newValue) -> {
+            svgInfoAttachmentsLight = newValue;
+            svgInfoLightProducerName = getProducerByArticleName(cat6SelectLight.getValue());
+            renderSVGtextarea();
+            cat6BellPrice = getPriceByArticleName(cat6SelectBell.getValue());
+            cat6StandPrice = getPriceByArticleName(cat6SelectStand.getValue());
+            cat6LightPrice = getPriceByArticleName(cat6SelectLight.getValue());
+            cat6LabelPrice.setText(strPriceBeautify(Float.sum(Float.sum(cat6BellPrice, cat6StandPrice), cat6LightPrice)));
+        });
+
+    }
+
+    /* =====================================
+     * UTILITIES
+     ========================================= */
+
+    /**
+     * Schließt alle Bottonbar-Container-JFXDrawer
+     */
+    private void closeAllBottomDrawers() {
+        for (JFXDrawer i : drawersBuilderBottom) {
+            i.close();
+            i.setVisible(false);
+        }
+    }
+
+    /**
+     * Schließt alle Sidebar-Container-JFXDrawer
+     */
+    private void closeAllSideDrawers() {
+        for (JFXDrawer i : drawersBuilderSide) {
+            i.close();
+            i.setVisible(false);
+        }
+    }
+
+    /**
+     * Verhindert, dass die Kategorie-Toggles in der Bottombar deselektiert werden können.
+     */
+    private void onToggleDeselect() {
+        catsTogglegroup.selectedToggleProperty().addListener((observable, oldValue, newValue) -> {
+            if (catIsOpen) {
+                if (newValue == null) {
+                    oldValue.setSelected(true);
+                }
+            }
+        });
+    }
+
+    /**
+     * Verhindert, dass die Kategorie-Toggles in der Sidebar deselektiert werden können.
+     * @param tg Toggle-Gruppe der Unterkategorie
+     */
+    private void onToggleDeselectSubCat(ToggleGroup tg) {
+        tg.selectedToggleProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue == null) {
+                oldValue.setSelected(true);
+            }
+        });
+    }
+
+    /**
+     * Deselektiert alle Kategorie-Toggles in der Bottombar.
+     */
+    private void deselectAllToggles() {
+        if (catsTogglegroup.getSelectedToggle() != null) {
+            catsTogglegroup.getSelectedToggle().setSelected(false);
+        }
+    }
+
+    /**
+     * Deaktiviert die Buttons in der Default-Sidebar, wenn die Kundendaten eingegeben werden.
+     */
+    private void deactivateButtonsOnCustomerEdit() {
+        btnHeaderHome.setDisable(true);
+        btnAddCustomerData.setDisable(true);
+        btnSaveDraft.setDisable(true);
+        btnSidebarHome.setDisable(true);
+    }
+
+    /**
+     * Aktiviert die Buttons in der Default-Sidebar, wenn der Kundendaten-Container geschlossen wurde.
+     */
+    private void activateButtonsOnCustomerEdit() {
+        btnHeaderHome.setDisable(false);
+        btnAddCustomerData.setDisable(false);
+        btnSaveDraft.setDisable(false);
+        btnSidebarHome.setDisable(false);
+    }
+
+    /**
+     * Starte eine Fade-Animation mit dem empfangenen Objekt.
+     * @param node Das Objekt(SVG Pfad als Beispiel)
+     */
+    private void fadeIn(Node node) {
+        FadeTransition ft = new FadeTransition(Duration.millis(1000), node);
+        ft.setFromValue(0.0);
+        ft.setToValue(1.0);
+        ft.play();
+    }
+
+    /**
+     * Starte eine Scale-Animation mit dem empfangenen Objekt.
+     * @param node Das Objekt(SVG Pfad als Beispiel)
+     * @param ms Millisekunden
+     */
+    private void scaleIn(Node node, int ms) {
+        ScaleTransition st = new ScaleTransition(Duration.millis(ms), node);
+        st.setFromX(0);
+        st.setFromY(0);
+        st.setFromZ(0);
+        st.setByX(1);
+        st.setByY(1);
+        st.setByZ(1);
+        st.play();
+    }
+
+    /**
+     * Starte eine ScaleX-Animation mit dem empfangenen Objekt.
+     * @param node Das Objekt(SVG Pfad als Beispiel)
+     */
+    private void scaleInX(Node node) {
+        ScaleTransition st = new ScaleTransition(Duration.millis(1000), node);
+        st.setFromX(0);
+        st.setByX(1);
+        st.play();
+    }
+
+    /**
+     * Vergleicht den Hex-Color String aus der Bedingung und setzt entsprechend den Farben-Toggle Button.
+     * @param conditionColorString Hex-Color String als Bedingung
+     * @param tn1 Toggle-Button 1
+     * @param tn2 Toggle-Button 2
+     * @param tn3 Toggle-Button 3
+     */
+    private void setSubcatColorToggleOnLoad(String conditionColorString, JFXToggleNode tn1, JFXToggleNode tn2, JFXToggleNode tn3) {
+        switch (conditionColorString) {
+            case "#000000":
+                tn1.setSelected(true);
+                break;
+            case "#FFFFFF":
+                tn2.setSelected(true);
+                break;
+            case "#808080":
+                tn3.setSelected(true);
+                break;
+        }
+    }
+
+    /**
+     * Vergleicht den Hex-Color String aus der Bedingung und setzt entsprechend den Farben-Toggle Button.
+     * @param conditionColorString Hex-Color String als Bedingung
+     * @param tn1 Toggle-Button 1
+     * @param tn2 Toggle-Button 2
+     * @param tn3 Toggle-Button 3
+     */
+    private void setSubcatColorToggleOnLoadSaddle(String conditionColorString, JFXToggleNode tn1, JFXToggleNode tn2, JFXToggleNode tn3) {
+        switch (conditionColorString) {
+            case "#000000":
+                tn1.setSelected(true);
+                break;
+            case "#FFFFFF":
+                tn3.setSelected(true);
+                break;
+            case "#4b2c20":
+                tn2.setSelected(true);
+                break;
+        }
+    }
+
+    /**
+     * Vergleicht den Hex-Color String aus der Bedingung und setzt entsprechend den Farben-Toggle Button.
+     * @param conditionSizeString Size String als Bedingung (S, M, L)
+     * @param tn1 Toggle-Button 1
+     * @param tn2 Toggle-Button 2
+     * @param tn3 Toggle-Button 3
+     */
+    private void setSubcatSizeToggleOnLoad(String conditionSizeString, JFXToggleNode tn1, JFXToggleNode tn2, JFXToggleNode tn3) {
+        switch (conditionSizeString) {
+            case "S":
+                tn1.setSelected(true);
+                break;
+            case "M":
+                tn2.setSelected(true);
+                break;
+            case "L":
+                tn3.setSelected(true);
+                break;
+        }
+    }
+
+    /**
+     * Hilfsfunktion zum initialen Setzen der Auswahlbox einer Unterkategorie.
+     * @param cb Auswahlbox
+     */
+    private void setSubcatSelectboxDefault(JFXComboBox cb) {
+        if (cb.getSelectionModel().isEmpty()) {
+            cb.getSelectionModel().select(0);
+        }
+    }
+
+    /**
+     * Hilfsfunktion zum initialen Setzen eines Toggles einer Unterkategorie.
+     * @param tg Toggle-Gruppe
+     */
+    private void setSubcatToggleDefault(ToggleGroup tg) {
+        if (tg.getSelectedToggle() == null) {
+            tg.getToggles().get(0).setSelected(true);
+        }
+    }
+
+    /**
+     * Die Preise etwas gebräuchlicher ausgeben, mit Komma und gerundet auf zwei Nachkommastellen.
+     * @param value Preis-Variable
+     * @return Preis als String
+     */
+    private String strPriceBeautify(float value) {
+        return String.valueOf(String.format("%.02f", value));
+    }
+
+    /**
+     * Preisberechnung aus dem Array der Zwischenpreise.
+     * @param fArray Preis-Array
+     */
+    private void calcFinalPriceFromArray(ObservableFloatArray fArray) {
+        catDefaultFinalPrice = 0.0f;
+        for (int i = 0; i < fArray.size(); i++) {
+            catDefaultFinalPrice += fArray.get(i);
+        }
+    }
+
+    /**
+     * Server DB-Abfrage für alle Elemente.
+     * Artikelname mit dem gegebenen Typ.
+     * @param typeString zum Beispiel "RAHMEN"
+     * @return Liste mit allen Elementen
+     * Duplikate werden entfernt.
+     */
+    private ObservableList<String> getArticleNamesByType(String typeString) {
+        ObservableList<String> data = FXCollections.observableArrayList();
+        for (Article i : Main.ARTICLES) {
+            if (i.type.equals(typeString)) {
+                if (!data.contains(i.name)) {
+                    data.add(i.name);
+                }
+            }
+        }
+        return data;
+    }
+
+    /**
+     * Server DB-Abfrage für ein Element.
+     * Produzentenname mit dem gegebenen Artikelnamen.
+     * @param name Artikelname
+     * @return Produzentenname als String
+     */
+    private String getProducerByArticleName(String name) {
+        String pName = "";
+        for (Article i : Main.ARTICLES) {
+            if (i.name.equals(name)) {
+                pName = i.producer;
+                break;
+            }
+        }
+        return pName;
+    }
+
+    /**
+     * Server DB-Abfrage für ein Element.
+     * Characteristic mit dem gegebenen Artikelnamen.
+     * @param name Artikelname
+     * @return Characteristic als String
+     */
+    private String getCharacteristicByArticleName(String name) {
+        String tName = "";
+        for (Article i : Main.ARTICLES) {
+            if (i.name.equals(name)) {
+                tName = i.characteristic;
+                break;
+            }
+        }
+        return tName;
+    }
+
+    /**
+     * Server DB-Abfrage für ein Element.
+     * Artikelbeschreibung mit dem gegebenen Artikelnamen.
+     * @param name Artikelname
+     * @return Beschreibung als String
+     */
+    private String getDescriptionByArticleName(String name) {
+        String dText = "";
+        for (Article i : Main.ARTICLES) {
+            if (i.name.equals(name)) {
+                dText = i.description;
+                break;
+            }
+        }
+        return dText;
+    }
+
+    /**
+     * Server DB-Abfrage für ein Element.
+     * Preis mit dem gegebenen Artikelnamen.
+     * @param name Artikelname
+     * @return Preis als Float
+     */
+    private float getPriceByArticleName(String name) {
+        float price = 0.0f;
+        for (Article i : Main.ARTICLES) {
+            if (i.name.equals(name)) {
+                price = i.price;
+                break;
+            }
+        }
+        return price;
+    }
+
+    /**
+     * Server DB-Abfrage für ein Element.
+     * Preis mit dem gegebenen Artikelnamen und Größe.
+     * @param name Artikelname
+     * @param size Größen-String (S, M, L)
+     * @return Preis als String
+     */
+    private float getPriceByArticleNameAndSize(String name, String size) {
+        float price = 0.0f;
+        for (Article i : Main.ARTICLES) {
+            if (i.name.equals(name)) {
+                if (i.characteristic.equals(size)) {
+                    price = i.price;
+                    break;
+                }
+            }
+        }
+        return price;
+    }
+
+    /**
+     * Server DB-Abfrage für ein Element.
+     * Artikel-ID mit dem gegebenen Artikelnamen.
+     * @param name Artikelname
+     * @return Artikel-ID als Integer
+     */
+    public int getArticleIdByName(String name) {
+        int id = 0;
+        for (Article i : Main.ARTICLES) {
+            if (i.name.equals(name)) {
+                id = i.id;
+                break;
+            }
+        }
+        return id;
+    }
+
+    /**
+     * Server DB-Abfrage für ein Element.
+     * Artikel-ID mit dem gegebenen Artikelnamen und Farbe.
+     * @param name Artikelname
+     * @param color Farben-Hex-Color-String
+     * @return Artikel-ID als Integer
+     */
+    public int getArticleIDByNameAndColor(String name, String color) {
+        int id = 0;
+        for (Article i : Main.ARTICLES) {
+            if (i.name.equals(name)) {
+                if (i.hexColor.equals(color)) {
+                    id = i.id;
+                    break;
+                }
+            }
+        }
+        return id;
+    }
+
+    /**
+     * Server DB-Abfrage für ein Element.
+     * Artikel-ID mit dem gegebenen Artikelnamen, Farbe und Größe.
+     * @param name Artikelname
+     * @param color Farben-Hex-Color-String
+     * @param size Größen-String
+     * @return Artikel-ID als Integer
+     */
+    public int getArticleIDByNameSizeAndColor(String name, String size, String color) {
+        int id = 0;
+        for (Article a : Main.ARTICLES) {
+            if (a.name.equals(name)) {
+                if (a.characteristic.equals(size) && a.hexColor.equals(color)) {
+                    id = a.id;
+                    break;
+                }
+            }
+        }
+        return id;
     }
 
 }

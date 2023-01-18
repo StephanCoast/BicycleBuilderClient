@@ -24,17 +24,47 @@ import java.util.HashSet;
 
 import static pf.bb.controller.LoginController.activeUser;
 
+/**
+ * Diese Klasse steuert die Dashboard-Ansicht des BicycleBuilder und alle enthaltenen Elemente.
+ * @author Alexander Rauch
+ * @supportedby Stephan Kost
+ * @version 1.0
+ * TH-Brandenburg Semesterprojekt Pattern & Frameworks Winter 2022/2023
+ */
 public class DashboardController {
 
+    /**
+     * Variablendeklaration für die Validierung's-Objekte der Eingabefelder im Admin- und Profilbereich.
+     * Wurden in Dashboard.fxml gesetzt.
+     */
     public RequiredFieldValidator validatorAdminFirstName, validatorAdminLastName, validatorAdminUserName, validatorAdminMail, validatorAdminPW;
     public RequiredFieldValidator validatorProfileFirstName, validatorProfileLastName, validatorProfileUserName, validatorProfileMail;
+    /**
+     * Variablendeklaration für die Text-Boxen im Admin- und Profilbereich.
+     */
     public JFXTextField tfAdminFirstName, tfAdminLastName, tfAdminUserName, tfAdminMail;
     public JFXTextField tfProfileFirstName, tfProfileLastName, tfProfileUserName, tfProfileMail;
     public JFXPasswordField pfAdminPW;
+    /**
+     * Variablendeklaration für die Buttons: Neuer-User-Icon und Profil-Icon im Kopfbereich.
+     */
     public JFXButton btnNewConfig, btnCreateUser;
+    /**
+     * Variablendeklaration für die JFX-Drawer der Bottombar.
+     */
     public JFXDrawer drawerAdmin, drawerProfile;
+    /**
+     * Variablendeklaration für ein Hashset in dem nur einzigartige Elemente aufgenommen werden können.
+     * Zur Anzeigen-Hilfe von verschiedenen JFX-Drawer.
+     */
     private HashSet<JFXDrawer> drawersDashboard;
+    /**
+     * Variablendeklaration für die Halte-Container der Bottombar.
+     */
     public BorderPane bpAdmin, bpProfile;
+    /**
+     * FXML-Variablendeklaration für den Tableview(Tabelle) und Tabellenspalten.
+     */
     @FXML private TableView<Configuration> dboard_table;
     @FXML private TableColumn<Configuration, Integer> dboard_col1;
     @FXML private TableColumn<Configuration, String> dboard_col2;
@@ -42,13 +72,25 @@ public class DashboardController {
     @FXML private TableColumn<Configuration, Integer> dboard_col4;
     @FXML private TableColumn<Configuration, String> dboard_col5;
     @FXML private TableColumn<Configuration, Void> dboard_col6;
-
+    /**
+     * Variablendeklaration für verschiedene Singleton-Instanzen.
+     * ViewManager = steuert die verschiedenen Ansichten, stellt Methoden bereit
+     * ValidatorManager = initialisiert einzelne Validator, stellt Methoden bereit
+     */
     ViewManager vm = ViewManager.getInstance();
     ValidatorManager validatorManager = ValidatorManager.getInstance();
 
+    /**
+     * Standard-Konstruktor der Klasse
+     */
     public DashboardController() {
     }
 
+    /**
+     * FXML Konstruktor der Klasse
+     * Zusammenfassung aller Funktionen, die beim Start geladen werden sollen.
+     * Regelt den Initial-Status des Dashboards.
+     */
     @FXML
     public void initialize() {
         dboard_table.refresh();
@@ -63,7 +105,18 @@ public class DashboardController {
         initTextFieldListeners();
     }
 
-    public void openAdmin(ActionEvent event) throws IOException {
+    /* =====================================
+     * BUTTONS
+    ========================================= */
+
+    /**
+     * Neuen Benutzer Hinzufügen Button im Kopfbereich.
+     * @throws IOException Fehlerbehandlung
+     * Admin-Fenster der Bottombar wird über den ViewManager angefordert.
+     * Button "Neue Konfiguration" wird deaktiviert.
+     * Validierung der Eingabefelder wird zurückgesetzt.
+     */
+    public void openAdmin() throws IOException {
         btnNewConfig.setDisable(true);
         closeAllDrawers();
         vm.forceDrawerView(drawerAdmin, bpAdmin);
@@ -81,7 +134,14 @@ public class DashboardController {
         pfAdminPW.resetValidation();
     }
 
-    public void openProfile(ActionEvent event) throws IOException {
+    /**
+     * Profil Öffnen Button im Kopfbereich.
+     * @throws IOException Fehlerbehandlung
+     * Profil-Fenster der Bottombar wird über den ViewManager angefordert.
+     * Profildaten des angemeldeten Benutzers werden geladen und in den Textfeldern angezeigt.
+     * Validierung der Eingabefelder wird zurückgesetzt.
+     */
+    public void openProfile() throws IOException {
         btnNewConfig.setDisable(true);
         closeAllDrawers();
         vm.forceDrawerView(drawerProfile, bpProfile);
@@ -102,23 +162,47 @@ public class DashboardController {
         tfProfileMail.resetValidation();
     }
 
+    /**
+     * Logout Button im Kopfbereich.
+     * @param event Click-Event des Buttons
+     * @throws IOException Fehlerbehandlung
+     * Login-Fenster wird über den ViewManager angefordert.
+     * Button "Neue Konfiguration" wird wieder aktiviert.
+     */
     public void logout(ActionEvent event) throws IOException {
         btnNewConfig.setDisable(false);
         vm.forceLoginView(event, "Login.fxml", "Bicycle Builder - Login");
     }
 
+    /**
+     * Neue Konfiguration Button
+     * @param event Click-Event des Buttons
+     * @throws IOException Fehlerbehandlung
+     * Konfigurator-Fenster wird über den ViewManager angefordert.
+     */
     public void openBuilder(ActionEvent event) throws IOException {
         vm.forceView(event, "Builder.fxml", "Bicycle Builder - Konfigurator", false);
     }
 
-    public void onBottomBarClose(ActionEvent event) {
+    /**
+     * X-Icon-Buttons der Bottombar.
+     * Bottombar wird geschlossen.
+     * Button "Neue Konfiguration" wird wieder aktiviert.
+     */
+    public void onBottomBarClose() {
         btnNewConfig.setDisable(false);
         closeAllDrawers();
         setDefaultFocus();
     }
 
-    // AR: hier speichert der Admin einen neuen User
-    public void onBottomBarSaveAdmin(ActionEvent event) {
+    /**
+     * Speichern Button im Admin-Neuer-Benutzer Container
+     * @supportedby SK
+     * Eingabefelder werden überprüft.
+     * Neuer Nutzer wird im Backend gespeichert.
+     * Button "Neue Konfiguration" wird wieder aktiviert.
+     */
+    public void onBottomBarSaveAdmin() {
         if (ValidatorManager.textFieldIsEmpty(tfAdminUserName) || ValidatorManager.textFieldIsEmpty(tfAdminFirstName) || ValidatorManager.textFieldIsEmpty(tfAdminLastName) || ValidatorManager.textFieldIsEmpty(tfAdminMail) || ValidatorManager.pwFieldIsEmpty(pfAdminPW)) {
             ViewManager.createWarningAlert("Bicycle Builder - Warnung", "Bitte füllen Sie alle Felder aus.", null);
         } else if (ValidatorManager.textFieldNotHaveSymbol(tfAdminMail, "@")) {
@@ -145,8 +229,14 @@ public class DashboardController {
         }
     }
 
-    // AR: hier speichert der User neue Daten für sein Profil
-    public void onBottomBarSaveProfile(ActionEvent event) {
+    /**
+     * Speichern Button im Profil-Benutzer Container
+     * @supportedby SK
+     * Eingabefelder werden überprüft.
+     * Aktualisierte Profildaten werden im Backend gespeichert.
+     * Button "Neue Konfiguration" wird wieder aktiviert.
+     */
+    public void onBottomBarSaveProfile() {
         if (ValidatorManager.textFieldIsEmpty(tfProfileUserName) || ValidatorManager.textFieldIsEmpty(tfProfileFirstName) || ValidatorManager.textFieldIsEmpty(tfProfileLastName) || ValidatorManager.textFieldIsEmpty(tfProfileMail)) {
             ViewManager.createWarningAlert("Bicycle Builder - Warnung", "Bitte füllen Sie alle Felder aus.", null);
         } else if (ValidatorManager.textFieldNotHaveSymbol(tfProfileMail, "@")) {
@@ -178,6 +268,83 @@ public class DashboardController {
         }
     }
 
+    /* =====================================
+     * SETUP
+     ========================================= */
+
+    /**
+     * Den Tabellenspalten werden Variablen aus dem Configuration-Objekt zugeordnet.
+     */
+    private void setupTableView() {
+        dboard_col1.setCellValueFactory(new PropertyValueFactory<>("id"));
+        dboard_col2.setCellValueFactory(new PropertyValueFactory<>("timestampLastTouched"));
+        dboard_col3.setCellValueFactory(new PropertyValueFactory<>("customerName"));
+        dboard_col4.setCellValueFactory(new PropertyValueFactory<>("customerId"));
+        dboard_col5.setCellValueFactory(new PropertyValueFactory<>("status"));
+    }
+
+    /**
+     * Die JFX-Drawer der Bottombar werden dem Hashset zugeordnet.
+     */
+    private void setupDrawersSet() {
+        drawersDashboard = new HashSet<>();
+        drawersDashboard.add(drawerAdmin);
+        drawersDashboard.add(drawerProfile);
+    }
+
+    /**
+     * Validatoren werden über den ValidatorManager den Textfeldern zugeordnet.
+     */
+    private void setupValidators() {
+        validatorManager.initTextValidators(tfAdminFirstName, validatorAdminFirstName);
+        validatorManager.initTextValidators(tfAdminLastName, validatorAdminLastName);
+        validatorManager.initTextValidators(tfAdminUserName, validatorAdminUserName);
+        validatorManager.initTextValidators(tfAdminMail, validatorAdminMail);
+        validatorManager.initPasswordValidators(pfAdminPW, validatorAdminPW);
+
+        validatorManager.initTextValidators(tfProfileFirstName, validatorProfileFirstName);
+        validatorManager.initTextValidators(tfProfileLastName, validatorProfileLastName);
+        validatorManager.initTextValidators(tfProfileUserName, validatorProfileUserName);
+        validatorManager.initTextValidators(tfProfileMail, validatorProfileMail);
+    }
+
+    /**
+     * Eingabe-Regeln werden über den ValidatorManager den Textfeldern zugeordnet.
+     * Über RegEx-Pattern werden Symbol-Regeln erstellt.
+     */
+    private void initTextFieldListeners() {
+        ValidatorManager.setTextFieldRules(tfAdminUserName, "[a-zA-Z0-9]");
+        ValidatorManager.setTextFieldRules(tfAdminMail, "[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$");
+        ValidatorManager.setTextFieldRules(tfAdminFirstName, "[a-zA-Z-'`´]");
+        ValidatorManager.setTextFieldRules(tfAdminLastName, "[a-zA-Z-'`´]");
+
+        ValidatorManager.setTextFieldRules(tfProfileUserName, "[a-zA-Z0-9]");
+        ValidatorManager.setTextFieldRules(tfProfileMail, "[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$");
+        ValidatorManager.setTextFieldRules(tfProfileFirstName, "[a-zA-Z-'`´]");
+        ValidatorManager.setTextFieldRules(tfProfileLastName, "[a-zA-Z-'`´]");
+    }
+
+    /**
+     * Admin-Icon Button im Kopfbereich wird deaktiviert, wenn man nicht als Admin angemeldet ist.
+     */
+    private void setCreateUserBtn() {
+        switch (activeUser.role) {
+            case "ADMIN":
+                btnCreateUser.setDisable(false);
+                break;
+            default:
+                btnCreateUser.setDisable(true);
+        }
+    }
+
+    /* =====================================
+     * LOGIC
+     ========================================= */
+
+    /**
+     * Bestehende Konfigurationen werden aus dem Backend geladen und der Tabelle hinzugefügt.
+     * @supportedby SK
+     */
     private void loadConfigs() {
         GetConfigurationsTask configurationsTask = new GetConfigurationsTask(activeUser);
         configurationsTask.setOnRunning((successEvent) -> System.out.println("DashboardController: loading  configurations..."));
@@ -191,36 +358,17 @@ public class DashboardController {
         new Thread(configurationsTask).start();
     }
 
-
-    private void setupTableView() {
-        dboard_col1.setCellValueFactory(new PropertyValueFactory<>("id"));
-        dboard_col2.setCellValueFactory(new PropertyValueFactory<>("timestampLastTouched"));
-        dboard_col3.setCellValueFactory(new PropertyValueFactory<>("customerName"));
-        dboard_col4.setCellValueFactory(new PropertyValueFactory<>("customerId"));
-        dboard_col5.setCellValueFactory(new PropertyValueFactory<>("status"));
-    }
-
-    private void setupDrawersSet() {
-        drawersDashboard = new HashSet<>();
-        drawersDashboard.add(drawerAdmin);
-        drawersDashboard.add(drawerProfile);
-    }
-
-    private void closeAllDrawers() {
-        for (JFXDrawer i : drawersDashboard) {
-            i.close();
-            i.setVisible(false);
-        }
-    }
-
-    private void setDefaultFocus() {
-        Platform.runLater(() -> {
-            dboard_table.requestFocus();
-            dboard_table.getSelectionModel().select(0);
-            dboard_table.getFocusModel().focus(0);
-        });
-    }
-
+    /**
+     * Jedem Datensatz der Tabelle werden in einer zusätzlichen Spalte zwei Buttons zugeordnet.
+     * Lupe-Icon Button für das Öffnen einer bestehenden Konfiguration.
+     * Eimer-Icon Button für das Löschen einer bestehenden Konfiguration.
+     * @supportedby SK, detail/remove Button setOnAction
+     * 6. Spalte, 2 Buttons, 2 Icons, eine HBox werden erzeugt.
+     * Den Buttons werden CSS-Klassen und Tooltips zugewiesen.
+     * Lupe-Icon Button: Konfigurator öffnet sich mit Schreibzugriff je nach Konfigurationsstatus.
+     * Eimer-Icon Button: Konfigurationsdatensatz wird nach bestätigtem Dialog gelöscht.
+     * Dem Bestätigungsdialog werden Zusatzinformationen zugewiesen.
+     */
     private void addActionButtonsToTable() {
         dboard_col6.setCellFactory(col -> new TableCell<>() {
 
@@ -348,6 +496,11 @@ public class DashboardController {
         });
     }
 
+    /**
+     * Löschen der Konfiguration.
+     * by Stephan Kost
+     * @param configId Aktuelle Konfiguration's-ID
+     */
     private void deleteConfigFromDb(int configId) {
         // DELETE CONFIGURATION FROM DB
         DeleteConfigurationTask configDeleteTask1 = new DeleteConfigurationTask(activeUser, configId);
@@ -365,41 +518,36 @@ public class DashboardController {
         new Thread(configDeleteTask1).start();
     }
 
-    private void setupValidators() {
-        validatorManager.initTextValidators(tfAdminFirstName, validatorAdminFirstName);
-        validatorManager.initTextValidators(tfAdminLastName, validatorAdminLastName);
-        validatorManager.initTextValidators(tfAdminUserName, validatorAdminUserName);
-        validatorManager.initTextValidators(tfAdminMail, validatorAdminMail);
-        validatorManager.initPasswordValidators(pfAdminPW, validatorAdminPW);
+    /* =====================================
+     * UTILITIES
+     ========================================= */
 
-        validatorManager.initTextValidators(tfProfileFirstName, validatorProfileFirstName);
-        validatorManager.initTextValidators(tfProfileLastName, validatorProfileLastName);
-        validatorManager.initTextValidators(tfProfileUserName, validatorProfileUserName);
-        validatorManager.initTextValidators(tfProfileMail, validatorProfileMail);
-    }
-
-    private void setCreateUserBtn() {
-        switch (activeUser.role) {
-            case "ADMIN":
-                btnCreateUser.setDisable(false);
-                break;
-            default:
-                btnCreateUser.setDisable(true);
+    /**
+     * Schließt alle Dashboard-Container-JFXDrawer
+     */
+    private void closeAllDrawers() {
+        for (JFXDrawer i : drawersDashboard) {
+            i.close();
+            i.setVisible(false);
         }
     }
 
-    private void initTextFieldListeners() {
-        ValidatorManager.setTextFieldRules(tfAdminUserName, "[a-zA-Z0-9]");
-        ValidatorManager.setTextFieldRules(tfAdminMail, "[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$");
-        ValidatorManager.setTextFieldRules(tfAdminFirstName, "[a-zA-Z-'`´]");
-        ValidatorManager.setTextFieldRules(tfAdminLastName, "[a-zA-Z-'`´]");
-
-        ValidatorManager.setTextFieldRules(tfProfileUserName, "[a-zA-Z0-9]");
-        ValidatorManager.setTextFieldRules(tfProfileMail, "[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$");
-        ValidatorManager.setTextFieldRules(tfProfileFirstName, "[a-zA-Z-'`´]");
-        ValidatorManager.setTextFieldRules(tfProfileLastName, "[a-zA-Z-'`´]");
+    /**
+     * Setzt den Anwendungsfokus auf das Hauptfenster und selektiert den ersten Tabelleneintrag.
+     */
+    private void setDefaultFocus() {
+        Platform.runLater(() -> {
+            dboard_table.requestFocus();
+            dboard_table.getSelectionModel().select(0);
+            dboard_table.getFocusModel().focus(0);
+        });
     }
 
+    /**
+     * Die Preise etwas gebräuchlicher ausgeben, mit Komma und gerundet auf zwei Nachkommastellen.
+     * @param value Preis-Variable
+     * @return Preis als String
+     */
     private String strPriceBeautify(float value) {
         return String.valueOf(String.format("%.02f", value));
     }
