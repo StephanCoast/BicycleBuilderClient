@@ -16,9 +16,13 @@ import javafx.util.Duration;
 import pf.bb.model.Article;
 import pf.bb.model.Configuration;
 import pf.bb.task.GetArticlesTask;
+import pf.bb.task.PutConfigurationWriteAccessTask;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Objects;
+
+import static pf.bb.controller.LoginController.activeUser;
 
 /**
  * Main Hauptklasse der JavaFX-Anwendung zum Starten des Bicycle Builder Client.
@@ -97,6 +101,24 @@ public class Main extends Application {
         stageMain.getIcons().add(APP_ICON);
         stageMain.setResizable(false);
         stageMain.setScene(scene);
+        stageMain.setOnCloseRequest(windowsevent -> {
+            if(Main.writeAccessGiven) {
+                //return write Access
+                PutConfigurationWriteAccessTask writeAccessTask1 = new PutConfigurationWriteAccessTask(activeUser, Main.currentConfig.id);
+                writeAccessTask1.setOnRunning((runningEvent) -> System.out.println("trying switch writeAccess for configuration..."));
+                writeAccessTask1.setOnSucceeded((WorkerStateEvent switchSuccess) -> {
+                    System.out.println("OnExitBuilderController: writeAccess for configuration " + Main.currentConfig.id + " switched to: " + writeAccessTask1.getValue());
+                    if (writeAccessTask1.getValue().equals("ACCESS OPENED")) {
+                        Main.writeAccessGiven = false; // flag zurücksetzen
+                    } else {
+                        System.out.println("OnExitBuilderController: writeAccess for configuration " + Main.currentConfig.id + " could not be returned on close!");
+                    }
+                });
+                writeAccessTask1.setOnFailed((writeAccessFailed) -> System.out.println("Couldn't switch writeAccess for configuration. Server error."));
+                //Tasks in eigenem Thread ausführen
+                new Thread(writeAccessTask1).start();
+            }
+        });
         stageMain.show();
         centerLoginScene(stageMain);
         fadeLoginScene(apane);

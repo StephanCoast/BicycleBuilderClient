@@ -311,20 +311,23 @@ public class BuilderController {
      * Dashboard-Ansicht wird über den ViewManager angefordert.
      */
     public void openDashboard(ActionEvent event) throws IOException {
-        // when new config or status "ABGESCHLOSSEN"&& "ENTWURF" nicht abgeschlossen no need to return writeAccess
-//        if (Main.currentConfig == null || (draftOpened && draftWasFinished) || (Main.currentConfig.status.equals(Configuration.stats[1]) && !draftWasFinished)) {
+        // when writeAccess was Given it needs to be returned
         if(Main.writeAccessGiven) {
             //return write Access
             PutConfigurationWriteAccessTask writeAccessTask1 = new PutConfigurationWriteAccessTask(activeUser, Main.currentConfig.id);
             writeAccessTask1.setOnRunning((runningEvent) -> System.out.println("trying switch writeAccess for configuration..."));
             writeAccessTask1.setOnSucceeded((WorkerStateEvent switchSuccess) -> {
-                Main.writeAccessGiven = false; // flag zurücksetzen
                 System.out.println("OnExitBuilderController: writeAccess for configuration " + Main.currentConfig.id + " switched to: " + writeAccessTask1.getValue());
-                Main.currentConfig = null;
-                try {
-                    vm.forceView(event, "Dashboard.fxml", "Bicycle Builder - Dashboard", false);
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
+                if (writeAccessTask1.getValue().equals("ACCESS OPENED")) {
+                    Main.writeAccessGiven = false; // flag zurücksetzen
+                    Main.currentConfig = null;
+                    try {
+                        vm.forceView(event, "Dashboard.fxml", "Bicycle Builder - Dashboard", false);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                } else {
+                    System.out.println("OnExitBuilderController: writeAccess for configuration " + Main.currentConfig.id + " could not be returned. Please try again!");
                 }
             });
             writeAccessTask1.setOnFailed((writeAccessFailed) -> System.out.println("Couldn't switch writeAccess for configuration"));
@@ -332,6 +335,7 @@ public class BuilderController {
             new Thread(writeAccessTask1).start();
 
         } else {
+            Main.currentConfig = null;
             vm.forceView(event, "Dashboard.fxml", "Bicycle Builder - Dashboard", false);
         }
     }
