@@ -46,7 +46,7 @@ public class DashboardController {
     public JFXTextField tfProfileFirstName, tfProfileLastName, tfProfileUserName, tfProfileMail;
     public JFXPasswordField pfAdminPW;
     /**
-     * Variablendeklaration für die Buttons: Neuer-User-Icon und Profil-Icon im Kopfbereich.
+     * Variablendeklaration für die Buttons: Neue Konfiguration und Nutzer erstellen
      */
     public JFXButton btnNewConfig, btnCreateUser;
     /**
@@ -414,10 +414,12 @@ public class DashboardController {
                                     throw new RuntimeException(e);
                                 }
                             }
+                            if (writeAccessTask1.getValue().equals("ACCESS OPENED")) {
+                                System.out.println("Write access wasn't returned last time, because the program was shutdown in the Builder view. Please try to open the configuration again.");
+                            }
                         });
                         writeAccessTask1.setOnFailed((writeAccessFailed) -> {
-                            // TODO user notification
-                            System.out.println("Couldn't get writeAccess for configuration." + writeAccessTask1.getMessage());
+                            System.out.println("Couldn't get writeAccess for configuration. Server does not respond." + writeAccessTask1.getMessage());
                         });
                         //Tasks in eigenem Thread ausführen
                         new Thread(writeAccessTask1).start();
