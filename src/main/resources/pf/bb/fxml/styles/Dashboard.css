@@ -1,72 +1,97 @@
+/* ###################################################################### */
+/* Dashboard.css */
+/* Design by Karina Szemplinska */
+/* TH-Brandenburg Semesterprojekt Pattern & Frameworks Winter 2022/2023 */
+/* ###################################################################### */
 
-/* neu karre beginn*/
 
 /** Root-Schriftgrösse **/
 .apane-dashboard {
     -fx-font-size: 14px !important;
+    -fx-text-fill: black !important;
 }
+
+
+/** Header **/
+.header-borderpane {
+    -fx-background-color: #ffffff;
+    -fx-border-width: 10px 0px 0px 0px !important;
+    -fx-border-color: #7a7cff !important;
+}
+
 .header-icon-bicycle {
     -fx-font-size: 85px !important;
-    -fx-fill: #000000/***#304fff***/ !important;
+    -fx-fill: black;
 }
 
-/** Titel für Unteransichten
-.subpane-title {
-    -fx-text-fill: #7a7cff !important;
-} **/
-/* Button Design des Login-Fensters */
+.header-title {
+    -fx-text-fill: black;
+}
+
+.header-icon-home,
+.header-icon-admin,
+.header-icon-profile,
+.header-icon-logout {
+    -fx-fill: #ff8f00;
+}
+
+.header-icon-home:hover,
+.header-icon-admin:hover,
+.header-icon-profile:hover,
+.header-icon-logout:hover {
+    -fx-scale-x: 1.2;
+    -fx-scale-y: 1.2;
+    -fx-scale-z: 1.2;
+}
+
+
+/** Buttons Standard (Nutzer und Profil) **/
 .btn-standard-comp {
     -fx-text-fill: white;
-    /*neu karre*/-fx-min-width: 64px !important;
-    /*neu karre*/-fx-min-height: 36px !important;
-    /*neu karre*/-fx-max-height: 36px !important;
-    /*neu karre*/-fx-padding: 0px 16px 0px 16px;
-    -fx-background-color: #ff8f00 !important; /*#2196f3;*/ /* material palette - blue 500 primary */
+    -fx-min-width: 64px;
+    -fx-min-height: 36px;
+    -fx-max-height: 36px;
+    -fx-padding: 0px 10px 0px 10px;
+    -fx-background-color: #ff8f00;
     -fx-background-radius: 50px;
-
+    -fx-font-weight: bold;
 }
 
 .btn-standard-comp:hover,
 .btn-large-comp:hover {
-    /***-fx-effect: dropshadow(three-pass-box, rgba(255,143,0,1), 5, 0.4, 0.0, 0.0) !important;***//*dropshadow(three-pass-box, rgba(33, 150, 243, 0.5), 5, 0.4, 0.0, 0.0);*/
     -fx-scale-x: 1.05;
     -fx-scale-y: 1.05;
     -fx-scale-z: 1.05;
     -fx-cursor: hand;
 }
-/***
-.btn-large-comp {
-    -fx-text-fill: white;***/
-/*neu karre-fx-min-width: 64px !important;*/
-/*neu karre-fx-min-height: 36px !important;*/
-/*neu karre-fx-max-height: 36px !important;*/
-/**neu karre-fx-padding: 0px 12px 0px 16px;
--fx-background-color: #ff8f00 !important; **//*#2196f3;*/ /* material palette - blue 500 primary */
-/**-fx-background-radius: 50px;
-}
-**/
+
+
+/** Button Konfigurator (Neue Konfiguration) **/
 .btn-icon-bicycle {
     -fx-font-size: 36px !important;
 }
+
 .btn-builder {
     -fx-text-fill: white;
-    -fx-background-color: #ff8f00 !important; /**#2196f3;**/ /* material palette - blue 500 primary */
-    /*neu karre*/-fx-min-width: 64px !important;
-    /*neu karre -fx-min-height: 36px !important;*/
-    /*neu karre-fx-max-height: 36px !important;*/
-    /*neu karre*/-fx-padding: 0px 16px 0px 16px;
+    -fx-background-color: #ff8f00;
+    -fx-min-width: 64px;
+    -fx-padding: 0px 16px 0px 16px;
     -fx-background-radius: 50px;
+    -fx-font-weight: bold;
+}
 
+.btn-builder:hover {
+    -fx-scale-x: 1.05;
+    -fx-scale-y: 1.05;
+    -fx-scale-z: 1.05;
+    -fx-cursor: hand;
 }
 
 
-/*HEADER */
-.table-view .column-header{
-    -fx-background-color: #ffffff;
-    -fx-size: 56.0px;
-    /***-fx-min-height: 45.0px;***/
-    -fx-cursor: hand;
-
+/** Tabelle (Übersicht Konfigurationen) **/
+.table-stack {
+    -fx-background-color: linear-gradient(from 25% 25% to 100% 100%, rgba(48, 79, 254, 0.1), rgba(255, 143, 0, 0.3));
+    -fx-padding: 50px 50px 0 50px;
 }
 
 .table-view {
@@ -74,7 +99,12 @@
     -fx-background-insets: 0.0;
     -fx-padding: 0;
     -fx-background-radius: 50.0 50.0 0.0 0.0;
+}
 
+.table-view .column-header{
+    -fx-background-color: #ffffff;
+    -fx-size: 56.0px;
+    -fx-cursor: hand;
 }
 
 .table-view .column-header-background {
@@ -82,41 +112,41 @@
     -fx-background-color: white;
 }
 
-
 .table-view .column-header .label {
     -fx-font-size: 1.083333em;
     -fx-font-weight: bold;
     -fx-text-fill: #ff8f00;
     -fx-padding: 5.0 5.0 5.0 5.0;
 }
+
+.table-col {
+    -fx-alignment: center;
+}
+
 .table-col-id {
     -fx-background-radius: 50.0 0 0 0;
 }
+
 .table-view .filler {
     -fx-background-radius: 0 50.0 0 0;
     -fx-background-color: #ffffff;
     -fx-size: 45.0px;
     -fx-min-height: 45.0px;
-
 }
-.table-stack {
-    -fx-background-color: linear-gradient(from 25% 25% to 100% 100%, rgba(48, 79, 254, 0.1), rgba(255, 143, 0, 0.3));
-    -fx-padding: 50px 50px 0 50px;
-
-}
-
-
 
 .table-row-cell {
     -fx-background-color: transparent;
     -fx-border-width: 0.0;
     -fx-padding: 10.0 0.0 10.0 0.0;
-    -fx-pref-height: 52.0px;
+    -fx-pref-height: 52px;
+    -fx-cell-size: 32px;
 }
-.table-row-cell:filled:even{
+
+.table-row-cell:filled:even {
     -fx-background-color: #f2f2f2;
 }
-.table-row-cell:filled:odd{
+
+.table-row-cell:filled:odd {
     -fx-background-color: #e6e6e6;
 
 }
@@ -124,104 +154,83 @@
 .table-view:row-selection .table-row-cell:filled:hover {
     -fx-background-color: rgba(48, 79, 255, 0.2);
 }
-.table-view:row-selection .table-row-cell:filled:hover .text{
+
+.table-view:row-selection .table-row-cell:filled:hover .text {
     -fx-fill: black;
 }
+
 .table-row-cell:filled:focused {
     -fx-background-color: rgba(48, 79, 255, 1);
     -fx-background-insets: 0.0;
 }
-.table-row-cell:filled:focused .text{
+
+.table-row-cell:filled:focused .text {
     -fx-fill: white;
 }
-.table-row-cell .table-column{
+
+.table-row-cell .table-column {
     -fx-border-width: 0.0;
     -fx-padding: 0 10.0 0 10.0;
 }
+
 .table-col-id,
 .table-col-date,
 .table-col-cust-id {
     -fx-alignment: center-right !important;
 }
-/*Text in Zelle */
-.table-row-cell .text{
+
+.table-col-customer {
+    -fx-alignment: center !important;
+}
+
+.table-row-cell .text {
     -fx-font-size: 1.1em;
     -fx-fill: black;
 }
 
-/*
-.table-view .scroll-bar:vertical{
-    -fx-padding: 0.0 0.0 0.0 0.0;
-}
-.table-view .scroll-bar:horizontal {
-    -fx-padding: 0.0 0.0 0.0 0.0;
-}
-*/
-
-.icon-btn-new-conf {
-    -fx-font-size: 16px !important;
-    -fx-fill: white;
-    /*-fx-margin: 0px 30px 0px 0px !important;
-    -fx-padding: 0px 20px 0px 0px !important;*/
-}
-.header-borderpane {
-    -fx-background-color: #ffffff;
-    -fx-border-width: 10px 0px 0px 0px !important;
-    -fx-border-color: #7a7cff !important;
-}
-
-
 .table-icon-search,
-.table-icon-remove,
-.bottombar-icon-close {
-    -fx-fill: #ff8f00 !important;
+.table-icon-remove {
+    -fx-fill: #ff8f00;
 }
+
 .btn-table-icon-search:hover,
 .btn-table-icon-remove:hover {
     -fx-scale-x: 1.1;
     -fx-scale-y: 1.1;
     -fx-scale-z: 1.1;
-    /*neu karre*/-fx-cursor: hand;
+    -fx-cursor: hand;
 }
 
-/*
-.table-icon-search:hover {
--fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 5, 0.4, 0.0, 0.0) !important;
-    -fx-scale-x: 1.1 !important;
-    -fx-scale-y: 1.1 !important;
-    -fx-scale-z: 1.1 !important;
-}
-.table-icon-remove:hover {
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 5, 0.4, 0.0, 0.0) !important;
-    -fx-scale-x: 1.1 !important;
-    -fx-scale-y: 1.1 !important;
-    -fx-scale-z: 1.1 !important;
-}
-*/
 
-.bottombar-icon-close {
-    -fx-padding: 0 0 0 20px !important;
-    /*neu karre*/-fx-cursor: hand;
-}
-
-/* Input-Felder Benutzer und PW*/
+/** Controls Nutzer und Profil **/
 .jfx-text-field {
     -jfx-focus-color: #304ffe;
     -jfx-unfocus-color: black;
     -fx-text-fill: black;
-    /*    -jfx-focus-text-fill: blue;*/
-    -fx-pref-width: 200px;/***280px;***/
+    -fx-pref-width: 200px;
     -fx-pref-height: 48px;
-    /*neu karre*/-fx-padding: 26px 16px 2px 12px;
+    -fx-padding: 26px 16px 2px 12px;
 }
-/* Error-Message des Validators */
+
+.bottombar-icon-close {
+    -fx-cursor: hand;
+    -fx-fill: #ff8f00;
+}
+
+.bottombar-icon-close:hover {
+    -fx-scale-x: 1.1;
+    -fx-scale-y: 1.1;
+    -fx-scale-z: 1.1;
+}
+
+
+/** Input-Felder Validierung fehlerhafte Eingabe (Nutzer und Profil) **/
 .error-label {
-    -fx-text-fill: red !important; /**entfernt durch karre #ba000d;**/ /* material palette - red 500 primary dark */
+    -fx-text-fill: red;
     -fx-font-size: 10px;
     -fx-font-weight: bold;
     -fx-padding: 0px 0px 0px 5px;
     -fx-pref-height: 16px;
-
 }
 
 .jfx-text-field:error {
@@ -233,132 +242,21 @@
 .jfx-text-field .error-label {
     -fx-text-fill: red;
 }
-.icon-btn-new-conf {
-    -fx-text-fill: white !important;
-}
-
-.header-icon-home, .header-icon-admin, .header-icon-profile, .header-icon-logout {
-    -fx-fill: #ff8f00 !important;
-}
-
-.footer-borderpane {
-    -fx-background-color: white;
-    -fx-border-color : #7a7cff !important;
-    -fx-border-width : 1 0 0 0 !important;
-}
-.bpAdmin, .bpProfile {
-    -fx-border-color : #304ffe !important;
-    -fx-border-width : 0 0 0 1 !important;
-}
-/* neu karre ende */
 
 
-/* ######################################### */
-/* Dashboard - Header */
-/* ######################################### */
-
-/* Trennlinie zwischen Header und Tabelle */
-.header-borderpane {
-    -fx-border-color : black;
-    -fx-border-width : 0 0 1 0;
-}
-/* Bicycle Icon im Header */
-.header-icon-bicycle {
-    -fx-fill: black;
-}
-/* Titel im Header */
-.header-title {
-    -fx-text-fill: black;
-}
-/* Funktions-Buttons rechts im Header */
-.header-icon-home, .header-icon-admin, .header-icon-profile, .header-icon-logout {
-    -fx-fill: black;
-}
-
-.header-icon-home:hover, .header-icon-admin:hover, .header-icon-profile:hover, .header-icon-logout:hover {
-    /* -fx-effect: dropshadow(blurType, color, radius, spread, offsetX, offsetY); */
-    /**durch Karre entfernt!-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 5, 0.4, 0.0, 0.0);**/
-    -fx-scale-x: 1.2;
-    -fx-scale-y: 1.2;
-    -fx-scale-z: 1.2;
-}
-
-/* ######################################### */
-/* Dashboard - Main Table */
-/* ######################################### */
-
-/* Zelleninhalt der Tabelle */
-.table-col {
-    -fx-alignment: center;
-}
-/* Zelleninhalt der Tabelle für Kundenname */
-
-.table-col-customer {
-    -fx-alignment: center !important;
-}
-
-/* Icons in der Aktionsspalte */
-.table-icon-search {
-    -fx-fill: #2196f3; /* material palette - blue 500 primary */
-}
-
-.table-icon-remove {
-    -fx-fill: #ef5350; /* material palette - red 400 primary */
-}
-
-/* Zeilenhöhe abgestimmt mit Icon-Größe in der Aktionsspalte */
-.table-row-cell {
-    -fx-cell-size: 32px;
-}
-
-/* ######################################### */
-/* Dashboard - Footer */
-/* ######################################### */
-
-/* Trennlinie zwischen Footer und Tabelle */
-.footer-borderpane {
+/** Schwarze Borders **/
+.table-stack {
     -fx-border-color : black;
     -fx-border-width : 1 0 0 0;
 }
 
-/* Button im Footer zum Starten des Konfigurators */
-.btn-builder {
-    -fx-text-fill: white;
-    -fx-background-color: #2196f3; /* material palette - blue 500 primary */
+.footer-borderpane {
+    -fx-background-color: white;
+    -fx-border-color : black;
+    -fx-border-width : 1 0 0 0;
 }
 
-.btn-builder:hover {
-    /**auskommentiert durch Karre -fx-effect: dropshadow(three-pass-box, rgba(33, 150, 243, 0.5), 5, 0.4, 0.0, 0.0);**/
-    -fx-scale-x: 1.05;
-    -fx-scale-y: 1.05;
-    -fx-scale-z: 1.05;
-    -fx-cursor: hand;
-}
-
-/* Trennlinie links im Footer wenn Admin- bzw Benutzerprofil aufgerufen wird */
 .bpAdmin, .bpProfile {
     -fx-border-color : black;
     -fx-border-width : 0 0 0 1;
 }
-/* Schliessen Button im Admin- bzw Benutzerprofil */
-.bottombar-icon-close {
-    -fx-fill: #ef5350; /* material palette - red 400 primary */
-}
-
-.bottombar-icon-close:hover {
-    -fx-scale-x: 1.1;
-    -fx-scale-y: 1.1;
-    -fx-scale-z: 1.1;
-}
-
-/* Error-Message des Validators */
-.error-label {
-    -fx-text-fill: #ba000d; /* material palette - red 500 primary dark */
-    -fx-font-size: 10px;
-    -fx-padding: 0 0 0 5px;
-}
-
-
-
-
-
