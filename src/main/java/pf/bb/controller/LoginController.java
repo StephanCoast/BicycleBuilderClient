@@ -20,7 +20,7 @@ import java.io.IOException;
  * @author Alexander Rauch
  * @supportedby Stephan Kost
  * @version 1.0
- * TH-Brandenburg Semesterprojekt Pattern & Frameworks Winter 2022/2023
+ * TH-Brandenburg Semesterprojekt Pattern und Frameworks Winter 2022/2023
  */
 public class LoginController {
 
@@ -31,7 +31,7 @@ public class LoginController {
     public static User activeUser;
 
     /**
-     * Variablendeklaration für die Text-Boxen Benutzername & Passworteingabe.
+     * Variablendeklaration für die Text-Boxen Benutzername und Passworteingabe.
      */
     @FXML
     public JFXTextField username;

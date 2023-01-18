@@ -31,7 +31,7 @@ import static pf.bb.controller.LoginController.activeUser;
  * @author Alexander Rauch
  * @supportedby Stephan Kost
  * @version 1.0
- * TH-Brandenburg Semesterprojekt Pattern & Frameworks Winter 2022/2023
+ * TH-Brandenburg Semesterprojekt Pattern und Frameworks Winter 2022/2023
  */
 public class BuilderController {
 
@@ -42,7 +42,7 @@ public class BuilderController {
     public RequiredFieldValidator validatorCustomerID, validatorCustomerFirstName, validatorCustomerLastName, validatorCustomerMail;
     public RequiredFieldValidator validatorCustomerStreet, validatorCustomerNr, validatorCustomerZipcode, validatorCustomerCity;
     /**
-     * Variablendeklaration für die Text-Boxen des Kundendaten-Container & Kundendaten-Übersicht.
+     * Variablendeklaration für die Text-Boxen Kundendaten-Container, Kundendaten-Übersicht.
      */
     public JFXTextField tfCustomerFirstName, tfCustomerLastName, tfCustomerMail, tfCustomerStreet, tfCustomerNr, tfCustomerZipcode, tfCustomerCity;
     public TextField tfFinishOrderID, tfFinishCustomerID, tfFinishFirstName, tfFinishLastName, tfFinishStreet, tfFinishNr, tfFinishZipCode, tfFinishCity, tfFinishMail;
@@ -342,7 +342,7 @@ public class BuilderController {
      * Speichern Button Kategorie 1
      * @param event Click-Event des Buttons
      * @throws IOException
-     * Preis-Array wird aktualisiert & kalkuliert, Labels zur Textausgabe werden aktualisiert, Abschlussfunktion wird aufgerufen.
+     * Preis-Array wird aktualisiert und kalkuliert, Labels zur Textausgabe werden aktualisiert, Abschlussfunktion wird aufgerufen.
      */
     public void onCat1Save(ActionEvent event) throws IOException {
         finalPriceArray.set(0, cat1FramePrice);
@@ -356,7 +356,7 @@ public class BuilderController {
      * Speichern Button Kategorie 2
      * @param event Click-Event des Buttons
      * @throws IOException
-     * Preis-Array wird aktualisiert & kalkuliert, Labels zur Textausgabe werden aktualisiert, Abschlussfunktion wird aufgerufen.
+     * Preis-Array wird aktualisiert und kalkuliert, Labels zur Textausgabe werden aktualisiert, Abschlussfunktion wird aufgerufen.
      */
     public void onCat2Save(ActionEvent event) throws IOException {
         finalPriceArray.set(1, cat2HandlebarPrice);
@@ -371,7 +371,7 @@ public class BuilderController {
      * Speichern Button Kategorie 3
      * @param event Click-Event des Buttons
      * @throws IOException
-     * Preis-Array wird aktualisiert & kalkuliert, Labels zur Textausgabe werden aktualisiert, Abschlussfunktion wird aufgerufen.
+     * Preis-Array wird aktualisiert und kalkuliert, Labels zur Textausgabe werden aktualisiert, Abschlussfunktion wird aufgerufen.
      */
     public void onCat3Save(ActionEvent event) throws IOException {
         finalPriceArray.set(3, cat3WheelPrice);
@@ -386,7 +386,7 @@ public class BuilderController {
      * Speichern Button Kategorie 4
      * @param event Click-Event des Buttons
      * @throws IOException
-     * Preis-Array wird aktualisiert & kalkuliert, Labels zur Textausgabe werden aktualisiert, Abschlussfunktion wird aufgerufen.
+     * Preis-Array wird aktualisiert und kalkuliert, Labels zur Textausgabe werden aktualisiert, Abschlussfunktion wird aufgerufen.
      */
     public void onCat4Save(ActionEvent event) throws IOException {
         finalPriceArray.set(5, cat4SaddlePrice);
@@ -400,7 +400,7 @@ public class BuilderController {
      * Speichern Button Kategorie 5
      * @param event Click-Event des Buttons
      * @throws IOException
-     * Preis-Array wird aktualisiert & kalkuliert, Labels zur Textausgabe werden aktualisiert, Abschlussfunktion wird aufgerufen.
+     * Preis-Array wird aktualisiert und kalkuliert, Labels zur Textausgabe werden aktualisiert, Abschlussfunktion wird aufgerufen.
      */
     public void onCat5Save(ActionEvent event) throws IOException {
         finalPriceArray.set(6, cat5BrakePrice);
@@ -414,7 +414,7 @@ public class BuilderController {
      * Speichern Button Kategorie 6
      * @param event Click-Event des Buttons
      * @throws IOException
-     * Preis-Array wird aktualisiert & kalkuliert, Labels zur Textausgabe werden aktualisiert, Abschlussfunktion wird aufgerufen.
+     * Preis-Array wird aktualisiert und kalkuliert, Labels zur Textausgabe werden aktualisiert, Abschlussfunktion wird aufgerufen.
      */
     public void onCat6Save(ActionEvent event) throws IOException {
         finalPriceArray.set(7, cat6BellPrice);
@@ -458,7 +458,7 @@ public class BuilderController {
      * E-Mail-Adresse in den Textfeldern wird auf das @-Symbol geprüft.
      * Save Configuration Task wird ausgeführt.
      * Kunde wird erstellt und gespeichert.
-     * Gesamtpreis wird berechnet, Auftrag & Rechnung wird erstellt.
+     * Gesamtpreis wird berechnet, Auftrag und Rechnung wird erstellt.
      * Status der Konfiguration wird auf "ABGESCHLOSSEN" gesetzt.
      * Finale Ansicht in der Sidebar wird über den ViewManager angefordert.
      * Kategorie-Ansicht wird in der Bottombar über den ViewManager angefordert.
@@ -697,7 +697,7 @@ public class BuilderController {
     /**
      * Eingabe-Regeln werden über den ValidatorManager den Kundendaten-Textfeldern zugeordnet.
      * Über RegEx-Pattern werden Symbol-Regeln erstellt.
-     * Kundendaten-Textfelder für Hausnummer & PLZ bekommen Limitierungen im Listener.
+     * Kundendaten-Textfelder für Hausnummer und PLZ bekommen Limitierungen im Listener.
      */
     private void initTextFieldListeners() {
         ValidatorManager.setTextFieldRules(tfCustomerFirstName, "[a-zA-Z-'`´]");
@@ -814,7 +814,7 @@ public class BuilderController {
 
     /**
      * Ausgabe der technischen Informationen zur aktuellen Auswahl in der Text-Area.
-     * Trennzeichen & Zeilenumbrüche werden vorbestimmt.
+     * Trennzeichen und Zeilenumbrüche werden vorbestimmt.
      * Ausgabestruktur wird mit entsprechenden Variablen zusammengestellt.
      */
     private void renderSVGtextarea() {
@@ -926,8 +926,8 @@ public class BuilderController {
     }
 
     /**
-     * Initialisiert & steuert alle Change-Listeners der Auswahl-Boxen, Größen- und Farben-Toggles in den Unterkategorien.
-     * Je nach Auswahl werden technische Informationen, SVG-Pfade, Preise, Größen und Farben gesetzt & aktualisiert.
+     * Initialisiert und steuert alle Change-Listeners der Auswahl-Boxen, Größen- und Farben-Toggles in den Unterkategorien.
+     * Je nach Auswahl werden technische Informationen, SVG-Pfade, Preise, Größen und Farben gesetzt und aktualisiert.
      */
     private void initSubcatsListeners() {
         // Rahmen

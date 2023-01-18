@@ -131,6 +131,7 @@
                     <target>11</target>
                 </configuration>
             </plugin>
+
             <plugin>
                 <groupId>org.openjfx</groupId>
                 <artifactId>javafx-maven-plugin</artifactId>
@@ -150,6 +151,21 @@
                         </configuration>
                     </execution>
                 </executions>
+            </plugin>
+
+            <!-- AR: added for javadoc -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>3.4.1</version>
+                <configuration>
+                    <!--AR: excluded because of javadoc double logging package using -->
+                    <excludePackageNames>:commons.logging</excludePackageNames>
+                    <!--AR: avoid a few warnings-->
+                    <doclint>-html,-syntax,-accessibility,-missing</doclint>
+                    <failOnError>false</failOnError>
+                    <quiet>true</quiet>
+                </configuration>
             </plugin>
         </plugins>
     </build>

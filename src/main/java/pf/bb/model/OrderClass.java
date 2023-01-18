@@ -7,7 +7,7 @@ import pf.bb.Main;
  * Klasse für das Auftragsobjekt.
  * @author Stephan Kost
  * @version 1.0
- * TH-Brandenburg Semesterprojekt Pattern & Frameworks Winter 2022/2023
+ * TH-Brandenburg Semesterprojekt Pattern und Frameworks Winter 2022/2023
  */
 public class OrderClass extends EntityWithID {
 

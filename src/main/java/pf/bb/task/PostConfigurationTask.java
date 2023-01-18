@@ -14,7 +14,7 @@ import pf.bb.model.User;
  * Klasse für das Speichern von Konfigurationen.
  * @author Stephan Kost
  * @version 1.0
- * TH-Brandenburg Semesterprojekt Pattern & Frameworks Winter 2022/2023
+ * TH-Brandenburg Semesterprojekt Pattern und Frameworks Winter 2022/2023
  */
 public class PostConfigurationTask extends Task<Configuration> {
 

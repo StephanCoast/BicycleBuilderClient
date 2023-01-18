@@ -25,7 +25,7 @@ import java.util.Objects;
  * @author Alexander Rauch, Stephan Kost
  * @supportedby Juliane Müller
  * @version 1.0
- * TH-Brandenburg Semesterprojekt Pattern & Frameworks Winter 2022/2023
+ * TH-Brandenburg Semesterprojekt Pattern und Frameworks Winter 2022/2023
  */
 public class Main extends Application {
 
@@ -35,7 +35,7 @@ public class Main extends Application {
     public static final Image APP_ICON = new Image(Objects.requireNonNull(Main.class.getResource("/img/bbAppIcon.png")).toExternalForm(), false);
     /**
      * Variablendeklaration zur Kommunikation mit dem Server.
-     * Array-Listen für Artikel & Konfigurationen
+     * Array-Listen für Artikel und Konfigurationen
      * Konfigurationsobjekt
      * Boolean für den Schreibzugriff
      * Host-URL String
@@ -53,7 +53,7 @@ public class Main extends Application {
      * Applications may create other stages, if needed, but they will not be
      * primary stages.
      * @throws IOException Fehlerbehandlung
-     * Artikeldaten & erste Ansicht werden geladen.
+     * Artikeldaten und erste Ansicht werden geladen.
      */
     @Override
     public void start(Stage stageMain) throws IOException {
@@ -86,7 +86,7 @@ public class Main extends Application {
      * primary stages.
      * @throws IOException Fehlerbehandlung
      * FXML-Dateipfad wird bestimmt, Scene wird erstellt.
-     * Titel & App-Icon werden zugeordnet.
+     * Titel und App-Icon werden zugeordnet.
      * Fenster wird zentriert und Fade-Animation wird geladen.
      */
     private void loadFirstClientView(Stage stageMain) throws IOException {

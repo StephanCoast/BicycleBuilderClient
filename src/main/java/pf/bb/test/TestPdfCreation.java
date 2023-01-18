@@ -34,7 +34,7 @@ import java.util.*;
  * Test-Klasse Bicycle Builder zur PDF-Erstellung.
  * @author Stephan Kost
  * @version 1.0
- * TH-Brandenburg Semesterprojekt Pattern & Frameworks Winter 2022/2023
+ * TH-Brandenburg Semesterprojekt Pattern und Frameworks Winter 2022/2023
  */
 public class TestPdfCreation {
 
