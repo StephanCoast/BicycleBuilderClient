@@ -48,7 +48,7 @@ public class DashboardController {
     /**
      * Variablendeklaration für die Buttons: Neue Konfiguration und Nutzer erstellen
      */
-    public JFXButton btnNewConfig, btnCreateUser;
+    public JFXButton btnNewConfig, btnCreateUser, btnOpenProfile, btnLogout;
     /**
      * Variablendeklaration für die JFX-Drawer der Bottombar.
      */
@@ -103,6 +103,7 @@ public class DashboardController {
         loadConfigs();
         setCreateUserBtn();
         initTextFieldListeners();
+        initIconButtonTooltips();
         getAllUsers();
     }
 
@@ -349,6 +350,21 @@ public class DashboardController {
         }
     }
 
+    /**
+     * Tooltips erstellen und den Icon-Buttons im Kopfbereich zuordnen.
+     */
+    private void initIconButtonTooltips() {
+        Tooltip ttIconCreateUser = new Tooltip("Nutzer anlegen");
+        Tooltip ttIconOpenProfile = new Tooltip("Benutzer: " + activeUser.name + " - ID: " + activeUser.id);
+        Tooltip ttIconLogout = new Tooltip("Logout");
+        btnCreateUser.setTooltip(ttIconCreateUser);
+        btnOpenProfile.setTooltip(ttIconOpenProfile);
+        btnLogout.setTooltip(ttIconLogout);
+        btnCreateUser.getStyleClass().add("header-icon-tooltip");
+        btnOpenProfile.getStyleClass().add("header-icon-tooltip");
+        btnLogout.getStyleClass().add("header-icon-tooltip");
+    }
+
     /* =====================================
      * LOGIC
      ========================================= */
@@ -400,8 +416,13 @@ public class DashboardController {
                 removeButton.getStyleClass().add("btn-table-icon-remove");
                 detailButton.setGraphic(iconSearch);
                 removeButton.setGraphic(iconRemove);
-                detailButton.setTooltip(new Tooltip("Konfiguration öffnen"));
-                removeButton.setTooltip(new Tooltip("Konfiguration löschen"));
+
+                Tooltip tt1 = new Tooltip("Konfiguration öffnen");
+                Tooltip tt2 = new Tooltip("Konfiguration löschen");
+                detailButton.setTooltip(tt1);
+                removeButton.setTooltip(tt2);
+                tt1.getStyleClass().add("table-tooltip");
+                tt2.getStyleClass().add("table-tooltip");
 
                 // AR: Lupe-Icon-Button
                 detailButton.setOnAction(event -> {
@@ -426,7 +447,7 @@ public class DashboardController {
                                 }
                             } else if (writeAccessTask1.getValue().equals("ACCESS OPENED")) {
                                 System.out.println("Write access wasn't returned last time, because the program was shutdown in the Builder view. Please try to open the configuration again.");
-                                vm.createErrorAlert("Bicycle Builder - Fehler", "Zugriffsfehler", "Die Berechtigung zum Bearbeiten der Konfiguration wurden fehlerhaft zurückgegeben. Bitte öffnen Sie die Konfiguration erneut." + newline + newline);
+                                vm.createErrorAlert("Bicycle Builder - Fehler", "Zugriffsfehler", "Die Berechtigung zum Bearbeiten der Konfiguration wurde fehlerhaft zurückgegeben. Bitte öffnen Sie die Konfiguration erneut." + newline + newline);
                             } else {
                                 vm.createErrorAlert("Bicycle Builder - Fehler", "Zugriffsfehler", "Die gewählte Konfiguration wird gerade von einem anderen Benutzer bearbeitet." + newline + newline);
                             }

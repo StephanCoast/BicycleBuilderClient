@@ -13,6 +13,7 @@ import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.Tooltip;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
@@ -53,7 +54,7 @@ public class BuilderController {
     /**
      * Variablendeklaration für die Buttons: Home-Icon(Kopfbereich), Entwurf speichern, Kundendaten eingeben, Dashboard(Sidebar), Abschliessen.
      */
-    public JFXButton btnHeaderHome, btnSaveDraft, btnAddCustomerData, btnSidebarHome, btnCustomerFinish;
+    public JFXButton btnHeaderHome, btnSaveDraft, btnAddCustomerData, btnSidebarHome, btnCustomerFinish, btnLogout;
     /**
      * Variablendeklaration für die Text-Area der technischen Informationen.
      */
@@ -178,6 +179,7 @@ public class BuilderController {
         initFirstSVGSet();
         renderSVGtextarea();
         initTextFieldListeners();
+        initIconButtonTooltips();
         loadFinishedConfig();
         getAllCustomers();
     }
@@ -731,6 +733,18 @@ public class BuilderController {
                 tfCustomerZipcode.setText(str);
             }
         });
+    }
+
+    /**
+     * Tooltips erstellen und den Icon-Buttons im Kopfbereich zuordnen.
+     */
+    private void initIconButtonTooltips() {
+        Tooltip ttIconHome = new Tooltip("Dashboard");
+        Tooltip ttIconLogout = new Tooltip("Logout");
+        btnHeaderHome.setTooltip(ttIconHome);
+        btnLogout.setTooltip(ttIconLogout);
+        btnHeaderHome.getStyleClass().add("header-icon-tooltip");
+        btnLogout.getStyleClass().add("header-icon-tooltip");
     }
 
     /* =====================================
