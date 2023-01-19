@@ -103,6 +103,7 @@ public class DashboardController {
         loadConfigs();
         setCreateUserBtn();
         initTextFieldListeners();
+        getAllUsers();
     }
 
     /* =====================================
@@ -203,10 +204,14 @@ public class DashboardController {
      * Button "Neue Konfiguration" wird wieder aktiviert.
      */
     public void onBottomBarSaveAdmin() {
-        if (ValidatorManager.textFieldIsEmpty(tfAdminUserName) || ValidatorManager.textFieldIsEmpty(tfAdminFirstName) || ValidatorManager.textFieldIsEmpty(tfAdminLastName) || ValidatorManager.textFieldIsEmpty(tfAdminMail) || ValidatorManager.pwFieldIsEmpty(pfAdminPW)) {
+        if (validatorManager.textFieldIsEmpty(tfAdminUserName) || validatorManager.textFieldIsEmpty(tfAdminFirstName) || validatorManager.textFieldIsEmpty(tfAdminLastName) || validatorManager.textFieldIsEmpty(tfAdminMail) || validatorManager.pwFieldIsEmpty(pfAdminPW)) {
             vm.createWarningAlert("Bicycle Builder - Warnung", "Bitte füllen Sie alle Felder aus.", null);
-        } else if (ValidatorManager.textFieldNotHaveSymbol(tfAdminMail, "@")) {
+        } else if (validatorManager.textFieldNotHaveSymbol(tfAdminMail, "@")) {
             vm.createWarningAlert("Bicycle Builder - Warnung", "Die E-Mail Adresse muss ein @-Symbol enthalten.", null);
+        } else if (validatorManager.textFieldUserMailExists(tfAdminMail.getText())) {
+            vm.createWarningAlert("Bicycle Builder - Warnung", "Die gewünschte E-Mail Adresse existiert bereits.", null);
+        } else if (validatorManager.textFieldUserNameExists(tfAdminUserName.getText())) {
+            vm.createWarningAlert("Bicycle Builder - Warnung", "Der gewünschte Benutzername existiert bereits.", null);
         } else {
             User newUser = new User(tfAdminUserName.getText(), pfAdminPW.getText(), tfAdminMail.getText(), tfAdminFirstName.getText(), tfAdminLastName.getText(), "CONSULTANT");
             PostUserTask userTaskNewUser = new PostUserTask(activeUser, newUser);
@@ -214,13 +219,12 @@ public class DashboardController {
                 if(userTaskNewUser.getValue() != null) {
                     System.out.println("DashboardController: user id=" + userTaskNewUser.getValue().id + " created");
                     vm.createInfoAlert("Bicycle Builder - Info", "Der neue Benutzer wurde gespeichert.", null);
-                }
-                else {
+                } else {
                     System.out.println("DashboardController: user creation failed for: " + newUser.id + " result: " + userTaskNewUser.getMessage());
                     vm.createWarningAlert("Bicycle Builder - Warnung", "Die Erstellung des neuen Benutzers ist fehlgeschlagen.", null);
                 }
             });
-            userTaskNewUser.setOnFailed((WorkerStateEvent userCreatedFailed) -> System.out.println("DashboardController: user creation failed for: " + newUser.id + " result: " + userTaskNewUser.getMessage()));
+            userTaskNewUser.setOnFailed((WorkerStateEvent userCreatedFailed) -> System.out.println("DashboardController setOnFailed(): user creation failed for: " + newUser.id + " result: " + userTaskNewUser.getMessage()));
             new Thread(userTaskNewUser).start();
 
             btnNewConfig.setDisable(false);
@@ -237,10 +241,18 @@ public class DashboardController {
      * Button "Neue Konfiguration" wird wieder aktiviert.
      */
     public void onBottomBarSaveProfile() {
-        if (ValidatorManager.textFieldIsEmpty(tfProfileUserName) || ValidatorManager.textFieldIsEmpty(tfProfileFirstName) || ValidatorManager.textFieldIsEmpty(tfProfileLastName) || ValidatorManager.textFieldIsEmpty(tfProfileMail)) {
+        if (validatorManager.textFieldIsEmpty(tfProfileUserName) || validatorManager.textFieldIsEmpty(tfProfileFirstName) || validatorManager.textFieldIsEmpty(tfProfileLastName) || validatorManager.textFieldIsEmpty(tfProfileMail)) {
             vm.createWarningAlert("Bicycle Builder - Warnung", "Bitte füllen Sie alle Felder aus.", null);
-        } else if (ValidatorManager.textFieldNotHaveSymbol(tfProfileMail, "@")) {
+        } else if (validatorManager.textFieldNotHaveSymbol(tfProfileMail, "@")) {
             vm.createWarningAlert("Bicycle Builder - Warnung", "Die E-Mail Adresse muss ein @-Symbol enthalten.", null);
+        } else if (!tfProfileMail.getText().equals(activeUser.email)) {
+            if (validatorManager.textFieldUserMailExists(tfProfileMail.getText())) {
+                vm.createWarningAlert("Bicycle Builder - Warnung", "Die gewünschte E-Mail Adresse existiert bereits.", null);
+            }
+        } else if (!tfProfileUserName.getText().equals(activeUser.name)) {
+            if (validatorManager.textFieldUserNameExists(tfProfileUserName.getText())) {
+                vm.createWarningAlert("Bicycle Builder - Warnung", "Der gewünschte Benutzername existiert bereits.", null);
+            }
         } else {
             User updatedUser = activeUser;
             updatedUser.id = activeUser.id;
@@ -313,15 +325,15 @@ public class DashboardController {
      * Über RegEx-Pattern werden Symbol-Regeln erstellt.
      */
     private void initTextFieldListeners() {
-        ValidatorManager.setTextFieldRules(tfAdminUserName, "[a-zA-Z0-9]");
-        ValidatorManager.setTextFieldRules(tfAdminMail, "[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$");
-        ValidatorManager.setTextFieldRules(tfAdminFirstName, "[a-zA-Z-'`´]");
-        ValidatorManager.setTextFieldRules(tfAdminLastName, "[a-zA-Z-'`´]");
+        validatorManager.setTextFieldRules(tfAdminUserName, "[a-zA-Z0-9]");
+        validatorManager.setTextFieldRules(tfAdminMail, "[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$");
+        validatorManager.setTextFieldRules(tfAdminFirstName, "[a-zA-Z-'`´]");
+        validatorManager.setTextFieldRules(tfAdminLastName, "[a-zA-Z-'`´]");
 
-        ValidatorManager.setTextFieldRules(tfProfileUserName, "[a-zA-Z0-9]");
-        ValidatorManager.setTextFieldRules(tfProfileMail, "[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$");
-        ValidatorManager.setTextFieldRules(tfProfileFirstName, "[a-zA-Z-'`´]");
-        ValidatorManager.setTextFieldRules(tfProfileLastName, "[a-zA-Z-'`´]");
+        validatorManager.setTextFieldRules(tfProfileUserName, "[a-zA-Z0-9]");
+        validatorManager.setTextFieldRules(tfProfileMail, "[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$");
+        validatorManager.setTextFieldRules(tfProfileFirstName, "[a-zA-Z-'`´]");
+        validatorManager.setTextFieldRules(tfProfileLastName, "[a-zA-Z-'`´]");
     }
 
     /**
@@ -525,6 +537,17 @@ public class DashboardController {
         });
         //Tasks in eigenem Thread ausführen
         new Thread(configDeleteTask1).start();
+    }
+
+    /**
+     * Überführe alle existierenden User in die Array-Liste des ValidatorManager.
+     */
+    private void getAllUsers() {
+        GetUsersTask usersTask = new GetUsersTask(activeUser);
+        usersTask.setOnSucceeded((WorkerStateEvent getUsers) -> {
+            validatorManager.USERS.addAll(usersTask.getValue());
+        });
+        new Thread(usersTask).start();
     }
 
     /* =====================================
