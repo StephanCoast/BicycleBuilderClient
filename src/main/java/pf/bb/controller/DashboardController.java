@@ -360,9 +360,9 @@ public class DashboardController {
         btnCreateUser.setTooltip(ttIconCreateUser);
         btnOpenProfile.setTooltip(ttIconOpenProfile);
         btnLogout.setTooltip(ttIconLogout);
-        btnCreateUser.getStyleClass().add("header-icon-tooltip");
-        btnOpenProfile.getStyleClass().add("header-icon-tooltip");
-        btnLogout.getStyleClass().add("header-icon-tooltip");
+        ttIconCreateUser.getStyleClass().add("header-icon-tooltip");
+        ttIconOpenProfile.getStyleClass().add("header-icon-tooltip");
+        ttIconLogout.getStyleClass().add("header-icon-tooltip");
     }
 
     /* =====================================
