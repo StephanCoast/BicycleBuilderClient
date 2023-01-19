@@ -1338,6 +1338,7 @@ public class BuilderController {
     private void getAllCustomers() {
         GetCustomersTask customersTask = new GetCustomersTask(activeUser);
         customersTask.setOnSucceeded((WorkerStateEvent getCustomers) -> {
+            validatorManager.CUSTOMERS.clear();
             validatorManager.CUSTOMERS.addAll(customersTask.getValue());
         });
         new Thread(customersTask).start();
