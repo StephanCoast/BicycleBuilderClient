@@ -743,8 +743,8 @@ public class BuilderController {
         Tooltip ttIconLogout = new Tooltip("Logout");
         btnHeaderHome.setTooltip(ttIconHome);
         btnLogout.setTooltip(ttIconLogout);
-        btnHeaderHome.getStyleClass().add("header-icon-tooltip");
-        btnLogout.getStyleClass().add("header-icon-tooltip");
+        ttIconHome.getStyleClass().add("header-icon-tooltip");
+        ttIconLogout.getStyleClass().add("header-icon-tooltip");
     }
 
     /* =====================================
