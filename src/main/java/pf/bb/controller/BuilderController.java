@@ -29,7 +29,7 @@ import static pf.bb.controller.LoginController.activeUser;
 /**
  * Diese Klasse steuert die Konfigurator-Ansicht des BicycleBuilder und alle enthaltenen Elemente.
  * @author Alexander Rauch
- * @supportedby Stephan Kost
+ * supported by Stephan Kost
  * @version 1.0
  * TH-Brandenburg Semesterprojekt Pattern und Frameworks Winter 2022/2023
  */
@@ -305,7 +305,7 @@ public class BuilderController {
      * Home-Icon-Button, Dashboard-Button(Default-Sidebar), Dashboard-Button(Final-Sidebar)
      * @param event Click-Event des Buttons
      * @throws IOException Fehlerbehandlung Input/Output
-     * @supportedby SK
+     * supported by SK
      * Schreibzugriff für die Konfiguration wird gesteuert.
      * PUT Configuration Task wird ausgeführt.
      * Dashboard-Ansicht wird über den ViewManager angefordert.
@@ -457,7 +457,7 @@ public class BuilderController {
 
     /**
      * Abschliessen Button
-     * @supportedby SK
+     * supported by SK
      * Textfelder der Kundendaten werden durch den ValidatorManager überprüft.
      * E-Mail-Adresse in den Textfeldern wird auf das @-Symbol geprüft.
      * Save Configuration Task wird ausgeführt.
@@ -477,9 +477,9 @@ public class BuilderController {
                 ValidatorManager.textFieldIsEmpty(tfCustomerNr) ||
                 ValidatorManager.textFieldIsEmpty(tfCustomerZipcode) ||
                 ValidatorManager.textFieldIsEmpty(tfCustomerCity)) {
-            ViewManager.createWarningAlert("Bicycle Builder - Warnung", "Bitte füllen Sie alle Felder aus.", null);
+            vm.createWarningAlert("Bicycle Builder - Warnung", "Bitte füllen Sie alle Felder aus.", null);
         } else if (ValidatorManager.textFieldNotHaveSymbol(tfCustomerMail, "@")) {
-            ViewManager.createWarningAlert("Bicycle Builder - Warnung", "Die E-Mail Adresse muss ein @-Symbol enthalten.", null);
+            vm.createWarningAlert("Bicycle Builder - Warnung", "Die E-Mail Adresse muss ein @-Symbol enthalten.", null);
         } else {
             SaveConfigurationTask saveConfigTask1 = new SaveConfigurationTask(activeUser, this, "ABGESCHLOSSEN");
             saveConfigTask1.setOnRunning((runningEvent) -> System.out.println("trying to save configuration..."));
@@ -737,7 +737,7 @@ public class BuilderController {
     /**
      * Wenn keine Konfiguration vorhanden ist, werden Default-Auswahlmöglichkeiten in den Unterkategorien gesetzt.
      * Wenn eine Konfiguration vorhanden ist, werden die Auswahlmöglichkeiten anhand der gespeicherten Konfiguration in den Unterkategorien gesetzt.
-     * @supportedby SK
+     * supported by SK
      */
     private void initSubcatsInitialValues() {
         if (Main.currentConfig == null) {
@@ -862,7 +862,7 @@ public class BuilderController {
      * Wird jeweils von "Entwurf speichern" und den Unterkategorien aufgerufen.
      * @param event Click-Event des Buttons
      * @param comingFromSubCat Boolean, um zu wissen, ob aus einer Unterkategorie gespeichert wurde
-     * @supportedby SK
+     * supported by SK
      * Konfiguration wird gespeichert und je nach Boolean wird über den ViewManager die Dashboard-Ansicht angefordert.
      */
     private void startDraftSaveConfigurationTask(ActionEvent event, boolean comingFromSubCat) {

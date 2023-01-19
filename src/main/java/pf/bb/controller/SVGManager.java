@@ -9,7 +9,7 @@ import javafx.scene.shape.SVGPath;
 /**
  * Diese Klasse steuert alle SVG-Grafiken.
  * @author Alexander Rauch
- * @supportedby Juliane Müller, SVG Pfade
+ * supported by Juliane Müller, SVG Pfade
  * @version 1.0
  * TH-Brandenburg Semesterprojekt Pattern und Frameworks Winter 2022/2023
  */

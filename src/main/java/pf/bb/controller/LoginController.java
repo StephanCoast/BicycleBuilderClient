@@ -18,7 +18,7 @@ import java.io.IOException;
 /**
  * Diese Klasse steuert die Login-Ansicht des BicycleBuilder und alle enthaltenen Elemente.
  * @author Alexander Rauch
- * @supportedby Stephan Kost
+ * supported by Stephan Kost
  * @version 1.0
  * TH-Brandenburg Semesterprojekt Pattern und Frameworks Winter 2022/2023
  */
@@ -85,7 +85,7 @@ public class LoginController {
     /**
      * Login Button
      * @param event Click-Event des Buttons
-     * @supportedby SK
+     * supported by SK
      * Login-Daten werden überprüft und Benutzer Detail-Informationen werden zugewiesen.
      */
     public void authenticate(ActionEvent event){
