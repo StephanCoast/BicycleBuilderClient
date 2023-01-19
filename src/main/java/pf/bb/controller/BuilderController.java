@@ -179,6 +179,7 @@ public class BuilderController {
         renderSVGtextarea();
         initTextFieldListeners();
         loadFinishedConfig();
+        getAllCustomers();
     }
 
     /* =====================================
@@ -470,16 +471,18 @@ public class BuilderController {
      * Toggle-Buttons der Kategorien werden deaktiviert.
      */
     public void onBottomBarFinish() {
-        if (ValidatorManager.textFieldIsEmpty(tfCustomerFirstName) ||
-                ValidatorManager.textFieldIsEmpty(tfCustomerLastName) ||
-                ValidatorManager.textFieldIsEmpty(tfCustomerMail) ||
-                ValidatorManager.textFieldIsEmpty(tfCustomerStreet) ||
-                ValidatorManager.textFieldIsEmpty(tfCustomerNr) ||
-                ValidatorManager.textFieldIsEmpty(tfCustomerZipcode) ||
-                ValidatorManager.textFieldIsEmpty(tfCustomerCity)) {
+        if (validatorManager.textFieldIsEmpty(tfCustomerFirstName) ||
+                validatorManager.textFieldIsEmpty(tfCustomerLastName) ||
+                validatorManager.textFieldIsEmpty(tfCustomerMail) ||
+                validatorManager.textFieldIsEmpty(tfCustomerStreet) ||
+                validatorManager.textFieldIsEmpty(tfCustomerNr) ||
+                validatorManager.textFieldIsEmpty(tfCustomerZipcode) ||
+                validatorManager.textFieldIsEmpty(tfCustomerCity)) {
             vm.createWarningAlert("Bicycle Builder - Warnung", "Bitte füllen Sie alle Felder aus.", null);
-        } else if (ValidatorManager.textFieldNotHaveSymbol(tfCustomerMail, "@")) {
+        } else if (validatorManager.textFieldNotHaveSymbol(tfCustomerMail, "@")) {
             vm.createWarningAlert("Bicycle Builder - Warnung", "Die E-Mail Adresse muss ein @-Symbol enthalten.", null);
+        } else if (validatorManager.textFieldCustomerMailExists(tfCustomerMail.getText())) {
+            vm.createWarningAlert("Bicycle Builder - Warnung", "Die gewünschte E-Mail Adresse existiert bereits.", null);
         } else {
             SaveConfigurationTask saveConfigTask1 = new SaveConfigurationTask(activeUser, this, "ABGESCHLOSSEN");
             saveConfigTask1.setOnRunning((runningEvent) -> System.out.println("trying to save configuration..."));
@@ -704,13 +707,13 @@ public class BuilderController {
      * Kundendaten-Textfelder für Hausnummer und PLZ bekommen Limitierungen im Listener.
      */
     private void initTextFieldListeners() {
-        ValidatorManager.setTextFieldRules(tfCustomerFirstName, "[a-zA-Z-'`´]");
-        ValidatorManager.setTextFieldRules(tfCustomerLastName, "[a-zA-Z-'`´]");
-        ValidatorManager.setTextFieldRules(tfCustomerMail, "[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$");
-        ValidatorManager.setTextFieldRules(tfCustomerStreet, "[a-zA-Z-'`´]");
-        ValidatorManager.setTextFieldRules(tfCustomerNr, "[0-9]");
-        ValidatorManager.setTextFieldRules(tfCustomerZipcode, "[\\d{0,5}]");
-        ValidatorManager.setTextFieldRules(tfCustomerCity, "[a-zA-Z-'`´]");
+        validatorManager.setTextFieldRules(tfCustomerFirstName, "[a-zA-Z-'`´]");
+        validatorManager.setTextFieldRules(tfCustomerLastName, "[a-zA-Z-'`´]");
+        validatorManager.setTextFieldRules(tfCustomerMail, "[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$");
+        validatorManager.setTextFieldRules(tfCustomerStreet, "[a-zA-Z-'`´]");
+        validatorManager.setTextFieldRules(tfCustomerNr, "[0-9]");
+        validatorManager.setTextFieldRules(tfCustomerZipcode, "[\\d{0,5}]");
+        validatorManager.setTextFieldRules(tfCustomerCity, "[a-zA-Z-'`´]");
 
         int maxLengthZipCode = 5;
         int maxLengthHouseNumber = 3;
@@ -1327,6 +1330,17 @@ public class BuilderController {
             cat6LabelPrice.setText(strPriceBeautify(Float.sum(Float.sum(cat6BellPrice, cat6StandPrice), cat6LightPrice)));
         });
 
+    }
+
+    /**
+     * Überführe alle existierenden Kunden in die Array-Liste des ValidatorManager.
+     */
+    private void getAllCustomers() {
+        GetCustomersTask customersTask = new GetCustomersTask(activeUser);
+        customersTask.setOnSucceeded((WorkerStateEvent getCustomers) -> {
+            validatorManager.CUSTOMERS.addAll(customersTask.getValue());
+        });
+        new Thread(customersTask).start();
     }
 
     /* =====================================
