@@ -27,7 +27,7 @@ import static pf.bb.controller.LoginController.activeUser;
 /**
  * Main Hauptklasse der JavaFX-Anwendung zum Starten des Bicycle Builder Client.
  * @author Alexander Rauch, Stephan Kost
- * @supportedby Juliane Müller
+ * supported by Juliane Müller
  * @version 1.0
  * TH-Brandenburg Semesterprojekt Pattern und Frameworks Winter 2022/2023
  */

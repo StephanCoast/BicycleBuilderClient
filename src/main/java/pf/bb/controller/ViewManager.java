@@ -160,7 +160,7 @@ public class ViewManager {
      * @param headerText Überschrift
      * @param contentText Inhalt
      */
-    public static void createWarningAlert(String title, String headerText, String contentText) {
+    public void createWarningAlert(String title, String headerText, String contentText) {
         Alert alert = new Alert(Alert.AlertType.WARNING);
         alert.setTitle(title);
         alert.setHeaderText(headerText);
@@ -174,8 +174,22 @@ public class ViewManager {
      * @param headerText Überschrift
      * @param contentText Inhalt
      */
-    public static void createInfoAlert(String title, String headerText, String contentText) {
+    public void createInfoAlert(String title, String headerText, String contentText) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(headerText);
+        alert.setContentText(contentText);
+        alert.showAndWait();
+    }
+
+    /**
+     * Standard Error-Dialog wird geöffnet.
+     * @param title Titel des Fensters
+     * @param headerText Überschrift
+     * @param contentText Inhalt
+     */
+    public void createErrorAlert(String title, String headerText, String contentText) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle(title);
         alert.setHeaderText(headerText);
         alert.setContentText(contentText);

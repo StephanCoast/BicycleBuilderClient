@@ -27,7 +27,7 @@ import static pf.bb.controller.LoginController.activeUser;
 /**
  * Diese Klasse steuert die Dashboard-Ansicht des BicycleBuilder und alle enthaltenen Elemente.
  * @author Alexander Rauch
- * @supportedby Stephan Kost
+ * supported by Stephan Kost
  * @version 1.0
  * TH-Brandenburg Semesterprojekt Pattern und Frameworks Winter 2022/2023
  */
@@ -197,27 +197,27 @@ public class DashboardController {
 
     /**
      * Speichern Button im Admin-Neuer-Benutzer Container
-     * @supportedby SK
+     * supported by SK
      * Eingabefelder werden überprüft.
      * Neuer Nutzer wird im Backend gespeichert.
      * Button "Neue Konfiguration" wird wieder aktiviert.
      */
     public void onBottomBarSaveAdmin() {
         if (ValidatorManager.textFieldIsEmpty(tfAdminUserName) || ValidatorManager.textFieldIsEmpty(tfAdminFirstName) || ValidatorManager.textFieldIsEmpty(tfAdminLastName) || ValidatorManager.textFieldIsEmpty(tfAdminMail) || ValidatorManager.pwFieldIsEmpty(pfAdminPW)) {
-            ViewManager.createWarningAlert("Bicycle Builder - Warnung", "Bitte füllen Sie alle Felder aus.", null);
+            vm.createWarningAlert("Bicycle Builder - Warnung", "Bitte füllen Sie alle Felder aus.", null);
         } else if (ValidatorManager.textFieldNotHaveSymbol(tfAdminMail, "@")) {
-            ViewManager.createWarningAlert("Bicycle Builder - Warnung", "Die E-Mail Adresse muss ein @-Symbol enthalten.", null);
+            vm.createWarningAlert("Bicycle Builder - Warnung", "Die E-Mail Adresse muss ein @-Symbol enthalten.", null);
         } else {
             User newUser = new User(tfAdminUserName.getText(), pfAdminPW.getText(), tfAdminMail.getText(), tfAdminFirstName.getText(), tfAdminLastName.getText(), "CONSULTANT");
             PostUserTask userTaskNewUser = new PostUserTask(activeUser, newUser);
             userTaskNewUser.setOnSucceeded((WorkerStateEvent userCreated) -> {
                 if(userTaskNewUser.getValue() != null) {
                     System.out.println("DashboardController: user id=" + userTaskNewUser.getValue().id + " created");
-                    ViewManager.createInfoAlert("Bicycle Builder - Info", "Der neue Benutzer wurde gespeichert.", null);
+                    vm.createInfoAlert("Bicycle Builder - Info", "Der neue Benutzer wurde gespeichert.", null);
                 }
                 else {
                     System.out.println("DashboardController: user creation failed for: " + newUser.id + " result: " + userTaskNewUser.getMessage());
-                    ViewManager.createWarningAlert("Bicycle Builder - Warnung", "Die Erstellung des neuen Benutzers ist fehlgeschlagen.", null);
+                    vm.createWarningAlert("Bicycle Builder - Warnung", "Die Erstellung des neuen Benutzers ist fehlgeschlagen.", null);
                 }
             });
             userTaskNewUser.setOnFailed((WorkerStateEvent userCreatedFailed) -> System.out.println("DashboardController: user creation failed for: " + newUser.id + " result: " + userTaskNewUser.getMessage()));
@@ -231,16 +231,16 @@ public class DashboardController {
 
     /**
      * Speichern Button im Profil-Benutzer Container
-     * @supportedby SK
+     * supported by SK
      * Eingabefelder werden überprüft.
      * Aktualisierte Profildaten werden im Backend gespeichert.
      * Button "Neue Konfiguration" wird wieder aktiviert.
      */
     public void onBottomBarSaveProfile() {
         if (ValidatorManager.textFieldIsEmpty(tfProfileUserName) || ValidatorManager.textFieldIsEmpty(tfProfileFirstName) || ValidatorManager.textFieldIsEmpty(tfProfileLastName) || ValidatorManager.textFieldIsEmpty(tfProfileMail)) {
-            ViewManager.createWarningAlert("Bicycle Builder - Warnung", "Bitte füllen Sie alle Felder aus.", null);
+            vm.createWarningAlert("Bicycle Builder - Warnung", "Bitte füllen Sie alle Felder aus.", null);
         } else if (ValidatorManager.textFieldNotHaveSymbol(tfProfileMail, "@")) {
-            ViewManager.createWarningAlert("Bicycle Builder - Warnung", "Die E-Mail Adresse muss ein @-Symbol enthalten.", null);
+            vm.createWarningAlert("Bicycle Builder - Warnung", "Die E-Mail Adresse muss ein @-Symbol enthalten.", null);
         } else {
             User updatedUser = activeUser;
             updatedUser.id = activeUser.id;
@@ -253,10 +253,10 @@ public class DashboardController {
             userTaskUpdatedUser.setOnSucceeded((WorkerStateEvent userUpdated) -> {
                 if (userTaskUpdatedUser.getValue() != null) {
                     System.out.println("DashboardController: user id=" + userTaskUpdatedUser.getValue().id + " updated");
-                    ViewManager.createInfoAlert("Bicycle Builder - Info", "Das Nutzerprofil wurde aktualisiert.", null);
+                    vm.createInfoAlert("Bicycle Builder - Info", "Das Nutzerprofil wurde aktualisiert.", null);
                 } else {
                     System.out.println("DashboardController: user update failed for: " + updatedUser.id + " result: " + userTaskUpdatedUser.getMessage());
-                    ViewManager.createWarningAlert("Bicycle Builder - Warnung", "Die Erstellung des neuen Benutzers ist fehlgeschlagen.", null);
+                    vm.createWarningAlert("Bicycle Builder - Warnung", "Die Erstellung des neuen Benutzers ist fehlgeschlagen.", null);
                 }
             });
             userTaskUpdatedUser.setOnFailed((WorkerStateEvent userUpdatedFailed) -> System.out.println("DashboardController: user update failed for: " + updatedUser.id + " result: " + userTaskUpdatedUser.getMessage()));
@@ -343,7 +343,7 @@ public class DashboardController {
 
     /**
      * Bestehende Konfigurationen werden aus dem Backend geladen und der Tabelle hinzugefügt.
-     * @supportedby SK
+     * supported by SK
      */
     private void loadConfigs() {
         GetConfigurationsTask configurationsTask = new GetConfigurationsTask(activeUser);
@@ -362,7 +362,7 @@ public class DashboardController {
      * Jedem Datensatz der Tabelle werden in einer zusätzlichen Spalte zwei Buttons zugeordnet.
      * Lupe-Icon Button für das Öffnen einer bestehenden Konfiguration.
      * Eimer-Icon Button für das Löschen einer bestehenden Konfiguration.
-     * @supportedby SK, detail/remove Button setOnAction
+     * supported by SK, detail/remove Button setOnAction
      * 6. Spalte, 2 Buttons, 2 Icons, eine HBox werden erzeugt.
      * Den Buttons werden CSS-Klassen und Tooltips zugewiesen.
      * Lupe-Icon Button: Konfigurator öffnet sich mit Schreibzugriff je nach Konfigurationsstatus.
@@ -393,9 +393,7 @@ public class DashboardController {
 
                 // AR: Lupe-Icon-Button
                 detailButton.setOnAction(event -> {
-                    Configuration config = getTableView().getItems().get(getIndex());
-                    System.out.println("row-ID detailButton: " + config.id);
-                    Main.currentConfig = config;
+                    Main.currentConfig = getTableView().getItems().get(getIndex());
                     // if config is in status ENTWURF, check if someone else is editing it ATM
                     if (Main.currentConfig.status.equals(Configuration.stats[0]))  {
                         // ENTWURF
@@ -404,6 +402,7 @@ public class DashboardController {
                         writeAccessTask1.setOnRunning((runningEvent) -> System.out.println("trying to get writeAccess for configuration..."));
                         writeAccessTask1.setOnSucceeded((WorkerStateEvent writeAccess) -> {
                             System.out.println("OnExitDashboardController: writeAccess for configuration " + Main.currentConfig.id + " switched to: " + writeAccessTask1.getValue());
+                            String newline = "\n";
                             if (writeAccessTask1.getValue().equals("ACCESS GRANTED")) {
                                 // Lokales Objekt aktualisieren
                                 Main.currentConfig.writeAccess = activeUser.name;
@@ -413,9 +412,11 @@ public class DashboardController {
                                 } catch (IOException e) {
                                     throw new RuntimeException(e);
                                 }
-                            }
-                            if (writeAccessTask1.getValue().equals("ACCESS OPENED")) {
+                            } else if (writeAccessTask1.getValue().equals("ACCESS OPENED")) {
                                 System.out.println("Write access wasn't returned last time, because the program was shutdown in the Builder view. Please try to open the configuration again.");
+                                vm.createErrorAlert("Bicycle Builder - Fehler", "Zugriffsfehler", "Die Berechtigung zum Bearbeiten der Konfiguration wurden fehlerhaft zurückgegeben. Bitte öffnen Sie die Konfiguration erneut." + newline + newline);
+                            } else {
+                                vm.createErrorAlert("Bicycle Builder - Fehler", "Zugriffsfehler", "Die gewählte Konfiguration wird gerade von einem anderen Benutzer bearbeitet." + newline + newline);
                             }
                         });
                         writeAccessTask1.setOnFailed((writeAccessFailed) -> {
