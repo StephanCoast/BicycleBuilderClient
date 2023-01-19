@@ -545,6 +545,7 @@ public class DashboardController {
     private void getAllUsers() {
         GetUsersTask usersTask = new GetUsersTask(activeUser);
         usersTask.setOnSucceeded((WorkerStateEvent getUsers) -> {
+            validatorManager.USERS.clear();
             validatorManager.USERS.addAll(usersTask.getValue());
         });
         new Thread(usersTask).start();
