@@ -436,61 +436,67 @@ public class DashboardController {
 
                 // AR: Mülleimer-Icon-Button
                 removeButton.setOnAction(event -> {
+
                     Configuration config = getTableView().getItems().get(getIndex());
-
                     String newline = "\n";
-                    String configID = String.valueOf(config.id);
-                    String configDate = config.timestampCreated;
-                    String configCustomerName = config.getCustomerName();
-                    String configCustomerId = config.getCustomerId();
-                    String configState = config.status;
-                    ArrayList<String> configList = new ArrayList<>();
-                    ArrayList<Float> priceList = new ArrayList<>();
-                    float finalPrice = 0.0f;
 
-                    for (Article a : config.articles) {
-                        configList.add(a.name);
-                        priceList.add(a.price);
-                    }
+                    if ((!activeUser.role.equals("ADMIN")) && (config.status.equals("ABGESCHLOSSEN"))) {
+                        System.out.println("DashboardController: no access authorization to remove finished config's...");
+                        vm.createErrorAlert("Bicycle Builder - Fehler", "Zugriffsfehler", "Die gewählte Konfiguration ist bereits abgeschlossen und kann nur von einem Administrator entfernt werden." + newline + newline);
+                    } else {
+                        String configID = String.valueOf(config.id);
+                        String configDate = config.timestampCreated;
+                        String configCustomerName = config.getCustomerName();
+                        String configCustomerId = config.getCustomerId();
+                        String configState = config.status;
+                        ArrayList<String> configList = new ArrayList<>();
+                        ArrayList<Float> priceList = new ArrayList<>();
+                        float finalPrice = 0.0f;
 
-                    for (float f : priceList) {
-                        finalPrice += f;
-                    }
+                        for (Article a : config.articles) {
+                            configList.add(a.name);
+                            priceList.add(a.price);
+                        }
 
-                    Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "", ButtonType.YES, ButtonType.NO);
-                    alert.setTitle("Bicycle Builder - Konfiguration");
-                    alert.setHeaderText("Möchten Sie die ausgewählte Konfiguration entfernen?");
-                    alert.setContentText("Konfiguration-ID: " + configID + newline
-                            + "Erstellungsdatum: " + configDate + newline
-                            + "Kundenname: " + configCustomerName + newline
-                            + "Kunden-ID: " + configCustomerId + newline
-                            + "Status: " + configState + newline
-                            + "Gesamtpreis: "  + strPriceBeautify(finalPrice) + newline
-                            + "Artikelliste: " + configList.toString().replace("[", "").replace("]", "").trim() + newline + newline);
-                    alert.showAndWait();
+                        for (float f : priceList) {
+                            finalPrice += f;
+                        }
 
-                    if (alert.getResult() == ButtonType.YES) {
-                        // DELETE A CONFIGURATION REQUIRES: DELETE BILL -> DELETE ORDER -> DELETE CONFIGURATION  !! FOREIGN KEY Constraints
-                        // ASSUMPTION HERE: Bill is automatically created with order
-                        if (config.order != null) {
-                            // DELETE BILL FROM DB
-                            DeleteBillTask billDeleteTask1 = new DeleteBillTask(activeUser, config.order.bill.id);
-                            billDeleteTask1.setOnSucceeded((WorkerStateEvent billDeleted) -> {
-                                System.out.println("bill id=" + config.order.bill.id + " deleted=" +  billDeleteTask1.getValue());
+                        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "", ButtonType.YES, ButtonType.NO);
+                        alert.setTitle("Bicycle Builder - Konfiguration");
+                        alert.setHeaderText("Möchten Sie die ausgewählte Konfiguration entfernen?");
+                        alert.setContentText("Konfiguration-ID: " + configID + newline
+                                + "Erstellungsdatum: " + configDate + newline
+                                + "Kundenname: " + configCustomerName + newline
+                                + "Kunden-ID: " + configCustomerId + newline
+                                + "Status: " + configState + newline
+                                + "Gesamtpreis: "  + strPriceBeautify(finalPrice) + newline
+                                + "Artikelliste: " + configList.toString().replace("[", "").replace("]", "").trim() + newline + newline);
+                        alert.showAndWait();
 
-                                // DELETE ORDER FROM DB
-                                DeleteOrderTask orderDeleteTask1 = new DeleteOrderTask(activeUser, config.order.id);
-                                orderDeleteTask1.setOnSucceeded((WorkerStateEvent orderDeleted) -> {
-                                    System.out.println("order id=" + config.order.id + " deleted=" + orderDeleteTask1.getValue());
-                                    deleteConfigFromDb(config.id);
+                        if (alert.getResult() == ButtonType.YES) {
+                            // DELETE A CONFIGURATION REQUIRES: DELETE BILL -> DELETE ORDER -> DELETE CONFIGURATION  !! FOREIGN KEY Constraints
+                            // ASSUMPTION HERE: Bill is automatically created with order
+                            if (config.order != null) {
+                                // DELETE BILL FROM DB
+                                DeleteBillTask billDeleteTask1 = new DeleteBillTask(activeUser, config.order.bill.id);
+                                billDeleteTask1.setOnSucceeded((WorkerStateEvent billDeleted) -> {
+                                    System.out.println("bill id=" + config.order.bill.id + " deleted=" +  billDeleteTask1.getValue());
+
+                                    // DELETE ORDER FROM DB
+                                    DeleteOrderTask orderDeleteTask1 = new DeleteOrderTask(activeUser, config.order.id);
+                                    orderDeleteTask1.setOnSucceeded((WorkerStateEvent orderDeleted) -> {
+                                        System.out.println("order id=" + config.order.id + " deleted=" + orderDeleteTask1.getValue());
+                                        deleteConfigFromDb(config.id);
+                                    });
+                                    //Tasks in eigenem Thread ausführen
+                                    new Thread(orderDeleteTask1).start();
                                 });
                                 //Tasks in eigenem Thread ausführen
-                                new Thread(orderDeleteTask1).start();
-                            });
-                            //Tasks in eigenem Thread ausführen
-                            new Thread(billDeleteTask1).start();
-                        } else {
-                            deleteConfigFromDb(config.id);
+                                new Thread(billDeleteTask1).start();
+                            } else {
+                                deleteConfigFromDb(config.id);
+                            }
                         }
                     }
                 });
