@@ -818,27 +818,6 @@ public class BuilderController {
         }
     }
 
-    private void initSubCatsInitialValuesAfterClose() {
-        if (Main.currentConfig == null) {
-            cat1SelectName.getSelectionModel().clearAndSelect(0);
-            cat1TogglegroupColor.getToggles().get(0).setSelected(true);
-            cat1TogglegroupSize.getToggles().get(0).setSelected(true);
-            cat2SelectModel.getSelectionModel().clearAndSelect(0);
-            cat2SelectGrip.getSelectionModel().clearAndSelect(0);
-            cat2TogglegroupColor.getToggles().get(0).setSelected(true);
-            cat3SelectModel.getSelectionModel().clearAndSelect(0);
-            cat3SelectTyre.getSelectionModel().clearAndSelect(0);
-            cat3TogglegroupColor.getToggles().get(0).setSelected(true);
-            cat3TogglegroupSize.getToggles().get(0).setSelected(true);
-            cat4SelectModel.getSelectionModel().clearAndSelect(0);
-            cat4TogglegroupColor.getToggles().get(0).setSelected(true);
-            cat5SelectModel.getSelectionModel().clearAndSelect(0);
-            cat6SelectBell.getSelectionModel().clearAndSelect(0);
-            cat6SelectStand.getSelectionModel().clearAndSelect(0);
-            cat6SelectLight.getSelectionModel().clearAndSelect(0);
-        }
-    }
-
     /**
      * Die verschiedenen Zwischenpreise werden in einem Array zusammengefasst.
      * Der Gesamtpreis wird berechnet und in den Anzeige-Labeln ausgegeben.
