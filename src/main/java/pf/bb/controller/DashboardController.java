@@ -328,15 +328,15 @@ public class DashboardController {
      * Über RegEx-Pattern werden Symbol-Regeln erstellt.
      */
     private void initTextFieldListeners() {
-        validatorManager.setTextFieldRules(tfAdminUserName, "[a-zA-Z0-9]");
-        validatorManager.setTextFieldRules(tfAdminMail, "[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$");
-        validatorManager.setTextFieldRules(tfAdminFirstName, "[a-zA-Z-'`´]");
-        validatorManager.setTextFieldRules(tfAdminLastName, "[a-zA-Z-'`´]");
+        validatorManager.setTextFieldRules(tfAdminUserName, "[a-zöäüß][A-ZÖÄÜ][0-9]");
+        validatorManager.setTextFieldRules(tfAdminMail, "[a-zöäüß][A-ZÖÄÜ][0-9][._%+-]+@[a-zöäü][A-ZÖÄÜ][0-9][.-]+\\.[a-zöäü][A-ZÖÄÜ]{2,6}$");
+        validatorManager.setTextFieldRules(tfAdminFirstName, "[a-zöäüß][A-ZÖÄÜ][-'`´]");
+        validatorManager.setTextFieldRules(tfAdminLastName, "[a-zöäüß][A-ZÖÄÜ][-'`´]");
 
-        validatorManager.setTextFieldRules(tfProfileUserName, "[a-zA-Z0-9]");
-        validatorManager.setTextFieldRules(tfProfileMail, "[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$");
-        validatorManager.setTextFieldRules(tfProfileFirstName, "[a-zA-Z-'`´]");
-        validatorManager.setTextFieldRules(tfProfileLastName, "[a-zA-Z-'`´]");
+        validatorManager.setTextFieldRules(tfProfileUserName, "[a-zöäüß][A-ZÖÄÜ][0-9]");
+        validatorManager.setTextFieldRules(tfProfileMail, "[a-zöäüß][A-ZÖÄÜ][0-9][._%+-]+@[a-zöäü][A-ZÖÄÜ][0-9][.-]+\\.[a-zöäü][A-ZÖÄÜ]{2,6}$");
+        validatorManager.setTextFieldRules(tfProfileFirstName, "[a-zöäüß][A-ZÖÄÜ][-'`´]");
+        validatorManager.setTextFieldRules(tfProfileLastName, "[a-zöäüß][A-ZÖÄÜ][-'`´]");
     }
 
     /**
