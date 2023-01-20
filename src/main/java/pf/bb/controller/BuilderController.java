@@ -207,6 +207,7 @@ public class BuilderController {
     public void openSidebarDefault() throws IOException {
         initFirstSVGSet();
         initSubcatsInitialValues();
+
         catIsOpen = false;
         closeAllSideDrawers();
         vm.forceDrawerView(drawerDefault, catDefault);
@@ -761,27 +762,22 @@ public class BuilderController {
     private void initSubcatsInitialValues() {
         if (Main.currentConfig == null) {
             // SET DEFAULT CONFIG VALUES
-            setSubcatSelectboxDefault(cat1SelectName);
-            setSubcatToggleDefault(cat1TogglegroupColor);
-            setSubcatToggleDefault(cat1TogglegroupSize);
-
-            setSubcatSelectboxDefault(cat2SelectModel);
-            setSubcatSelectboxDefault(cat2SelectGrip);
-            setSubcatToggleDefault(cat2TogglegroupColor);
-
-            setSubcatSelectboxDefault(cat3SelectModel);
-            setSubcatSelectboxDefault(cat3SelectTyre);
-            setSubcatToggleDefault(cat3TogglegroupColor);
-            setSubcatToggleDefault(cat3TogglegroupSize);
-
-            setSubcatSelectboxDefault(cat4SelectModel);
-            setSubcatToggleDefault(cat4TogglegroupColor);
-
-            setSubcatSelectboxDefault(cat5SelectModel);
-
-            setSubcatSelectboxDefault(cat6SelectBell);
-            setSubcatSelectboxDefault(cat6SelectStand);
-            setSubcatSelectboxDefault(cat6SelectLight);
+            cat1SelectName.getSelectionModel().clearAndSelect(0);
+            cat1TogglegroupColor.getToggles().get(0).setSelected(true);
+            cat1TogglegroupSize.getToggles().get(0).setSelected(true);
+            cat2SelectModel.getSelectionModel().clearAndSelect(0);
+            cat2SelectGrip.getSelectionModel().clearAndSelect(0);
+            cat2TogglegroupColor.getToggles().get(0).setSelected(true);
+            cat3SelectModel.getSelectionModel().clearAndSelect(0);
+            cat3SelectTyre.getSelectionModel().clearAndSelect(0);
+            cat3TogglegroupColor.getToggles().get(0).setSelected(true);
+            cat3TogglegroupSize.getToggles().get(0).setSelected(true);
+            cat4SelectModel.getSelectionModel().clearAndSelect(0);
+            cat4TogglegroupColor.getToggles().get(0).setSelected(true);
+            cat5SelectModel.getSelectionModel().clearAndSelect(0);
+            cat6SelectBell.getSelectionModel().clearAndSelect(0);
+            cat6SelectStand.getSelectionModel().clearAndSelect(0);
+            cat6SelectLight.getSelectionModel().clearAndSelect(0);
         } else {
             // SET CURRENT CONFIG VALUES
             // !! There must be one article of every type in the configuration! Make sure client side before save in the database!
@@ -819,6 +815,27 @@ public class BuilderController {
             cat6SelectBell.getSelectionModel().select(Main.currentConfig.getArticleByType("Klingel").name);
             cat6SelectStand.getSelectionModel().select(Main.currentConfig.getArticleByType("Ständer").name);
             cat6SelectLight.getSelectionModel().select(Main.currentConfig.getArticleByType("Licht").name);
+        }
+    }
+
+    private void initSubCatsInitialValuesAfterClose() {
+        if (Main.currentConfig == null) {
+            cat1SelectName.getSelectionModel().clearAndSelect(0);
+            cat1TogglegroupColor.getToggles().get(0).setSelected(true);
+            cat1TogglegroupSize.getToggles().get(0).setSelected(true);
+            cat2SelectModel.getSelectionModel().clearAndSelect(0);
+            cat2SelectGrip.getSelectionModel().clearAndSelect(0);
+            cat2TogglegroupColor.getToggles().get(0).setSelected(true);
+            cat3SelectModel.getSelectionModel().clearAndSelect(0);
+            cat3SelectTyre.getSelectionModel().clearAndSelect(0);
+            cat3TogglegroupColor.getToggles().get(0).setSelected(true);
+            cat3TogglegroupSize.getToggles().get(0).setSelected(true);
+            cat4SelectModel.getSelectionModel().clearAndSelect(0);
+            cat4TogglegroupColor.getToggles().get(0).setSelected(true);
+            cat5SelectModel.getSelectionModel().clearAndSelect(0);
+            cat6SelectBell.getSelectionModel().clearAndSelect(0);
+            cat6SelectStand.getSelectionModel().clearAndSelect(0);
+            cat6SelectLight.getSelectionModel().clearAndSelect(0);
         }
     }
 
@@ -1536,26 +1553,6 @@ public class BuilderController {
             case "L":
                 tn3.setSelected(true);
                 break;
-        }
-    }
-
-    /**
-     * Hilfsfunktion zum initialen Setzen der Auswahlbox einer Unterkategorie.
-     * @param cb Auswahlbox
-     */
-    private void setSubcatSelectboxDefault(JFXComboBox cb) {
-        if (cb.getSelectionModel().isEmpty()) {
-            cb.getSelectionModel().select(0);
-        }
-    }
-
-    /**
-     * Hilfsfunktion zum initialen Setzen eines Toggles einer Unterkategorie.
-     * @param tg Toggle-Gruppe
-     */
-    private void setSubcatToggleDefault(ToggleGroup tg) {
-        if (tg.getSelectedToggle() == null) {
-            tg.getToggles().get(0).setSelected(true);
         }
     }
 
