@@ -240,8 +240,7 @@ public class DashboardController {
      * Speichern Button im Profil-Benutzer Container
      * supported by SK
      * Eingabefelder werden überprüft.
-     * Aktualisierte Profildaten werden im Backend gespeichert.
-     * Button "Neue Konfiguration" wird wieder aktiviert.
+     * Update User Methode wird aufgerufen.
      */
     public void onBottomBarSaveProfile() {
         if (validatorManager.textFieldIsEmpty(tfProfileUserName) || validatorManager.textFieldIsEmpty(tfProfileFirstName) || validatorManager.textFieldIsEmpty(tfProfileLastName) || validatorManager.textFieldIsEmpty(tfProfileMail)) {
@@ -251,36 +250,42 @@ public class DashboardController {
         } else if (!tfProfileMail.getText().equals(activeUser.email)) {
             if (validatorManager.textFieldUserMailExists(tfProfileMail.getText())) {
                 vm.createWarningAlert("Bicycle Builder - Warnung", "Die gewünschte E-Mail Adresse existiert bereits.", null);
-            }
+            } else { updateUserTask(); }
         } else if (!tfProfileUserName.getText().equals(activeUser.name)) {
             if (validatorManager.textFieldUserNameExists(tfProfileUserName.getText())) {
                 vm.createWarningAlert("Bicycle Builder - Warnung", "Der gewünschte Benutzername existiert bereits.", null);
+            } else { updateUserTask(); }
+        } else { updateUserTask(); }
+    }
+
+    /**
+     * Aktualisierte Profildaten werden im Backend gespeichert.
+     * Button "Neue Konfiguration" wird wieder aktiviert.
+     */
+    private void updateUserTask() {
+        User updatedUser = activeUser;
+        updatedUser.id = activeUser.id;
+        updatedUser.forename = tfProfileFirstName.getText();
+        updatedUser.lastname = tfProfileLastName.getText();
+        updatedUser.name = tfProfileUserName.getText();
+        updatedUser.email = tfProfileMail.getText();
+
+        PutUserTask userTaskUpdatedUser = new PutUserTask(activeUser, updatedUser, activeUser.id);
+        userTaskUpdatedUser.setOnSucceeded((WorkerStateEvent userUpdated) -> {
+            if (userTaskUpdatedUser.getValue() != null) {
+                System.out.println("DashboardController: user id=" + userTaskUpdatedUser.getValue().id + " updated");
+                vm.createInfoAlert("Bicycle Builder - Info", "Das Nutzerprofil wurde aktualisiert.", null);
+            } else {
+                System.out.println("DashboardController: user update failed for: " + updatedUser.id + " result: " + userTaskUpdatedUser.getMessage());
+                vm.createWarningAlert("Bicycle Builder - Warnung", "Die Erstellung des neuen Benutzers ist fehlgeschlagen.", null);
             }
-        } else {
-            User updatedUser = activeUser;
-            updatedUser.id = activeUser.id;
-            updatedUser.forename = tfProfileFirstName.getText();
-            updatedUser.lastname = tfProfileLastName.getText();
-            updatedUser.name = tfProfileUserName.getText();
-            updatedUser.email = tfProfileMail.getText();
+        });
+        userTaskUpdatedUser.setOnFailed((WorkerStateEvent userUpdatedFailed) -> System.out.println("DashboardController: user update failed for: " + updatedUser.id + " result: " + userTaskUpdatedUser.getMessage()));
+        new Thread(userTaskUpdatedUser).start();
 
-            PutUserTask userTaskUpdatedUser = new PutUserTask(activeUser, updatedUser, activeUser.id);
-            userTaskUpdatedUser.setOnSucceeded((WorkerStateEvent userUpdated) -> {
-                if (userTaskUpdatedUser.getValue() != null) {
-                    System.out.println("DashboardController: user id=" + userTaskUpdatedUser.getValue().id + " updated");
-                    vm.createInfoAlert("Bicycle Builder - Info", "Das Nutzerprofil wurde aktualisiert.", null);
-                } else {
-                    System.out.println("DashboardController: user update failed for: " + updatedUser.id + " result: " + userTaskUpdatedUser.getMessage());
-                    vm.createWarningAlert("Bicycle Builder - Warnung", "Die Erstellung des neuen Benutzers ist fehlgeschlagen.", null);
-                }
-            });
-            userTaskUpdatedUser.setOnFailed((WorkerStateEvent userUpdatedFailed) -> System.out.println("DashboardController: user update failed for: " + updatedUser.id + " result: " + userTaskUpdatedUser.getMessage()));
-            new Thread(userTaskUpdatedUser).start();
-
-            btnNewConfig.setDisable(false);
-            closeAllDrawers();
-            setDefaultFocus();
-        }
+        btnNewConfig.setDisable(false);
+        closeAllDrawers();
+        setDefaultFocus();
     }
 
     /* =====================================
