@@ -74,17 +74,26 @@ public class SaveConfigurationTask extends Task<Configuration> {
             String configJSON;
             if (Main.currentConfig == null) {
                 configNew.status = this.status;
+
+                //Set writeAccess immediately to user who created it for further editing
+                configNew.writeAccess = user.name;
+                Main.writeAccessGiven = true;
+
+                //Serialize JAVA-Object -> JSON via GSON library
                 configJSON = gson.toJson(configNew);
 
+                //HTTP-Request
                 HttpResponse<JsonNode> res = Unirest.post(Configuration.getUrl()).header("Content-Type", "application/json").header("Authorization", user.jsonWebToken).body(configJSON).asJson();
                 String json = res.getBody().toString();
                 Configuration tempConfig = new Gson().fromJson(json, Configuration.class);
+
                 // Add db-generated values to Object
                 configNew.id = tempConfig.id;
                 configNew.timestampCreated = tempConfig.timestampCreated;
                 configNew.timestampLastTouched = tempConfig.timestampLastTouched;
-                return configNew;
+                Main.currentConfig = configNew;
 
+                return Main.currentConfig;
             } else {
                 // Artikelliste der bestehenden Konfiguration aktualisieren
                 Main.currentConfig.articles = configNew.articles;
