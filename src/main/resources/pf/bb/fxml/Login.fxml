@@ -67,7 +67,7 @@
          </VBox.margin>
          <JFXButton buttonType="RAISED" onAction="#close" prefHeight="36.0" prefWidth="110.0"
                     styleClass="btn-standard-comp" text="ABBRECHEN"/>
-         <JFXButton buttonType="RAISED" onAction="#authenticate" prefHeight="36.0" prefWidth="110.0"
+         <JFXButton fx:id="btnLogin" buttonType="RAISED" onAction="#authenticate" prefHeight="36.0" prefWidth="110.0"
                     styleClass="btn-standard-comp" text="LOGIN"/>
       </HBox>
       <Label fx:id="loginFailure" text="Login fehlgeschlagen" visible="false"/>

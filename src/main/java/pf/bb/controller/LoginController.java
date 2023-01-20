@@ -1,15 +1,20 @@
 package pf.bb.controller;
 
+import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
 import javafx.application.Platform;
 import com.jfoenix.validation.RequiredFieldValidator;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.scene.control.Label;
+import javafx.scene.input.KeyCode;
+import javafx.scene.layout.AnchorPane;
 import pf.bb.Main;
 import pf.bb.model.*;
 import pf.bb.task.*;
@@ -43,7 +48,10 @@ public class LoginController {
      */
     @FXML
     public Label loginFailure;
-
+    /**
+     * Variablendeklaration für den Login-Button.
+     */
+    public JFXButton btnLogin;
     /**
      * Variablendeklaration für verschiedene Singleton-Instanzen.
      * ViewManager = steuert die verschiedenen Ansichten, stellt Methoden bereit
@@ -75,6 +83,7 @@ public class LoginController {
     public void initialize() {
         validatorManager.initTextValidators(username, validatorName);
         validatorManager.initPasswordValidators(password, validatorPW);
+        setLoginOnEnter();
 
         // for developing only
         // todo: must be removed for shipping, causes label float bug
@@ -132,6 +141,33 @@ public class LoginController {
     }
 
     /**
+     * Login per Enter-Button bei vollständig ausgefüllten Textfeldern.
+     * Cursor wird auf die letzte Stelle im Benutzernamen-Textfeld gesetzt.
+     */
+    private void setLoginOnEnter() {
+        username.focusedProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue) {
+                Platform.runLater(()->{
+                    username.deselect();
+                    username.positionCaret(username.getLength());
+                });
+            }
+        });
+
+        username.setOnKeyPressed(ke -> {
+            if (ke.getCode().equals(KeyCode.ENTER)) {
+                btnLogin.fire();
+            }
+        });
+
+        password.setOnKeyPressed(ke -> {
+            if (ke.getCode().equals(KeyCode.ENTER)) {
+                btnLogin.fire();
+            }
+        });
+    }
+
+    /**
      * Abbrechen Button
      * @throws IOException Fehlerbehandlung
      * Standard Frage-Dialog wird geöffnet, bei positiver Bestätigung wird die Anwendung geschlossen.
@@ -145,6 +181,10 @@ public class LoginController {
 
         if (alert.getResult() == ButtonType.YES) {
             Platform.exit();
+        } else {
+            username.resetValidation();
+            password.resetValidation();
+            username.requestFocus();
         }
     }
 
