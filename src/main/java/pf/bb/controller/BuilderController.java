@@ -205,6 +205,8 @@ public class BuilderController {
      * Default-Fenster der Sidebar wird über den ViewManager angefordert.
      */
     public void openSidebarDefault() throws IOException {
+        initFirstSVGSet();
+        initSubcatsInitialValues();
         catIsOpen = false;
         closeAllSideDrawers();
         vm.forceDrawerView(drawerDefault, catDefault);
@@ -712,7 +714,7 @@ public class BuilderController {
         validatorManager.setTextFieldRules(tfCustomerFirstName, "[a-zA-Z-'`´]");
         validatorManager.setTextFieldRules(tfCustomerLastName, "[a-zA-Z-'`´]");
         validatorManager.setTextFieldRules(tfCustomerMail, "[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$");
-        validatorManager.setTextFieldRules(tfCustomerStreet, "[a-zA-Z-'`´]");
+        validatorManager.setTextFieldRules(tfCustomerStreet, "[a-zA-Z-'`´ß]");
         validatorManager.setTextFieldRules(tfCustomerNr, "[0-9]");
         validatorManager.setTextFieldRules(tfCustomerZipcode, "[\\d{0,5}]");
         validatorManager.setTextFieldRules(tfCustomerCity, "[a-zA-Z-'`´]");

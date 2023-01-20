@@ -19,8 +19,10 @@ import pf.bb.model.User;
 import pf.bb.task.*;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashSet;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 import static pf.bb.controller.LoginController.activeUser;
 
@@ -381,9 +383,33 @@ public class DashboardController {
             Main.CONFIGURATIONS.clear();
             Main.CONFIGURATIONS.addAll(configurationsTask.getValue());
             dboard_table.setItems(Main.CONFIGURATIONS);
+            formatDateColumn();
         });
         configurationsTask.setOnFailed((WorkerStateEvent e21) -> System.out.println("DashboardController: loading configuration failed."));
         new Thread(configurationsTask).start();
+    }
+
+    /**
+     * Formatiert den Zeitstempel der Tabelle in eine gebräuchliche Reihenfolge.
+     */
+    private void formatDateColumn() {
+        dboard_col2.setCellFactory(col -> new TableCell<Configuration, String>() {
+            final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+            final DateFormat df = DateFormat.getDateTimeInstance(DateFormat.DEFAULT, DateFormat.SHORT, Locale.GERMANY);
+            @Override
+            protected void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty) {
+                    setText(null);
+                } else {
+                    try {
+                        setText(df.format(sdf.parse(item)));
+                    } catch (ParseException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            }
+        });
     }
 
     /**
@@ -496,15 +522,14 @@ public class DashboardController {
                         }
 
                         Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "", ButtonType.YES, ButtonType.NO);
-                        alert.setTitle("Bicycle Builder - Konfiguration");
+                        alert.setTitle("Konfiguration löschen");
                         alert.setHeaderText("Möchten Sie die ausgewählte Konfiguration entfernen?");
                         alert.setContentText("Konfiguration-ID: " + configID + newline
                                 + "Erstellungsdatum: " + configDate + newline
                                 + "Kundenname: " + configCustomerName + newline
                                 + "Kunden-ID: " + configCustomerId + newline
                                 + "Status: " + configState + newline
-                                + "Gesamtpreis: "  + strPriceBeautify(finalPrice) + newline
-                                + "Artikelliste: " + configList.toString().replace("[", "").replace("]", "").trim() + newline + newline);
+                                + "Gesamtpreis: "  + strPriceBeautify(finalPrice) + " €" + newline + newline);
                         alert.showAndWait();
 
                         if (alert.getResult() == ButtonType.YES) {
