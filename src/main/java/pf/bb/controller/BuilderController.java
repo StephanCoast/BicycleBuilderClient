@@ -712,13 +712,13 @@ public class BuilderController {
      * Kundendaten-Textfelder für Hausnummer und PLZ bekommen Limitierungen im Listener.
      */
     private void initTextFieldListeners() {
-        validatorManager.setTextFieldRules(tfCustomerFirstName, "[a-zA-Z-'`´]");
-        validatorManager.setTextFieldRules(tfCustomerLastName, "[a-zA-Z-'`´]");
-        validatorManager.setTextFieldRules(tfCustomerMail, "[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$");
-        validatorManager.setTextFieldRules(tfCustomerStreet, "[a-zA-Z-'`´ß]");
+        validatorManager.setTextFieldRules(tfCustomerFirstName, "[a-zöäüß][A-ZÖÄÜ][-'`´]");
+        validatorManager.setTextFieldRules(tfCustomerLastName, "[a-zöäüß][A-ZÖÄÜ][-'`´]");
+        validatorManager.setTextFieldRules(tfCustomerMail, "[a-zöäüß][A-ZÖÄÜ][0-9][._%+-]+@[a-zöäü][A-ZÖÄÜ][0-9][.-]+\\.[a-zöäü][A-ZÖÄÜ]{2,6}$");
+        validatorManager.setTextFieldRules(tfCustomerStreet, "[a-zöäüß][A-ZÖÄÜ][-'`´]");
         validatorManager.setTextFieldRules(tfCustomerNr, "[0-9]");
         validatorManager.setTextFieldRules(tfCustomerZipcode, "[\\d{0,5}]");
-        validatorManager.setTextFieldRules(tfCustomerCity, "[a-zA-Z-'`´]");
+        validatorManager.setTextFieldRules(tfCustomerCity, "[a-zöäüß][A-ZÖÄÜ][-'`´]");
 
         int maxLengthZipCode = 5;
         int maxLengthHouseNumber = 3;

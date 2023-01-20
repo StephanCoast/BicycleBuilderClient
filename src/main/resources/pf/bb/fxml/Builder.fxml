@@ -26,7 +26,7 @@
       <top>
          <BorderPane prefHeight="48.0" prefWidth="625.0" styleClass="header-borderpane" BorderPane.alignment="CENTER">
             <left>
-               <StackPane prefHeight="150.0" prefWidth="335.0" BorderPane.alignment="CENTER">
+               <StackPane prefHeight="150.0" prefWidth="155.0" BorderPane.alignment="CENTER">
                   <FontAwesomeIconView glyphName="BICYCLE" size="75" styleClass="header-icon-bicycle" textOrigin="TOP" wrappingWidth="48.85714340209961" />
                </StackPane>
             </left>
@@ -37,10 +37,13 @@
                         <Font size="32.0" />
                      </font>
                   </Label>
+                  <padding>
+                     <Insets left="50.0" />
+                  </padding>
                </StackPane>
             </center>
             <right>
-               <StackPane prefHeight="150.0" prefWidth="270.0" BorderPane.alignment="CENTER">
+               <StackPane prefHeight="150.0" prefWidth="180.0" BorderPane.alignment="CENTER">
                   <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="50.0" StackPane.alignment="CENTER_RIGHT">
                      <JFXButton fx:id="btnHeaderHome" ellipsisString="" onAction="#openDashboard" prefHeight="28.0" prefWidth="28.0" styleClass="header-icon-home">
                         <graphic>
@@ -69,68 +72,68 @@
       <right>
          <StackPane prefHeight="669.0" prefWidth="350.0" styleClass="container-sidebar" BorderPane.alignment="CENTER">
             <JFXDrawer fx:id="drawerDefault" defaultDrawerSize="350.0" direction="RIGHT">
-                  <BorderPane fx:id="catDefault">
-                     <top>
-                        <StackPane prefHeight="100.0" BorderPane.alignment="CENTER">
-                           <padding>
-                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
-                           </padding>
-                           <VBox prefHeight="200.0" prefWidth="100.0">
-                              <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
-                                 <Label ellipsisString="" text="Gesamtpreis:">
-                                    <font>
-                                       <Font size="20.0"/>
-                                    </font>
-                                 </Label>
-                                 <Label fx:id="catLabelDefaultPrice" ellipsisString="" text="1000">
-                                    <font>
-                                       <Font name="System Bold" size="24.0"/>
-                                    </font>
-                                    <padding>
-                                       <Insets left="10.0"/>
-                                    </padding>
-                                 </Label>
-                                 <Label ellipsisString="" text="€">
-                                    <font>
-                                       <Font size="21.0"/>
-                                    </font>
-                                    <padding>
-                                       <Insets left="10.0"/>
-                                    </padding>
-                                 </Label>
-                              </HBox>
-                           </VBox>
-                        </StackPane>
-                     </top>
-                     <bottom>
-                        <StackPane prefHeight="200.0" BorderPane.alignment="CENTER">
-                           <padding>
-                              <Insets bottom="30.0" left="10.0" right="10.0" top="10.0"/>
-                           </padding>
-                           <VBox alignment="CENTER" spacing="10.0">
-                              <cursor>
-                                 <Cursor fx:constant="HAND"/>
-                              </cursor>
-                              <JFXButton fx:id="btnSaveDraft" buttonType="RAISED" ellipsisString=""
-                                         onAction="#onSaveDraft" prefHeight="80.0" prefWidth="200.0"
-                                         styleClass="btn-standard-comp" text="ENTWURF SPEICHERN"/>
-                              <JFXButton fx:id="btnAddCustomerData" buttonType="RAISED" ellipsisString=""
-                                         onAction="#openCustomerDataView" prefHeight="80.0" prefWidth="200.0"
-                                         styleClass="btn-standard-comp" text="KUNDENDATEN EINGEBEN"/>
-                              <JFXButton fx:id="btnSidebarHome" buttonType="RAISED" ellipsisString=""
-                                         onAction="#openDashboard" prefHeight="80.0" prefWidth="200.0"
-                                         styleClass="btn-standard-comp" text="DASHBOARD"/>
-                           </VBox>
-                        </StackPane>
-                     </bottom>
-                     <center>
-                        <StackPane prefHeight="300.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-                           <padding>
-                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                           </padding>
-                        </StackPane>
-                     </center>
-                  </BorderPane>
+               <BorderPane fx:id="catDefault">
+                  <top>
+                     <StackPane prefHeight="100.0" BorderPane.alignment="CENTER">
+                        <padding>
+                           <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+                        </padding>
+                        <VBox prefHeight="200.0" prefWidth="100.0">
+                           <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                              <Label ellipsisString="" text="Gesamtpreis:">
+                                 <font>
+                                    <Font size="20.0"/>
+                                 </font>
+                              </Label>
+                              <Label fx:id="catLabelDefaultPrice" ellipsisString="" text="1000">
+                                 <font>
+                                    <Font name="System Bold" size="24.0"/>
+                                 </font>
+                                 <padding>
+                                    <Insets left="10.0"/>
+                                 </padding>
+                              </Label>
+                              <Label ellipsisString="" text="€">
+                                 <font>
+                                    <Font size="21.0"/>
+                                 </font>
+                                 <padding>
+                                    <Insets left="10.0"/>
+                                 </padding>
+                              </Label>
+                           </HBox>
+                        </VBox>
+                     </StackPane>
+                  </top>
+                  <bottom>
+                     <StackPane prefHeight="200.0" BorderPane.alignment="CENTER">
+                        <padding>
+                           <Insets bottom="30.0" left="10.0" right="10.0" top="10.0"/>
+                        </padding>
+                        <VBox alignment="CENTER" spacing="10.0">
+                           <cursor>
+                              <Cursor fx:constant="HAND"/>
+                           </cursor>
+                           <JFXButton fx:id="btnSaveDraft" buttonType="RAISED" ellipsisString=""
+                                      onAction="#onSaveDraft" prefHeight="80.0" prefWidth="220.0"
+                                      styleClass="btn-standard-comp" text="ENTWURF SPEICHERN"/>
+                           <JFXButton fx:id="btnAddCustomerData" buttonType="RAISED" ellipsisString=""
+                                      onAction="#openCustomerDataView" prefHeight="80.0" prefWidth="220.0"
+                                      styleClass="btn-standard-comp" text="KUNDENDATEN EINGEBEN"/>
+                           <JFXButton fx:id="btnSidebarHome" buttonType="RAISED" ellipsisString=""
+                                      onAction="#openDashboard" prefHeight="80.0" prefWidth="220.0"
+                                      styleClass="btn-standard-comp" text="DASHBOARD"/>
+                        </VBox>
+                     </StackPane>
+                  </bottom>
+                  <center>
+                     <StackPane prefHeight="300.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                        <padding>
+                           <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                        </padding>
+                     </StackPane>
+                  </center>
+               </BorderPane>
             </JFXDrawer>
             <JFXDrawer fx:id="drawerCat1" alignment="TOP_LEFT" defaultDrawerSize="350.0" direction="RIGHT"
                        visible="false">
@@ -925,13 +928,13 @@
                               <Cursor fx:constant="HAND"/>
                            </cursor>
                            <JFXButton buttonType="RAISED" ellipsisString="" onAction="#onFinalOrder"
-                                      prefHeight="80.0" prefWidth="200.0"
+                                      prefHeight="80.0" prefWidth="120.0"
                                       styleClass="btn-standard-comp" text="AUFTRAG"/>
                            <JFXButton buttonType="RAISED" ellipsisString="" onAction="#onFinalInvoice"
-                                      prefHeight="80.0" prefWidth="200.0"
+                                      prefHeight="80.0" prefWidth="120.0"
                                       styleClass="btn-standard-comp" text="RECHNUNG"/>
                            <JFXButton buttonType="RAISED" ellipsisString="" onAction="#openDashboard"
-                                      prefHeight="80.0" prefWidth="200.0"
+                                      prefHeight="80.0" prefWidth="120.0"
                                       styleClass="btn-standard-comp" text="DASHBOARD"/>
                         </VBox>
                      </StackPane>
@@ -1138,15 +1141,15 @@
                         <center>
                            <StackPane alignment="TOP_LEFT" styleClass="spCustomerData" BorderPane.alignment="CENTER">
                               <VBox>
+                                 <padding>
+                                    <Insets top="10.0" left="20.0"/>
+                                 </padding>
                                  <opaqueInsets>
                                     <Insets/>
                                  </opaqueInsets>
                                  <BorderPane prefHeight="30.0">
                                     <left>
                                        <StackPane prefWidth="40.0" BorderPane.alignment="CENTER">
-                                          <padding>
-                                             <Insets top="10.0" left="20.0"/>
-                                          </padding>
                                           <JFXButton ellipsisString="" onAction="#onBottomBarClose"
                                                      prefHeight="28.0" prefWidth="28.0"
                                                      styleClass="sidebar-icon-close-kunden">
@@ -1270,6 +1273,9 @@
                                                               minHeight="-Infinity"
                                                               minWidth="-Infinity" prefHeight="40.0"
                                                               prefWidth="150.0" promptText=" Stadt"/>
+                                                <padding>
+                                                   <Insets left="20.0" bottom="10.0"/>
+                                                </padding>
                                                 <RequiredFieldValidator
                                                         fx:id="validatorCustomerStreet"
                                                         message="Strasse fehlt">

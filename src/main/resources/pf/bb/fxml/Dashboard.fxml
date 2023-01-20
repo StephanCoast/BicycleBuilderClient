@@ -23,7 +23,7 @@
       <top>
          <BorderPane prefHeight="48.0" prefWidth="625.0" styleClass="header-borderpane" BorderPane.alignment="CENTER">
             <left>
-               <StackPane prefWidth="335" BorderPane.alignment="CENTER">
+               <StackPane prefWidth="155" BorderPane.alignment="CENTER">
                   <FontAwesomeIconView glyphName="BICYCLE" size="75" styleClass="header-icon-bicycle" textOrigin="TOP" wrappingWidth="48.85714340209961" />
                </StackPane>
             </left>
@@ -34,10 +34,13 @@
                         <Font size="32.0" />
                      </font>
                   </Label>
+                  <padding>
+                     <Insets left="55.0" />
+                  </padding>
                </StackPane>
             </center>
             <right>
-               <StackPane prefWidth="225.0" BorderPane.alignment="CENTER">
+               <StackPane prefWidth="180.0" BorderPane.alignment="CENTER">
                   <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="50.0">
                      <JFXButton fx:id="btnCreateUser" ellipsisString="" onAction="#openAdmin" prefHeight="28.0" prefWidth="28.0" styleClass="header-icon-admin">
                         <graphic>
@@ -63,7 +66,9 @@
                            <Cursor fx:constant="HAND" />
                         </cursor>
                      </JFXButton>
-
+                     <padding>
+                        <Insets right="41.0" />
+                     </padding>
                   </HBox>
                </StackPane>
             </right>
@@ -186,6 +191,9 @@
                                                                prefHeight="40.0" prefWidth="150.0"
                                                                promptText=" Passwort"
                                                                styleClass="jfx-text-field"/>
+                                             <padding>
+                                                <Insets bottom="5.0"/>
+                                             </padding>
                                              <RequiredFieldValidator fx:id="validatorAdminMail"
                                                                      message="E-Mail Adresse fehlt">
                                                 <cursor>
@@ -308,6 +316,9 @@
                                                            minHeight="-Infinity" minWidth="-Infinity"
                                                            prefHeight="40.0" prefWidth="150.0"
                                                            promptText=" E-Mail"/>
+                                             <padding>
+                                                <Insets bottom="5.0"/>
+                                             </padding>
                                              <RequiredFieldValidator fx:id="validatorProfileMail"
                                                                      message="E-Mail Adresse fehlt">
                                                 <cursor>

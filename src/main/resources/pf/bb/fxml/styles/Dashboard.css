@@ -45,6 +45,23 @@
 }
 
 
+/** Tooltips **/
+.table-tooltip {
+    -fx-background-color: white;
+    -fx-font-size: 12px;
+    -fx-text-fill: black;
+    -fx-opacity: 0.9;
+
+}
+
+.header-icon-tooltip {
+    -fx-background-color: white;
+    -fx-font-size: 12px;
+    -fx-text-fill: black;
+    -fx-opacity: 0.9;
+}
+
+
 /** Buttons Standard (Nutzer und Profil) **/
 .btn-standard-comp {
     -fx-text-fill: white;
@@ -151,12 +168,8 @@
 
 }
 
-.table-view:row-selection .table-row-cell:filled:hover {
-    -fx-background-color: rgba(48, 79, 255, 0.2);
-}
-
 .table-view:row-selection .table-row-cell:filled:hover .text {
-    -fx-fill: black;
+    -fx-fill: #304ffe;
 }
 
 .table-row-cell:filled:focused {
@@ -166,6 +179,10 @@
 
 .table-row-cell:filled:focused .text {
     -fx-fill: white;
+}
+
+.table-row-cell:filled:focused:hover .text {
+    -fx-fill: black !important;
 }
 
 .table-row-cell .table-column {
@@ -195,9 +212,9 @@
 
 .btn-table-icon-search:hover,
 .btn-table-icon-remove:hover {
-    -fx-scale-x: 1.1;
-    -fx-scale-y: 1.1;
-    -fx-scale-z: 1.1;
+    -fx-scale-x: 1.2;
+    -fx-scale-y: 1.2;
+    -fx-scale-z: 1.2;
     -fx-cursor: hand;
 }
 
@@ -218,9 +235,9 @@
 }
 
 .bottombar-icon-close:hover {
-    -fx-scale-x: 1.1;
-    -fx-scale-y: 1.1;
-    -fx-scale-z: 1.1;
+    -fx-scale-x: 1.2;
+    -fx-scale-y: 1.2;
+    -fx-scale-z: 1.2;
 }
 
 
