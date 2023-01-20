@@ -15,7 +15,6 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import pf.bb.model.Article;
 import pf.bb.model.Configuration;
-import pf.bb.task.GetArticlesTask;
 import pf.bb.task.PutConfigurationWriteAccessTask;
 
 import java.io.IOException;
@@ -61,25 +60,7 @@ public class Main extends Application {
      */
     @Override
     public void start(Stage stageMain) throws IOException {
-        loadStaticData();
         loadFirstClientView(stageMain);
-    }
-
-    /**
-     * Get Articles Task.
-     * Alle vorhandenen Artikel werden der Array-Liste hinzugefügt.
-     */
-    private void loadStaticData() {
-        // query all articles from REST API with Task Thread before Login -> faster
-        GetArticlesTask articlesTask = new GetArticlesTask();
-        //Erst Task definieren incl. WorkerStateEvent als Flag, um zu wissen, wann fertig
-        articlesTask.setOnRunning((successEvent) -> System.out.println("loading articles..."));
-        articlesTask.setOnSucceeded((WorkerStateEvent e) -> {
-            System.out.println("articles loaded.");
-            ARTICLES.addAll(articlesTask.getValue());
-        });
-        //Tasks in eigenem Thread ausführen
-        new Thread(articlesTask).start();
     }
 
     /**
