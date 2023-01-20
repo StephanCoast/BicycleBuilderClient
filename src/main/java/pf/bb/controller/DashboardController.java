@@ -393,9 +393,10 @@ public class DashboardController {
      * Formatiert den Zeitstempel der Tabelle in eine gebräuchliche Reihenfolge.
      */
     private void formatDateColumn() {
-        dboard_col2.setCellFactory(col -> new TableCell<Configuration, String>() {
+        dboard_col2.setCellFactory(col -> new TableCell<>() {
             final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
             final DateFormat df = DateFormat.getDateTimeInstance(DateFormat.DEFAULT, DateFormat.SHORT, Locale.GERMANY);
+
             @Override
             protected void updateItem(String item, boolean empty) {
                 super.updateItem(item, empty);
@@ -478,9 +479,7 @@ public class DashboardController {
                                 vm.createErrorAlert("Bicycle Builder - Fehler", "Zugriffsfehler", "Die gewählte Konfiguration wird gerade von einem anderen Benutzer bearbeitet." + newline + newline);
                             }
                         });
-                        writeAccessTask1.setOnFailed((writeAccessFailed) -> {
-                            System.out.println("Couldn't get writeAccess for configuration. Server does not respond." + writeAccessTask1.getMessage());
-                        });
+                        writeAccessTask1.setOnFailed((writeAccessFailed) -> System.out.println("Couldn't get writeAccess for configuration. Server does not respond." + writeAccessTask1.getMessage()));
                         //Tasks in eigenem Thread ausführen
                         new Thread(writeAccessTask1).start();
                     } else {
