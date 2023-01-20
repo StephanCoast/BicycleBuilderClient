@@ -195,7 +195,27 @@ public class BuilderController {
      * Login-Fenster wird über den ViewManager angefordert.
      */
     public void logout(ActionEvent event) throws IOException {
+
+        // Schreibzugriff zurückgeben, wenn gegeben
+        if(Main.writeAccessGiven) {
+            //return write Access
+            PutConfigurationWriteAccessTask writeAccessTask1 = new PutConfigurationWriteAccessTask(activeUser, Main.currentConfig.id);
+            writeAccessTask1.setOnRunning((runningEvent) -> System.out.println("trying switch writeAccess for configuration..."));
+            writeAccessTask1.setOnSucceeded((WorkerStateEvent switchSuccess) -> {
+                System.out.println("OnExitBuilderController: writeAccess for configuration " + Main.currentConfig.id + " switched to: " + writeAccessTask1.getValue());
+                if (writeAccessTask1.getValue().startsWith("ACCESS RETURNED")) {
+                    Main.writeAccessGiven = false; // flag zurücksetzen
+                } else {
+                    System.out.println("OnExitBuilderController: writeAccess for configuration " + Main.currentConfig.id + " could not be returned on close!");
+                }
+            });
+            writeAccessTask1.setOnFailed((writeAccessFailed) -> System.out.println("Couldn't switch writeAccess for configuration. Server error."));
+            //Tasks in eigenem Thread ausführen
+            new Thread(writeAccessTask1).start();
+        }
+
         vm.forceLoginView(event, "Login.fxml", "Bicycle Builder - Login");
+
     }
 
     /**
@@ -324,7 +344,7 @@ public class BuilderController {
             writeAccessTask1.setOnRunning((runningEvent) -> System.out.println("trying switch writeAccess for configuration..."));
             writeAccessTask1.setOnSucceeded((WorkerStateEvent switchSuccess) -> {
                 System.out.println("OnExitBuilderController: writeAccess for configuration " + Main.currentConfig.id + " switched to: " + writeAccessTask1.getValue());
-                if (writeAccessTask1.getValue().equals("ACCESS OPENED")) {
+                if (writeAccessTask1.getValue().startsWith("ACCESS RETURNED")) {
                     Main.writeAccessGiven = false; // flag zurücksetzen
                     Main.currentConfig = null;
                     try {

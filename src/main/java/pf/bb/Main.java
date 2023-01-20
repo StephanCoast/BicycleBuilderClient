@@ -89,7 +89,7 @@ public class Main extends Application {
                 writeAccessTask1.setOnRunning((runningEvent) -> System.out.println("trying switch writeAccess for configuration..."));
                 writeAccessTask1.setOnSucceeded((WorkerStateEvent switchSuccess) -> {
                     System.out.println("OnExitBuilderController: writeAccess for configuration " + Main.currentConfig.id + " switched to: " + writeAccessTask1.getValue());
-                    if (writeAccessTask1.getValue().equals("ACCESS OPENED")) {
+                    if (writeAccessTask1.getValue().startsWith("ACCESS RETURNED")) {
                         Main.writeAccessGiven = false; // flag zurücksetzen
                     } else {
                         System.out.println("OnExitBuilderController: writeAccess for configuration " + Main.currentConfig.id + " could not be returned on close!");
