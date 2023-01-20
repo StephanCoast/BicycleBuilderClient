@@ -343,13 +343,7 @@ public class DashboardController {
      * Admin-Icon Button im Kopfbereich wird deaktiviert, wenn man nicht als Admin angemeldet ist.
      */
     private void setCreateUserBtn() {
-        switch (activeUser.role) {
-            case "ADMIN":
-                btnCreateUser.setDisable(false);
-                break;
-            default:
-                btnCreateUser.setDisable(true);
-        }
+        btnCreateUser.setDisable(!"ADMIN".equals(activeUser.role));
     }
 
     /**
@@ -463,7 +457,8 @@ public class DashboardController {
                         writeAccessTask1.setOnSucceeded((WorkerStateEvent writeAccess) -> {
                             System.out.println("OnExitDashboardController: writeAccess for configuration " + Main.currentConfig.id + " switched to: " + writeAccessTask1.getValue());
                             String newline = "\n";
-                            if (writeAccessTask1.getValue().equals("ACCESS GRANTED")) {
+                            String answer = writeAccessTask1.getValue();
+                            if (writeAccessTask1.getValue().startsWith("ACCESS GRANTED")) {
                                 // Lokales Objekt aktualisieren
                                 Main.currentConfig.writeAccess = activeUser.name;
                                 Main.writeAccessGiven = true;
@@ -472,11 +467,12 @@ public class DashboardController {
                                 } catch (IOException e) {
                                     throw new RuntimeException(e);
                                 }
-                            } else if (writeAccessTask1.getValue().equals("ACCESS OPENED")) {
-                                System.out.println("Write access wasn't returned last time, because the program was shutdown in the Builder view. Please try to open the configuration again.");
-                                vm.createErrorAlert("Bicycle Builder - Fehler", "Zugriffsfehler", "Die Berechtigung zum Bearbeiten der Konfiguration wurde fehlerhaft zurückgegeben. Bitte öffnen Sie die Konfiguration erneut." + newline + newline);
+                            } else if (writeAccessTask1.getValue().startsWith("ACCESS DENIED")){
+                                String username = answer.substring(answer.lastIndexOf(':') + 1);
+                                vm.createErrorAlert("Bicycle Builder - Fehler", "Zugriffsfehler", "Die gewählte Konfiguration wird gerade von " + newline + username + " bearbeitet."  + newline);
                             } else {
-                                vm.createErrorAlert("Bicycle Builder - Fehler", "Zugriffsfehler", "Die gewählte Konfiguration wird gerade von einem anderen Benutzer bearbeitet." + newline + newline);
+                                System.out.println("Write access wasn't returned correctly last time, because the program crashed in Builder view. Please try to open the configuration again.");
+                                vm.createErrorAlert("Bicycle Builder - Fehler", "Zugriffsfehler", "Die Berechtigung zum Bearbeiten der Konfiguration wurde fehlerhaft zurückgegeben. Bitte versuchen Sie die Konfiguration erneut zu öffnen." + newline + newline);
                             }
                         });
                         writeAccessTask1.setOnFailed((writeAccessFailed) -> System.out.println("Couldn't get writeAccess for configuration. Server does not respond." + writeAccessTask1.getMessage()));
