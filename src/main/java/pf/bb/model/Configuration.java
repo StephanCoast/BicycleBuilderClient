@@ -112,6 +112,14 @@ public class Configuration extends EntityWithID {
         return article;
     };
 
+    public float getPriceTotal() {
+        float finalPrice = 0.0f;
+        for (Article a : this.articles) {
+            finalPrice += a.price;
+        }
+        return finalPrice;
+    }
+
 
     public void createAndOpenTempPdf(String docType){
 
