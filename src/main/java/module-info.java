@@ -2,6 +2,7 @@ module pf.bb {
     // Frontend
     requires javafx.base;
     requires javafx.controls;
+    requires javafx.graphics;
     requires javafx.fxml;
     requires com.jfoenix;
     requires de.jensd.fx.glyphs.fontawesome;
