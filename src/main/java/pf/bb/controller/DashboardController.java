@@ -503,39 +503,46 @@ public class DashboardController {
                         System.out.println("DashboardController: no access authorization to remove finished config's...");
                         vm.createErrorAlert("Bicycle Builder - Fehler", "Zugriffsfehler", "Die gewählte Konfiguration ist bereits abgeschlossen und kann nur von einem Administrator entfernt werden." + newline + newline);
                     } else {
-                        String configID = String.valueOf(config.id);
-                        String configDate = config.timestampCreated;
-                        String configCustomerName = config.getCustomerName();
-                        String configCustomerId = config.getCustomerId();
-                        String configState = config.status;
-                        ArrayList<String> configList = new ArrayList<>();
-                        ArrayList<Float> priceList = new ArrayList<>();
-                        float finalPrice = 0.0f;
-
-                        for (Article a : config.articles) {
-                            configList.add(a.name);
-                            priceList.add(a.price);
-                        }
-
-                        for (float f : priceList) {
-                            finalPrice += f;
-                        }
-
+                        // DELETE DIALOG
                         Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "", ButtonType.YES, ButtonType.NO);
                         alert.setTitle("Konfiguration löschen");
                         alert.setHeaderText("Möchten Sie die ausgewählte Konfiguration entfernen?");
-                        alert.setContentText("Konfiguration-ID: " + configID + newline
-                                + "Erstellungsdatum: " + configDate + newline
-                                + "Kundenname: " + configCustomerName + newline
-                                + "Kunden-ID: " + configCustomerId + newline
-                                + "Status: " + configState + newline
-                                + "Gesamtpreis: "  + strPriceBeautify(finalPrice) + " €" + newline + newline);
+                        alert.setContentText("Konfiguration-ID: " + config.id + newline
+                                + "Erstellungsdatum: " + config.timestampCreated + newline
+                                + "Kundenname: " + config.getCustomerName() + newline
+                                + "Kunden-ID: " + config.getCustomerId() + newline
+                                + "Status: " + config.status + newline
+                                + "Gesamtpreis: "  + strPriceBeautify(config.getPriceTotal()) + " €" + newline + newline);
                         alert.showAndWait();
 
                         if (alert.getResult() == ButtonType.YES) {
                             // DELETE A CONFIGURATION REQUIRES: DELETE BILL -> DELETE ORDER -> DELETE CONFIGURATION  !! FOREIGN KEY Constraints
-                            // ASSUMPTION HERE: Bill is automatically created with order
-                            if (config.order != null) {
+
+                            // ENTWURF: Get write access for Configuration in ENTWURF status in case another user is editing it atm -> doesn't need to be returned since config is deleted
+                            if (config.status.equals(Configuration.stats[0]))  {
+                                PutConfigurationWriteAccessTask writeAccessTask2 = new PutConfigurationWriteAccessTask(activeUser, config.getId());
+                                writeAccessTask2.setOnRunning((runningEvent) -> System.out.println("trying to get writeAccess for configuration..."));
+                                writeAccessTask2.setOnSucceeded((WorkerStateEvent writeAccess) -> {
+                                    System.out.println("OnDeleteDashboardController: writeAccess for configuration " + config.getId() + " switched to: " + writeAccessTask2.getValue());
+                                    String answer = writeAccessTask2.getValue();
+                                    if (writeAccessTask2.getValue().startsWith("ACCESS GRANTED")) {
+                                        // ENTWURF has no foreign key constraints -> can be deleted directly
+                                        deleteConfigFromDb(config.id);
+
+                                    } else if (writeAccessTask2.getValue().startsWith("ACCESS DENIED")){
+                                        String username = answer.substring(answer.lastIndexOf(':') + 1);
+                                        vm.createErrorAlert("Bicycle Builder - Fehler", "Zugriffsfehler", "Die gewählte Konfiguration wird gerade von " + newline + username + " bearbeitet."  + newline);
+                                    } else {
+                                        System.out.println("Write access wasn't returned correctly last time, because the program crashed in Builder view. Please try to open the configuration again.");
+                                        vm.createErrorAlert("Bicycle Builder - Fehler", "Zugriffsfehler", "Die Berechtigung zum Bearbeiten der Konfiguration wurde fehlerhaft zurückgegeben. Bitte versuchen Sie die Konfiguration erneut zu öffnen." + newline + newline);
+                                    }
+                                });
+                                writeAccessTask2.setOnFailed((writeAccessFailed) -> System.out.println("Couldn't get writeAccess for configuration. Server does not respond." + writeAccessTask2.getMessage()));
+                                //Tasks in eigenem Thread ausführen
+                                new Thread(writeAccessTask2).start();
+                            } else {
+                            // ABGESCHLOSSEN: DELETE BY ADMIN WITHOUT WRITE ACCESS FOR CONFIGURATION IN FINISHED STATUS
+                            // ASSUMPTION HERE: Bill and Order are automatically created with transition to status "ABGESCHLOSSEN"
                                 // DELETE BILL FROM DB
                                 DeleteBillTask billDeleteTask1 = new DeleteBillTask(activeUser, config.order.bill.id);
                                 billDeleteTask1.setOnSucceeded((WorkerStateEvent billDeleted) -> {
@@ -552,8 +559,6 @@ public class DashboardController {
                                 });
                                 //Tasks in eigenem Thread ausführen
                                 new Thread(billDeleteTask1).start();
-                            } else {
-                                deleteConfigFromDb(config.id);
                             }
                         }
                     }
@@ -571,10 +576,10 @@ public class DashboardController {
     private void deleteConfigFromDb(int configId) {
         // DELETE CONFIGURATION FROM DB
         DeleteConfigurationTask configDeleteTask1 = new DeleteConfigurationTask(activeUser, configId);
-        //Erst Task definieren incl. WorkerStateEvent als Flag, um zu wissen, wann fertig
+        //Erst Task definieren incl. WorkerStateEvent als Flag, um zu wissen, wann fertig, dann starten
         configDeleteTask1.setOnSucceeded((WorkerStateEvent configDeleted) -> {
-            System.out.println("configuration id=" + configId + " deleted=" + configDeleteTask1.getValue());
 
+            System.out.println("configuration id=" + configId + " deleted=" + configDeleteTask1.getValue());
             // DELETE config FROM LOCAL Main.CONFIGURATIONS for sync
             Configuration localConfObject = Main.findConfigurationById(configId);
             if (localConfObject != null) {
